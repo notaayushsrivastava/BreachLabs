@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}About - BreachLabs{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="relative py-20 bg-bl-surface/30">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="inline-block px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm font-medium mb-4">
+            About
+        </span>
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+            Built for the
+            <span class="gradient-text">AI development era</span>
+        </h1>
+        <p class="text-xl text-bl-text-secondary max-w-2xl mx-auto">
+            Modern coding agents can generate functional applications rapidly, but security validation hasn't accelerated at the same rate. BreachLabs closes that gap.
+        </p>
+    </div>
+</section>
+
+<!-- Problem & Solution -->
+<section class="relative py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12">
+            <!-- Problem -->
+            <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-bl-danger/10 border border-bl-danger/20 text-bl-danger text-sm font-medium mb-4">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 5.5c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                    The Problem
+                </div>
+                <h2 class="text-2xl font-bold mb-6">Security hasn't kept pace</h2>
+                <div class="space-y-4">
+                    <p class="text-bl-text-secondary">
+                        AI-assisted software development dramatically reduces the time required to create applications. But the security-development cycle has not accelerated at the same rate.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-bl-danger flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            <span class="text-sm">Developers may ship insecure generated code without understanding every implementation detail.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-bl-danger flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            <span class="text-sm">Static scanners generate findings without understanding runtime context.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-bl-danger flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            <span class="text-sm">Dynamic scanners may discover alerts without understanding business intent.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-bl-danger flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            <span class="text-sm">Security findings frequently contain false positives or insufficient evidence.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-bl-danger flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            <span class="text-sm">A clean automated scan is not proof that an application is secure.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Solution -->
+            <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-bl-success/10 border border-bl-success/20 text-bl-success text-sm font-medium mb-4">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    The Solution
+                </div>
+                <h2 class="text-2xl font-bold mb-6">AI + deterministic tools</h2>
+                <p class="text-bl-text-secondary mb-6">
+                    BreachLabs acts as an autonomous security engineer that evaluates an application immediately after it is built. It doesn't replace professional penetration testers — it orchestrates proven security tools and gives an AI agent the ability to reason over their results.
+                </p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl bg-bl-card border border-bl-border">
+                        <p class="text-3xl font-bold text-bl-accent">AI</p>
+                        <p class="text-sm text-bl-text-secondary">Investigation, correlation, triage</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-bl-card border border-bl-border">
+                        <p class="text-3xl font-bold text-bl-accent">Tools</p>
+                        <p class="text-sm text-bl-text-secondary">SAST, DAST, secrets, recon</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Philosophy -->
+<section class="relative py-24 bg-bl-surface/30">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="inline-block px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm font-medium mb-4">
+                Our Philosophy
+            </span>
+            <h2 class="text-3xl font-bold">Trust through evidence</h2>
+        </div>
+
+        <div class="space-y-8">
+            <div class="p-6 rounded-2xl bg-bl-card border border-bl-border">
+                <h3 class="text-lg font-semibold mb-3">Security is a loop, not a checkpoint</h3>
+                <p class="text-bl-text-secondary">
+                    We designed BreachLabs around a simple development loop: BUILD → DISCOVER → TEST → INVESTIGATE → VERIFY → FIX → RETEST.
+                </p>
+                <p class="text-sm text-bl-text-secondary mt-4">
+                    Security shouldn't be a gate at the end of development. It should be an integral part of the development cycle, running automatically every time code changes.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-bl-card border border-bl-border">
+                <h3 class="text-lg font-semibold mb-3">Never overstate what we find</h3>
+                <p class="text-bl-text-secondary">
+                    An unverified hypothesis can never become "confirmed." BreachLabs is designed to be honest about what it knows and what it doesn't.
+                </p>
+                <p class="text-sm text-bl-text-secondary mt-4">
+                    Findings start as suspicious signals. They're investigated, correlated with evidence, and only confirmed through targeted verification. If we can't reproduce it, we say so.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-bl-card border border-bl-border">
+                <h3 class="text-lg font-semibold mb-3">Safety by design</h3>
+                <p class="text-bl-text-secondary">
+                    Every assessment runs in an isolated, disposable environment. The agent uses allowlisted security tools rather than unrestricted command execution.
+                </p>
+                <p class="text-sm text-bl-text-secondary mt-4">
+                    Application content is treated as untrusted data and cannot override the agent's security policy. This is defensive security research — period.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-bl-card border border-bl-border">
+                <h3 class="text-lg font-semibold mb-3">A clean scan is not a guarantee</h3>
+                <p class="text-bl-text-secondary">
+                    We're upfront about what BreachLabs can and cannot do. A clean automated assessment is not proof that an application is secure.
+                </p>
+                <p class="text-sm text-bl-text-secondary mt-4">
+                    Professional penetration testing still has value. BreachLabs makes security validation immediate and continuous — it doesn't replace human expertise.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Timeline -->
+<section class="relative py-24">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="inline-block px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm font-medium mb-4">
+                Origin Story
+            </span>
+            <h2 class="text-3xl font-bold">Built in 30 hours</h2>
+        </div>
+
+        <div class="p-8 rounded-2xl bg-bl-card border border-bl-border">
+            <p class="text-lg font-semibold mb-4">BreachLabs was created for VINHACK 2026</p>
+            <p class="text-bl-text-secondary mb-6">
+                A hackathon project born from a simple observation: AI coding agents are making software development faster than ever, but security validation is still fragmented across scanners, manual review, browser testing, and developer knowledge.
+            </p>
+            <div class="flex flex-wrap gap-3">
+                <span class="px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm">AI-native</span>
+                <span class="px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm">Deterministic tools</span>
+                <span class="px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm">Isolated execution</span>
+                <span class="px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm">MCP architecture</span>
+                <span class="px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm">Evidence-backed</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="relative py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold mb-4">See BreachLabs in action</h2>
+        <p class="text-lg text-bl-text-secondary mb-8">
+            Watch the complete security assessment pipeline on a vulnerable demo application.
+        </p>
+        <a href="{{ url_for('demo') }}" class="inline-flex items-center gap-3 px-6 py-3 text-base font-semibold text-bl-dark bg-bl-accent rounded-xl hover:bg-bl-accent-hover transition-colors">
+            View the demo
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+        </a>
+    </div>
+</section>
+{% endblock %}

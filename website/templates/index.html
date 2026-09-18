@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}BreachLabs - Build. Break. Verify. Fix.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <!-- Background pattern -->
+    <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-b from-bl-darker via-bl-dark to-bl-darker"></div>
+        <!-- Grid pattern -->
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(6, 182, 212, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.3) 1px, transparent 1px); background-size: 60px 60px;"></div>
+    </div>
+    
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm font-medium mb-8 animate-fade-in">
+            <span class="w-2 h-2 rounded-full bg-bl-accent animate-pulse"></span>
+            VINHACK 2026 Project
+        </div>
+        
+        <!-- Main heading -->
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6 animate-slide-up" style="animation-delay: 0.1s;">
+            Build. Break.
+            <span class="gradient-text">Verify.</span> Fix.
+        </h1>
+        
+        <!-- Subheading -->
+        <p class="text-xl sm:text-2xl text-bl-text-secondary max-w-2xl mx-auto mb-4 animate-slide-up" style="animation-delay: 0.2s;">
+            An autonomous AI application-security engineer for software created by humans or AI coding agents.
+        </p>
+        
+        <!-- Product promise -->
+        <blockquote class="mt-8 max-w-xl mx-auto px-4 animate-slide-up" style="animation-delay: 0.3s;">
+            <p class="text-lg text-bl-text-secondary/80 italic">
+                "Give every application its own security engineer."
+            </p>
+            <footer class="mt-2 text-sm text-bl-muted">— BreachLabs Philosophy</footer>
+        </blockquote>
+        
+        <!-- CTA Buttons -->
+        <div class="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style="animation-delay: 0.4s;">
+            <a href="{{ url_for('demo') }}" class="group inline-flex items-center gap-3 px-8 py-4 text-base font-semibold text-bl-dark bg-bl-accent rounded-xl hover:bg-bl-accent-hover transition-all shadow-2xl shadow-bl-accent/25 hover:shadow-bl-accent/40 hover:-translate-y-0.5">
+                <span>See it in action</span>
+                <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
+            <a href="{{ url_for('features') }}" class="inline-flex items-center gap-3 px-8 py-4 text-base font-semibold text-bl-text bg-bl-card border border-bl-border rounded-xl hover:bg-bl-surface hover:border-bl-border/50 transition-all">
+                <span>Explore features</span>
+            </a>
+        </div>
+        
+        <!-- Stats row -->
+        <div class="mt-16 grid grid-cols-2 md:grid-cols-3 gap-6 max-w-lg mx-auto animate-slide-up" style="animation-delay: 0.5s;">
+            <div class="glass-card p-4">
+                <p class="text-2xl font-bold text-bl-accent">7</p>
+                <p class="text-sm text-bl-text-secondary mt-1">Pipeline phases</p>
+            </div>
+            <div class="glass-card p-4">
+                <p class="text-2xl font-bold text-bl-accent">30h</p>
+                <p class="text-sm text-bl-text-secondary mt-1">Hackathon build</p>
+            </div>
+            <div class="glass-card p-4 col-span-2 md:col-span-1">
+                <p class="text-2xl font-bold text-bl-accent">100%</p>
+                <p class="text-sm text-bl-text-secondary mt-1">Isolated execution</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <svg class="w-6 h-6 text-bl-text-secondary/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+        </svg>
+    </div>
+</section>
+
+<!-- Pipeline Section -->
+<section class="relative py-24 bg-bl-surface/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section header -->
+        <div class="text-center mb-16">
+            <span class="inline-block px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm font-medium mb-4">
+                The Core Loop
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">
+                From code to confidence
+            </h2>
+            <p class="mt-4 text-lg text-bl-text-secondary max-w-2xl mx-auto">
+                BreachLabs orchestrates proven security tools and gives an AI agent the ability to reason over their results.
+            </p>
+        </div>
+        
+        <!-- Pipeline visualization -->
+        <div class="relative">
+            <!-- Connection line -->
+            <div class="absolute top-1/2 left-[8%] right-[8%] h-0.5 bg-gradient-to-r from-bl-accent/30 via-bl-accent/50 to-bl-accent/30 -translate-y-1/2 hidden md:block"></div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6">
+                <!-- Step 1: Build -->
+                <div class="pipeline-step group">
+                    <div class="relative z-10 w-16 h-16 rounded-2xl bg-bl-card border border-bl-border flex items-center justify-center mb-4 group-hover:border-bl-accent/50 group-hover:shadow-lg group-hover:shadow-bl-accent/10 transition-all">
+                        <svg class="w-8 h-8 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-bl-text">Build</h3>
+                    <p class="text-xs text-bl-text-secondary mt-1">Application created</p>
+                </div>
+                
+                <!-- Step 2: Discover -->
+                <div class="pipeline-step group">
+                    <div class="relative z-10 w-16 h-16 rounded-2xl bg-bl-card border border-bl-border flex items-center justify-center mb-4 group-hover:border-bl-accent/50 group-hover:shadow-lg group-hover:shadow-bl-accent/10 transition-all">
+                        <svg class="w-8 h-8 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-bl-text">Discover</h3>
+                    <p class="text-xs text-bl-text-secondary mt-1">Map attack surface</p>
+                </div>
+                
+                <!-- Step 3: Test -->
+                <div class="pipeline-step group">
+                    <div class="relative z-10 w-16 h-16 rounded-2xl bg-bl-card border border-bl-border flex items-center justify-center mb-4 group-hover:border-bl-accent/50 group-hover:shadow-lg group-hover:shadow-bl-accent/10 transition-all">
+                        <svg class="w-8 h-8 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-bl-text">Test</h3>
+                    <p class="text-xs text-bl-text-secondary mt-1">Run security scans</p>
+                </div>
+                
+                <!-- Step 4: Investigate -->
+                <div class="pipeline-step group">
+                    <div class="relative z-10 w-16 h-16 rounded-2xl bg-bl-card border border-bl-border flex items-center justify-center mb-4 group-hover:border-bl-accent/50 group-hover:shadow-lg group-hover:shadow-bl-accent/10 transition-all">
+                        <svg class="w-8 h-8 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1m0 0l1-1m-1 1v-6l9.75 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-bl-text">Investigate</h3>
+                    <p class="text-xs text-bl-text-secondary mt-1">AI triage & correlation</p>
+                </div>
+                
+                <!-- Step 5: Verify -->
+                <div class="pipeline-step group">
+                    <div class="relative z-10 w-16 h-16 rounded-2xl bg-bl-card border border-bl-border flex items-center justify-center mb-4 group-hover:border-bl-accent/50 group-hover:shadow-lg group-hover:shadow-bl-accent/10 transition-all">
+                        <svg class="w-8 h-8 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-bl-text">Verify</h3>
+                    <p class="text-xs text-bl-text-secondary mt-1">Confirm findings</p>
+                </div>
+                
+                <!-- Step 6: Fix -->
+                <div class="pipeline-step group">
+                    <div class="relative z-10 w-16 h-16 rounded-2xl bg-bl-card border border-bl-border flex items-center justify-center mb-4 group-hover:border-bl-accent/50 group-hover:shadow-lg group-hover:shadow-bl-accent/10 transition-all">
+                        <svg class="w-8 h-8 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-bl-text">Fix</h3>
+                    <p class="text-xs text-bl-text-secondary mt-1">Remediation guidance</p>
+                </div>
+                
+                <!-- Step 7: Retest -->
+                <div class="pipeline-step group">
+                    <div class="relative z-10 w-16 h-16 rounded-2xl bg-bl-accent/10 border border-bl-accent/30 flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-bl-text">Retest</h3>
+                    <p class="text-xs text-bl-text-secondary mt-1">Verify the fix</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Preview Section -->
+<section class="relative py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span class="inline-block px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm font-medium mb-4">
+                Capabilities
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">
+                Security, automated
+            </h2>
+            <p class="mt-4 text-lg text-bl-text-secondary max-w-2xl mx-auto">
+                From static analysis to dynamic testing, BreachLabs covers the full security assessment lifecycle.
+            </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Feature 1 -->
+            <div class="glass-card p-6 hover-lift group">
+                <div class="w-12 h-12 rounded-xl bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center mb-4 group-hover:bg-bl-accent/20 transition-colors">
+                    <svg class="w-6 h-6 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Static Analysis</h3>
+                <p class="text-bl-text-secondary text-sm">SAST and secret scanning to catch vulnerabilities before they reach production.</p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="glass-card p-6 hover-lift group">
+                <div class="w-12 h-12 rounded-xl bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center mb-4 group-hover:bg-bl-accent/20 transition-colors">
+                    <svg class="w-6 h-6 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Dynamic Testing</h3>
+                <p class="text-bl-text-secondary text-sm">DAST and browser exploration to find runtime vulnerabilities.</p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="glass-card p-6 hover-lift group">
+                <div class="w-12 h-12 rounded-xl bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center mb-4 group-hover:bg-bl-accent/20 transition-colors">
+                    <svg class="w-6 h-6 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1m0 0l1-1m-1 1v-6l9.75 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">AI Investigation</h3>
+                <p class="text-bl-text-secondary text-sm">Correlate evidence across tools and reduce false positives.</p>
+            </div>
+            
+            <!-- Feature 4 -->
+            <div class="glass-card p-6 hover-lift group">
+                <div class="w-12 h-12 rounded-xl bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center mb-4 group-hover:bg-bl-accent/20 transition-colors">
+                    <svg class="w-6 h-6 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Verification</h3>
+                <p class="text-bl-text-secondary text-sm">Re-probe findings to confirm what's real and what's noise.</p>
+            </div>
+            
+            <!-- Feature 5 -->
+            <div class="glass-card p-6 hover-lift group">
+                <div class="w-12 h-12 rounded-xl bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center mb-4 group-hover:bg-bl-accent/20 transition-colors">
+                    <svg class="w-6 h-6 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Evidence Reports</h3>
+                <p class="text-bl-text-secondary text-sm">Export actionable security reports with full evidence trail.</p>
+            </div>
+            
+            <!-- Feature 6 -->
+            <div class="glass-card p-6 hover-lift group">
+                <div class="w-12 h-12 rounded-xl bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center mb-4 group-hover:bg-bl-accent/20 transition-colors">
+                    <svg class="w-6 h-6 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V4a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Isolated Execution</h3>
+                <p class="text-bl-text-secondary text-sm">Disposable sandbox environments for safe, contained testing.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="relative py-24 overflow-hidden">
+    <!-- Background glow -->
+    <div class="absolute inset-0">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-bl-accent/5 rounded-full blur-[150px]"></div>
+    </div>
+    
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+            Ready to automate your
+            <span class="gradient-text">security workflow?</span>
+        </h2>
+        <p class="text-xl text-bl-text-secondary max-w-2xl mx-auto mb-10">
+            See BreachLabs in action with a live demo of the complete security assessment pipeline.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="{{ url_for('demo') }}" class="group inline-flex items-center gap-3 px-8 py-4 text-base font-semibold text-bl-dark bg-bl-accent rounded-xl hover:bg-bl-accent-hover transition-all shadow-2xl shadow-bl-accent/25 hover:shadow-bl-accent/40">
+                <span>View the demo</span>
+                <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
+            <a href="{{ url_for('about') }}" class="inline-flex items-center gap-3 px-8 py-4 text-base font-semibold text-bl-text bg-bl-card border border-bl-border rounded-xl hover:bg-bl-surface hover:border-bl-border/50 transition-all">
+                <span>Learn more</span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

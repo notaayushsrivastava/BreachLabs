@@ -6,3 +6,4 @@ implementation_plan.md
 .ruff_cache/*
 *.pyc
 */__pycache__/*
+*/node_modules/*

@@ -113,6 +113,21 @@ The repository is intentionally starting from the product and architecture speci
 
 BreachLabs is a defensive application-security research project. Only assess applications and environments for which you have explicit authorization.
 
+## Website
+
+The product landing page lives in `website/` (isolated Flask + Jinja + local TailwindCSS build, per `website/PRD.md`). It does not import or modify the core `breachlabs/` package.
+
+Run it:
+
+~~~bash
+cd website
+npm install          # one-time: local TailwindCSS CLI
+npm run build:css    # rebuild static/css/site.css
+../.venv/Scripts/python.exe app.py   # serves on http://127.0.0.1:8001
+~~~
+
+Smoke test: `.venv/Scripts/python.exe website/smoke.py`.
+
 ---
 
 **BreachLabs**

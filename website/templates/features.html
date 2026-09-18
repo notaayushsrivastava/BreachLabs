@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+
+{% block title %}Features - BreachLabs{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="relative py-20 bg-bl-surface/30">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="inline-block px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm font-medium mb-4">
+            Features
+        </span>
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+            Everything you need to
+            <span class="gradient-text">secure your apps</span>
+        </h1>
+        <p class="text-xl text-bl-text-secondary max-w-2xl mx-auto">
+            BreachLabs combines deterministic security tools with AI-powered investigation to deliver comprehensive application security assessments.
+        </p>
+    </div>
+</section>
+
+<!-- Features Detail -->
+<section class="relative py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12">
+            <!-- Left column: Detailed features -->
+            <div class="space-y-8">
+                <!-- Feature: Repository Intake -->
+                <div class="glass-card p-6 group">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center flex-shrink-0 group-hover:bg-bl-accent/20 transition-colors">
+                            <svg class="w-5 h-5 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-1">Repository Intake</h3>
+                            <p class="text-sm text-bl-text-secondary">Import and analyze any application repository. BreachLabs understands your codebase structure.</p>
+                        </div>
+                    </div>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Automatic language detection
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Dependency analysis
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Architecture understanding
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Feature: Isolated Sandbox -->
+                <div class="glass-card p-6 group">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center flex-shrink-0 group-hover:bg-bl-accent/20 transition-colors">
+                            <svg class="w-5 h-5 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V4a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-1">Isolated Sandbox</h3>
+                            <p class="text-sm text-bl-text-secondary">Every assessment runs in a disposable, isolated environment for safe testing.</p>
+                        </div>
+                    </div>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Automatic environment setup
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Dependency installation
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Safe cleanup after assessment
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Feature: Attack Surface Discovery -->
+                <div class="glass-card p-6 group">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center flex-shrink-0 group-hover:bg-bl-accent/20 transition-colors">
+                            <svg class="w-5 h-5 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-1">Attack Surface Discovery</h3>
+                            <p class="text-sm text-bl-text-secondary">Automatically map routes, endpoints, forms, and API surfaces.</p>
+                        </div>
+                    </div>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Route discovery
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Form and endpoint mapping
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Authentication flow detection
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Feature: Security Scanning -->
+                <div class="glass-card p-6 group">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center flex-shrink-0 group-hover:bg-bl-accent/20 transition-colors">
+                            <svg class="w-5 h-5 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-1">Multi-Layer Security Scanning</h3>
+                            <p class="text-sm text-bl-text-secondary">Static, dynamic, and secret scanning for comprehensive coverage.</p>
+                        </div>
+                    </div>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            SAST: Source code analysis
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            DAST: Runtime security testing
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Secret scanning: Credentials detection
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            SCA: Dependency vulnerability checks
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right column: Additional features + visual -->
+            <div class="space-y-8">
+                <!-- Feature: AI Investigation -->
+                <div class="glass-card p-6 group">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center flex-shrink-0 group-hover:bg-bl-accent/20 transition-colors">
+                            <svg class="w-5 h-5 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1m0 0l1-1m-1 1v-6l9.75 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-1">AI-Powered Investigation</h3>
+                            <p class="text-sm text-bl-text-secondary">The agent correlates evidence across tools, reduces false positives, and explains findings in context.</p>
+                        </div>
+                    </div>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Cross-tool evidence correlation
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            False positive reduction
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Contextual remediation guidance
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Feature: Verification -->
+                <div class="glass-card p-6 group">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center flex-shrink-0 group-hover:bg-bl-accent/20 transition-colors">
+                            <svg class="w-5 h-5 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-1">Targeted Verification</h3>
+                            <p class="text-sm text-bl-text-secondary">High-value findings are re-probed to confirm they're real before you act on them.</p>
+                        </div>
+                    </div>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Confidence classification
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Reproducibility confirmation
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Never overstates findings
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Feature: Exportable Reports -->
+                <div class="glass-card p-6 group">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-bl-accent/10 border border-bl-accent/20 flex items-center justify-center flex-shrink-0 group-hover:bg-bl-accent/20 transition-colors">
+                            <svg class="w-5 h-5 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-1">Evidence-Backed Reports</h3>
+                            <p class="text-sm text-bl-text-secondary">Export comprehensive security reports with full evidence trail and remediation guidance.</p>
+                        </div>
+                    </div>
+                    <ul class="mt-4 space-y-2">
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            JSON and Markdown formats
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Complete event timeline
+                        </li>
+                        <li class="flex items-center gap-2 text-sm text-bl-text-secondary">
+                            <svg class="w-4 h-4 text-bl-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Actionable remediation steps
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Safety note -->
+                <div class="p-6 rounded-2xl bg-bl-accent/5 border border-bl-accent/20">
+                    <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-bl-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 5.5c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                        Safety First
+                    </h3>
+                    <p class="text-sm text-bl-text-secondary">
+                        BreachLabs is designed for authorized defensive security testing. Every assessment runs in an isolated environment with allowlisted tools — no arbitrary command execution.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="relative py-16 bg-bl-surface/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold mb-4">See the full pipeline in action</h2>
+        <p class="text-lg text-bl-text-secondary mb-8">
+            Watch BreachLabs assess a vulnerable application from start to finish.
+        </p>
+        <a href="{{ url_for('demo') }}" class="inline-flex items-center gap-3 px-6 py-3 text-base font-semibold text-bl-dark bg-bl-accent rounded-xl hover:bg-bl-accent-hover transition-colors">
+            View the demo
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+        </a>
+    </div>
+</section>
+{% endblock %}

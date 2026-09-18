@@ -1,0 +1,390 @@
+{% extends "base.html" %}
+
+{% block title %}Demo - BreachLabs{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="relative py-20 bg-bl-surface/30">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="inline-block px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm font-medium mb-4">
+            Live Demo
+        </span>
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+            The full pipeline,
+            <span class="gradient-text">end to end</span>
+        </h1>
+        <p class="text-xl text-bl-text-secondary max-w-2xl mx-auto">
+            Watch BreachLabs assess a vulnerable application from repository intake to evidence-backed report.
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4 text-sm">
+            <span class="px-3 py-1 rounded-full bg-bl-card border border-bl-border text-bl-text-secondary">SQL Injection</span>
+            <span class="px-3 py-1 rounded-full bg-bl-card border border-bl-border text-bl-text-secondary">Reflected XSS</span>
+            <span class="px-3 py-1 rounded-full bg-bl-card border border-bl-border text-bl-text-secondary">Hardcoded Credentials</span>
+            <span class="px-3 py-1 rounded-full bg-bl-card border border-bl-border text-bl-text-secondary">Debug Mode Enabled</span>
+            <span class="px-3 py-1 rounded-full bg-bl-card border border-bl-border text-bl-text-secondary">IDOR</span>
+            <span class="px-3 py-1 rounded-full bg-bl-card border border-bl-border text-bl-text-secondary">Weak Hashing (MD5)</span>
+        </div>
+    </div>
+</section>
+
+<!-- Pipeline Visualization -->
+<section class="relative py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">How the demo works</h2>
+            <p class="text-lg text-bl-text-secondary max-w-2xl mx-auto">
+                BreachLabs runs through 7 phases, each building on the last, to produce a comprehensive security assessment.
+            </p>
+        </div>
+
+        <div class="relative">
+            <!-- Timeline line -->
+            <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-bl-accent/50 via-bl-accent/30 to-bl-accent/10 md:left-1/2 md:-translate-x-px"></div>
+
+            <div class="space-y-12">
+                <!-- Phase 1: Intake -->
+                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-12">
+                    <div class="relative z-10 flex items-center justify-center w-16 h-16 rounded-2xl bg-bl-card border-2 border-bl-accent/50 flex-shrink-0">
+                        <span class="text-2xl font-bold text-bl-accent">1</span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold mb-2">Repository Intake</h3>
+                        <p class="text-bl-text-secondary">
+                            BreachLabs receives an authorized application repository and begins understanding its structure.
+                        </p>
+                        <div class="mt-3 p-4 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                            <p class="text-sm text-bl-muted font-mono">Input: Application repository path</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2: Sandbox -->
+                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-12">
+                    <div class="relative z-10 flex items-center justify-center w-16 h-16 rounded-2xl bg-bl-card border-2 border-bl-accent/50 flex-shrink-0">
+                        <span class="text-2xl font-bold text-bl-accent">2</span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold mb-2">Isolated Environment Setup</h3>
+                        <p class="text-bl-text-secondary">
+                            A disposable sandbox is created with a copy of the application, dependencies installed, and the app launched.
+                        </p>
+                        <div class="mt-3 p-4 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                            <p class="text-sm text-bl-muted font-mono">Action: Workspace copy, venv setup, app launch</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3: Health Check -->
+                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-12">
+                    <div class="relative z-10 flex items-center justify-center w-16 h-16 rounded-2xl bg-bl-card border-2 border-bl-accent/50 flex-shrink-0">
+                        <span class="text-2xl font-bold text-bl-accent">3</span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold mb-2">Health Check & Reconnaissance</h3>
+                        <p class="text-bl-text-secondary">
+                            BreachLabs verifies the application is running and maps its attack surface — routes, forms, endpoints.
+                        </p>
+                        <div class="mt-3 p-4 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                            <p class="text-sm text-bl-muted font-mono">Output: Route list, form specs, attack surface map</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 4: Scanning -->
+                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-12">
+                    <div class="relative z-10 flex items-center justify-center w-16 h-16 rounded-2xl bg-bl-card border-2 border-bl-accent/50 flex-shrink-0">
+                        <span class="text-2xl font-bold text-bl-accent">4</span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold mb-2">Security Scanning</h3>
+                        <p class="text-bl-text-secondary">
+                            Multiple scanners run in parallel: static analysis, secret detection, and dynamic web testing.
+                        </p>
+                        <div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="p-3 rounded-lg bg-bl-accent/5 border border-bl-accent/20">
+                                <p class="text-sm font-medium text-bl-accent">SAST</p>
+                                <p class="text-xs text-bl-text-secondary">Source code analysis</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-bl-accent/5 border border-bl-accent/20">
+                                <p class="text-sm font-medium text-bl-accent">Secrets</p>
+                                <p class="text-xs text-bl-text-secondary">Credential detection</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-bl-accent/5 border border-bl-accent/20">
+                                <p class="text-sm font-medium text-bl-accent">DAST</p>
+                                <p class="text-xs text-bl-text-secondary">Runtime testing</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 5: Investigation -->
+                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-12">
+                    <div class="relative z-10 flex items-center justify-center w-16 h-16 rounded-2xl bg-bl-card border-2 border-bl-accent/50 flex-shrink-0">
+                        <span class="text-2xl font-bold text-bl-accent">5</span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold mb-2">AI Investigation</h3>
+                        <p class="text-bl-text-secondary">
+                            The AI agent correlates findings across scanners, elevates high-confidence signals, and prioritizes what matters.
+                        </p>
+                        <div class="mt-3 p-4 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                            <p class="text-sm text-bl-muted">
+                                Multi-source correlation → Higher confidence → Prioritized findings
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 6: Verification -->
+                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-12">
+                    <div class="relative z-10 flex items-center justify-center w-16 h-16 rounded-2xl bg-bl-card border-2 border-bl-accent/50 flex-shrink-0">
+                        <span class="text-2xl font-bold text-bl-accent">6</span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold mb-2">Verification</h3>
+                        <p class="text-bl-text-secondary">
+                            High-value findings are re-probed to confirm they're real. Only reproduced findings are marked as verified.
+                        </p>
+                        <div class="mt-3 p-4 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                            <p class="text-sm text-bl-muted">
+                                Confirmed · Inconclusive · Rejected — never overstated
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 7: Report -->
+                <div class="relative flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-12">
+                    <div class="relative z-10 flex items-center justify-center w-16 h-16 rounded-2xl bg-bl-accent/10 border-2 border-bl-accent/50 flex-shrink-0">
+                        <span class="text-2xl font-bold text-bl-accent">7</span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold mb-2">Report Generation</h3>
+                        <p class="text-bl-text-secondary">
+                            An evidence-backed security report is generated with findings, evidence, verification status, and remediation guidance.
+                        </p>
+                        <div class="mt-3 p-4 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                            <p class="text-sm text-bl-muted">Output formats: JSON, Markdown — with full event timeline</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- What's Found Section -->
+<section class="relative py-24 bg-bl-surface/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">What BreachLabs finds</h2>
+            <p class="text-lg text-bl-text-secondary">
+                The demo application contains 7 deliberate vulnerabilities. BreachLabs is designed to find and verify them.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Finding 1 -->
+            <div class="glass-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 rounded-lg bg-bl-danger/10 border border-bl-danger/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-bl-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 5.5c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                    </div>
+                    <span class="px-2 py-1 rounded text-xs font-medium bg-bl-danger/10 text-bl-danger">Critical</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">SQL Injection</h3>
+                <p class="text-sm text-bl-text-secondary">
+                    User input is directly interpolated into SQL queries without parameterization.
+                </p>
+                <div class="mt-4 p-3 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                    <p class="text-xs text-bl-muted font-mono">Vulnerable endpoint: /login</p>
+                </div>
+            </div>
+
+            <!-- Finding 2 -->
+            <div class="glass-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 rounded-lg bg-bl-warning/10 border border-bl-warning/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-bl-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 5.5c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                    </div>
+                    <span class="px-2 py-1 rounded text-xs font-medium bg-bl-warning/10 text-bl-warning">High</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Reflected XSS</h3>
+                <p class="text-sm text-bl-text-secondary">
+                    User input is rendered without sanitization, allowing script injection.
+                </p>
+                <div class="mt-4 p-3 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                    <p class="text-xs text-bl-muted font-mono">Vulnerable endpoint: /search</p>
+                </div>
+            </div>
+
+            <!-- Finding 3 -->
+            <div class="glass-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 rounded-lg bg-bl-danger/10 border border-bl-danger/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-bl-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 5.5c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                    </div>
+                    <span class="px-2 py-1 rounded text-xs font-medium bg-bl-danger/10 text-bl-danger">Critical</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Hardcoded Credentials</h3>
+                <p class="text-sm text-bl-text-secondary">
+                    Database credentials are hardcoded in source code.
+                </p>
+                <div class="mt-4 p-3 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                    <p class="text-xs text-bl-muted font-mono">Found in: app.py configuration</p>
+                </div>
+            </div>
+
+            <!-- Finding 4 -->
+            <div class="glass-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 rounded-lg bg-bl-warning/10 border border-bl-warning/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-bl-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 5.5c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                    </div>
+                    <span class="px-2 py-1 rounded text-xs font-medium bg-bl-warning/10 text-bl-warning">High</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Debug Mode Enabled</h3>
+                <p class="text-sm text-bl-text-secondary">
+                    Flask debug mode is enabled, exposing sensitive debugging information.
+                </p>
+                <div class="mt-4 p-3 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                    <p class="text-xs text-bl-muted font-mono">app.run(debug=True)
+                </div>
+            </div>
+
+            <!-- Finding 5 -->
+            <div class="glass-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 rounded-lg bg-bl-warning/10 border border-bl-warning/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-bl-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 5.5c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                    </div>
+                    <span class="px-2 py-1 rounded text-xs font-medium bg-bl-warning/10 text-bl-warning">High</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">IDOR</h3>
+                <p class="text-sm text-bl-text-secondary">
+                    Insecure Direct Object Reference allows accessing other users' data.
+                </p>
+                <div class="mt-4 p-3 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                    <p class="text-xs text-bl-muted font-mono">Vulnerable endpoint: /profile/<id></p>
+                </div>
+            </div>
+
+            <!-- Finding 6 -->
+            <div class="glass-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 rounded-lg bg-bl-warning/10 border border-bl-warning/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-bl-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 5.5c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                    </div>
+                    <span class="px-2 py-1 rounded text-xs font-medium bg-bl-warning/10 text-bl-warning">Medium</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Weak Hashing (MD5)</h3>
+                <p class="text-sm text-bl-text-secondary">
+                    Passwords are hashed using MD5, which is cryptographically broken.
+                </p>
+                <div class="mt-4 p-3 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                    <p class="text-xs text-bl-muted font-mono">hashlib.md5() in use</p>
+                </div>
+            </div>
+
+            <!-- Finding 7 -->
+            <div class="glass-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-10 h-10 rounded-lg bg-bl-warning/10 border border-bl-warning/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-bl-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 5.5c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                    </div>
+                    <span class="px-2 py-1 rounded text-xs font-medium bg-bl-warning/10 text-bl-warning">Medium</span>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Missing Security Headers</h3>
+                <p class="text-sm text-bl-text-secondary">
+                    No CSP, X-Frame-Options, or other security headers are set.
+                </p>
+                <div class="mt-4 p-3 rounded-lg bg-bl-card/50 border border-bl-border/50">
+                    <p class="text-xs text-bl-muted font-mono">Missing: CSP, X-Frame-Options, X-Content-Type-Options</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- API Section -->
+<section class="relative py-24">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <span class="inline-block px-3 py-1 rounded-full bg-bl-accent/10 border border-bl-accent/20 text-bl-accent text-sm font-medium mb-4">
+                API
+            </span>
+            <h2 class="text-3xl font-bold">Programmatic access</h2>
+            <p class="text-lg text-bl-text-secondary mt-4 max-w-2xl mx-auto">
+                BreachLabs exposes a REST API for triggering assessments and retrieving results.
+            </p>
+        </div>
+
+        <div class="glass-card p-6 overflow-x-auto">
+            <pre class="text-sm font-mono text-bl-text-secondary">POST /api/assessments
+Content-Type: application/json
+
+{
+  "repo_path": "/path/to/application",
+  "scope": {
+    "allowed_hosts": ["localhost"],
+    "isolated": true
+  }
+}
+
+<span class="text-bl-accent">Response:</span>
+{
+  "assessment_id": "abc-123",
+  "status": "in_progress",
+  "created_at": "2026-09-18T10:00:00Z"
+}
+
+<span class="text-bl-accent">GET /api/assessments/{id}/report</span>
+<span class="text-bl-accent">GET /api/assessments/{id}/findings</span>
+<span class="text-bl-accent">GET /api/assessments/{id}/events</span>
+<span class="text-bl-accent">POST /api/assessments/{id}/cancel</span></pre>
+        </div>
+
+        <div class="mt-6 p-4 rounded-lg bg-bl-card/50 border border-bl-border/50 text-center">
+            <p class="text-sm text-bl-text-secondary">
+                The API runs on <span class="font-mono text-bl-accent">localhost:8000</span> during the demo.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="relative py-16 bg-bl-surface/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold mb-4">Ready to try it yourself?</h2>
+        <p class="text-lg text-bl-text-secondary mb-8">
+            The BreachLabs repository includes everything you need to run the demo locally.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="https://github.com/notaayushsrivastava/BreachLabs" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-3 px-6 py-3 text-base font-semibold text-bl-accent bg-bl-accent/10 border border-bl-accent/20 rounded-xl hover:bg-bl-accent/20 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                View on GitHub
+            </a>
+            <a href="{{ url_for('features') }}" class="inline-flex items-center gap-3 px-6 py-3 text-base font-semibold text-bl-text bg-bl-card border border-bl-border rounded-xl hover:bg-bl-surface transition-colors">
+                Explore features
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
