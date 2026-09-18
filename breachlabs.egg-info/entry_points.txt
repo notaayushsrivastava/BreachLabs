@@ -1,0 +1,2 @@
+[console_scripts]
+breachlabs = breachlabs.api.server:main

@@ -1,0 +1,8 @@
+*.log
+*.pid
+.venv/*
+implementation_plan.md
+.pytest_cache/*
+.ruff_cache/*
+*.pyc
+*/__pycache__/*

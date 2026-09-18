@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "breachlabs"
+version = "0.1.0"
+description = "Build. Break. Verify. Fix. — An autonomous AI application-security engineer."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "BreachLabs Team" }]
+keywords = ["security", "sast", "dast", "ai-agent", "appsec"]
+
+dependencies = [
+    "pydantic>=2.0,<3.0",
+    "fastapi>=0.104,<0.112",
+    "uvicorn[standard]>=0.24,<0.31",
+    "httpx>=0.25,<1.0",
+    "pyyaml>=6.0,<7.0",
+    "python-multipart>=0.0.6",
+]
+
+[project.optional-dependencies]
+browser = ["playwright>=1.40,<2.0"]
+sast = ["semgrep>=1.40,<2.0"]
+sandbox = ["docker>=7.0,<8.0"]
+dev = [
+    "pytest>=7.4,<9.0",
+    "pytest-asyncio>=0.23,<1.0",
+    "pytest-cov>=4.1,<6.0",
+    "ruff>=0.1,<1.0",
+    "mypy>=1.7,<2.0",
+]
+
+[project.scripts]
+breachlabs = "breachlabs.api.server:main"
+
+[tool.setuptools.packages.find]
+include = ["breachlabs*"]
+
+[tool.pytest.ini_options]
+testpaths = ["breachlabs/tests", "tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "S"]
+ignore = ["S101"]  # asserts allowed in this codebase (tests + demo verification)
+
+[tool.ruff.lint.per-file-ignores]
+# The demo app contains INTENTIONAL vulnerabilities (PRD.md section 15).
+"breachlabs/demo/vulnerable_app.py" = ["S105", "S106", "S201", "S324", "S608", "E501"]
+# The sandbox launcher is a controlled internal component, not agent-exposed.
+"breachlabs/sandbox/manager.py" = ["S603", "S110", "E501"]
+# Scanner rule tables and probe URLs contain long literal strings.
+"breachlabs/mcp/tools/scanners.py" = ["E501"]
+"breachlabs/mcp/tool.py" = ["E501", "S104"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = false
+ignore_missing_imports = true
