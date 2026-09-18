@@ -1,0 +1,7 @@
+<article class="finding-artifact">
+<p class="mono">FINDING {{ finding.id }}</p>
+<h3>{{ finding.title }}</h3>
+<p>Severity {{ finding.severity|upper }} · Confidence {{ finding.confidence|upper }}</p>
+<p class="mono">Surface {{ finding.surface }}</p>
+{% with state=finding.status %}{% include "components/status.html" %}{% endwith %}
+</article>

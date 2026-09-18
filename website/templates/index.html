@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-hero">
+<div class="bg" aria-hidden="true">
+<video class="bg-video" autoplay muted loop playsinline>
+<source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4" type="video/mp4">
+</video>
+</div>
+<div class="hero-body">
+<div class="trust-row" aria-label="Product signals">
+<span class="trust-ring"><span><i class="fa-brands fa-microsoft" aria-hidden="true"></i></span></span>
+<span class="trust-ring"><span><i class="fa-brands fa-amazon" aria-hidden="true"></i></span></span>
+<span class="trust-ring"><span><i class="fa-brands fa-google" aria-hidden="true"></i></span></span>
+<span class="trust-pill">Open Source · MCP · SAST · DAST</span>
+</div>
+<h1 class="hero-headline"><span>Intelligence</span><span>Designed To Evolve</span></h1>
+<p class="hero-sub">Build applications that reason, adapt and collaborate using a modular AI platform designed for production.</p>
+<p class="hero-context">An autonomous security engineer for the software you just built.</p>
+<div class="cta-row">
+<a class="cta-glow" href="/demo">Get Started</a>
+<a class="cta-ghost" href="/how-it-works">How it works</a>
+</div>
+</div>
+<div class="hero-stats" aria-label="Illustrative product signals">
+{% with value="14", label="routes mapped*" %}{% include "components/metric.html" %}{% endwith %}
+{% with value="5", label="tool families*" %}{% include "components/metric.html" %}{% endwith %}
+{% with value="4", label="verification checks*" %}{% include "components/metric.html" %}{% endwith %}
+{% with value="7", label="stage security loop*" %}{% include "components/metric.html" %}{% endwith %}
+</div>
+</div>
+<section class="section reveal" id="signal">
+{% with label="01 — Product signal" %}{% include "components/section-label.html" %}{% endwith %}
+<h2>Security should run where software runs.</h2>
+<p class="copy-max">BreachLabs enters the build loop instead of treating security as a separate end-of-cycle task. *Illustrative signals.</p>
+<div class="assess-line" aria-hidden="true"></div>
+<p class="mono">Repository → Environment → Assessment → Evidence</p>
+</section>
+<section class="section reveal" id="loop">
+{% with label="02 — The security loop" %}{% include "components/section-label.html" %}{% endwith %}
+<h2>Build. Discover. Test. Investigate. Verify. Fix. Retest.</h2>
+<div class="demo-console mono" data-workflow>
+<p>BUILD — Create or receive the application.</p>
+<p>DISCOVER — Map routes, forms, APIs, auth flows.</p>
+<p>TEST — SAST, dependency, secret, DAST checks.</p>
+<p>INVESTIGATE — Correlate results with evidence.</p>
+<p>VERIFY — Targeted checks before certainty.</p>
+<p>FIX — Explain remediation, prepare targeted fix.</p>
+<p>RETEST — Repeat assessment, confirm resolution.</p>
+</div>
+<p><a class="cta-ghost" href="/how-it-works">Explore the loop</a></p>
+</section>
+<section class="section reveal" id="recon">
+{% with label="03 — From repository to attack surface" %}{% include "components/section-label.html" %}{% endwith %}
+<h2>From repository to attack surface.</h2>
+<div class="demo-console mono">
+<p>routes found 14 · forms discovered 3 · APIs observed 9 · auth flow 1 · static assets 37</p>
+<p>*Illustrative output.</p>
+</div>
+</section>
+<section class="section reveal" id="tools">
+{% with label="04 — Deterministic tools" %}{% include "components/section-label.html" %}{% endwith %}
+<h2>AI does not replace the tools. It makes the tools useful together.</h2>
+<p class="mono">SAST + SCA + Secrets + DAST + Browser → Evidence Graph</p>
+<p class="copy-max">Measurement stays deterministic. Reasoning correlates the measurements.</p>
+</section>
+<section class="section reveal" id="investigate">
+{% with label="05 — AI investigation" %}{% include "components/section-label.html" %}{% endwith %}
+<h2>Signal becomes evidence.</h2>
+<p class="mono">Signal → Source context → Runtime context → Related evidence → Confidence</p>
+<p>SOURCE MATCHED · RUNTIME OBSERVED · REPRODUCTION ATTEMPTED</p>
+</section>
+<section class="section reveal" id="verify">
+{% with label="06 — Verification" %}{% include "components/section-label.html" %}{% endwith %}
+<h2>Evidence before certainty.</h2>
+<p>DETECTED → INVESTIGATING → VERIFIED or UNCONFIRMED</p>
+</section>
+<section class="section reveal" id="evidence">
+{% with label="07 — Evidence-backed finding" %}{% include "components/section-label.html" %}{% endwith %}
+<h2>One finding, fully shown.</h2>
+{% with finding={"id": "BL-0142", "title": "Sensitive Data Exposure", "severity": "high", "confidence": "verified", "status": "verified", "surface": "GET /api/profile"} %}{% include "components/finding.html" %}{% endwith %}
+</section>
+<section class="section reveal" id="fix">
+{% with label="08 — Fix and retest" %}{% include "components/section-label.html" %}{% endwith %}
+<h2>The loop closes.</h2>
+<p class="mono">Finding → Remediation → Patch → Retest → Verified resolved</p>
+<p class="mono">BEFORE unsafe behavior · AFTER corrected behavior · RETEST: PASS</p>
+<p class="copy-max">Current MVP provides remediation guidance; automated patching is a supported/future capability.</p>
+</section>
+<section class="section reveal" id="cta">
+{% with label="Final — CTA" %}{% include "components/section-label.html" %}{% endwith %}
+<h2>Give every application its own security engineer.</h2>
+<p class="copy-max">Build faster. Validate earlier. Ship with evidence.</p>
+<div class="cta-row"><a class="cta-glow" href="/demo">View Demo</a>
+<a class="cta-ghost" href="/architecture">Explore Architecture</a></div>
+</section>
+{% endblock %}

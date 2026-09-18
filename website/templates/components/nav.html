@@ -1,0 +1,18 @@
+<header class="site-header">
+<a class="logo-btn" href="/" aria-label="BreachLabs home">
+<img src="/static/images/logo.webp" alt="" width="34" height="34"></a>
+<nav class="nav-pill" aria-label="Primary">
+<a class="nav-link{% if request.path == '/' %} is-active{% endif %}" {% if request.path == '/' %}aria-current="page"{% endif %} href="/">Home</a>
+<a class="nav-link{% if request.path == '/how-it-works' %} is-active{% endif %}" {% if request.path == '/how-it-works' %}aria-current="page"{% endif %} href="/how-it-works">Product</a>
+<a class="nav-link{% if request.path == '/architecture' %} is-active{% endif %}" {% if request.path == '/architecture' %}aria-current="page"{% endif %} href="/architecture">Architecture</a>
+<a class="nav-link{% if request.path == '/security' %} is-active{% endif %}" {% if request.path == '/security' %}aria-current="page"{% endif %} href="/security">Security</a>
+<a class="nav-link{% if request.path == '/about' %} is-active{% endif %}" {% if request.path == '/about' %}aria-current="page"{% endif %} href="/about">About</a>
+</nav>
+<a class="signin-pill" href="/demo">Demo</a>
+<button class="nav-burger" data-nav-toggle aria-expanded="false" aria-controls="mobile-sheet" aria-label="Open menu">☰</button>
+</header>
+<div id="mobile-sheet" class="mobile-sheet" role="dialog" aria-modal="true" aria-label="Menu">
+<a href="/">Home</a><a href="/how-it-works">Product</a>
+<a href="/architecture">Architecture</a><a href="/security">Security</a>
+<a href="/capabilities">Capabilities</a><a href="/demo">Demo</a><a href="/about">About</a>
+</div>

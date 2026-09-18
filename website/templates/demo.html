@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section"><h1>Demo — deterministic assessment</h1>
+<p class="copy-max"><strong>Clearly labeled illustrative demo.</strong> No live scanning, no external targets, no shell commands.</p>
+<div class="demo-console mono" id="demo-console">
+<p>Assessment {{ assessment.assessment_id }} · {{ assessment.status }} · target {{ assessment.target }}</p>
+<p>routes_discovered {{ assessment.routes_discovered }} · duration {{ assessment.duration_ms }}ms</p>
+{% for f in assessment.findings %}
+<p>{{ f.id }} · {{ f.title }} · {{ f.severity|upper }} · {{ f.status|upper }} · {{ f.surface }}</p>
+{% endfor %}
+</div>
+<script>window.DEMO_ASSESSMENT = {{ assessment | tojson }};</script>
+</section>
+{% endblock %}
+{% block scripts %}<script type="module" src="/static/js/demo.js" defer></script>{% endblock %}
