@@ -1,95 +1,331 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="page-flow">
-<div class="section-tight" style="max-width:var(--shell);margin:0 auto;padding-inline:var(--gut)">
-  <div class="idx-line"><span class="eyebrow">Demo</span><i aria-hidden="true"></i><span class="eyebrow">Security assessment report</span></div>
-  <h1 class="page-title" style="margin-top:18px;color:var(--fg)">{{ assessment.assessment_id }}</h1>
-  <p class="body-sm mt-l" style="color:var(--fg-soft)">{{ assessment.status|title }} assessment · breachlabs-demo · {{ assessment.duration_ms }}ms · {{ assessment.routes_discovered }} routes</p>
-</div>
-
-<section class="section">
-  <div class="section-head reveal">
-    {% with idx="01", label="At a glance" %}{% include "components/section-label.html" %}{% endwith %}
-    <h2 class="h-section" style="margin-bottom:24px">{{ assessment.assessment_id }} — Summary</h2>
+  <!-- Page Header -->
+  <div class="section-tight" style="max-width:var(--shell);margin:0 auto;padding-inline:var(--gut)">
+    <div class="idx-line"><span class="eyebrow">Demo</span><i aria-hidden="true"></i><span class="eyebrow">Deterministic Assessment Engine</span></div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-top:18px">
+      <div>
+        <h1 class="page-title">{{ assessment.assessment_id }}</h1>
+        <p class="body-sm mt-l" style="margin-top:8px;color:var(--fg-soft)">
+          Interactive illustrative assessment replay · <span data-active-target>{{ assessment.target }}</span> · <span data-active-duration>{{ assessment.duration_ms }}ms</span> · <span data-active-routes>{{ assessment.routes_discovered }}</span> routes mapped
+        </p>
+      </div>
+      <div class="chip-row">
+        <span class="status status--verified" data-demo-global-status><i aria-hidden="true"></i>COMPLETED</span>
+        <span class="chip" style="border-color:rgba(127,209,168,0.3)">Deterministic Replay</span>
+      </div>
+    </div>
   </div>
 
-  <div class="grid-4" style="margin-bottom:28px">
-    <div class="bezel reveal">
-      <div class="bezel-core">
-        <div class="stack-sm">
-          <div style="text-align:center">
-            <div style="font-family:var(--font-display);font-weight:400;font-size:clamp(32px,4vw,50px);line-height:1;letter-spacing:-0.03em;color:var(--fg)">{{ assessment.findings|length }}</div>
-            <div class="body-sm" style="margin-top:6px">Findings</div>
+  <section class="section" style="padding-top:10px">
+    <!-- Assessment Controls & Scenario Switcher -->
+    <div class="demo-controls-bar reveal">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span class="eyebrow" style="color:var(--fg-soft)">Target Scenario:</span>
+        <button class="chip is-active" type="button" data-scenario="ecommerce" aria-pressed="true">breachlabs-demo</button>
+        <button class="chip" type="button" data-scenario="api-gateway" aria-pressed="false">api-gateway-v2</button>
+        <button class="chip" type="button" data-scenario="auth-service" aria-pressed="false">auth-service</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" type="button" data-demo-replay>
+          <span class="btn-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </span>
+          Run Simulation
+        </button>
+        <button class="btn btn-ghost btn-sm" type="button" data-demo-next>
+          Step Next ›
+        </button>
+        <button class="btn btn-ghost btn-sm" type="button" data-demo-reset title="Reset Simulation">
+          ↺ Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Stage Pipeline Bar -->
+    <div class="demo-stage-bar reveal" data-stage-pipeline>
+      <div class="demo-step-pill" data-step-idx="0" data-active="true">
+        <span class="step-num">STAGE 01</span>
+        <span class="step-name">Discovery & Recon</span>
+      </div>
+      <div class="demo-step-pill" data-step-idx="1" data-active="true">
+        <span class="step-num">STAGE 02</span>
+        <span class="step-name">Deterministic Scans</span>
+      </div>
+      <div class="demo-step-pill" data-step-idx="2" data-active="true">
+        <span class="step-num">STAGE 03</span>
+        <span class="step-name">AI Investigation</span>
+      </div>
+      <div class="demo-step-pill" data-step-idx="3" data-active="true">
+        <span class="step-num">STAGE 04</span>
+        <span class="step-name">Targeted Verification</span>
+      </div>
+      <div class="demo-step-pill" data-step-idx="4" data-active="true">
+        <span class="step-num">STAGE 05</span>
+        <span class="step-name">Fix & Retest Proof</span>
+      </div>
+    </div>
+
+    <!-- Summary KPI Cards -->
+    <div class="grid-4 reveal" style="margin-bottom:28px">
+      <div class="bezel">
+        <div class="bezel-core">
+          <div class="card-k">Discovered Findings</div>
+          <b class="metric" style="border:0;padding:0;margin-top:8px"><b data-metric-findings style="font-size:36px">{{ assessment.findings|length }}</b></b>
+          <div class="body-sm" style="margin-top:6px;font-size:12px;color:var(--fg-faint)">
+            <span data-metric-verified-count style="color:var(--ok);font-weight:600">2</span> Verified · <span data-metric-investigating-count style="color:var(--warn);font-weight:600">1</span> Investigating
           </div>
-          <div class="keyline" style="margin:0">
-            {% for r in assessment.findings if r.confidence == 'verified' %}
-            <div style="background:var(--ok);width:6px;height:6px;border-radius:50%;display:grid;place-items:center;margin-bottom:6px"></div>
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <span class="txt-xs" style="color:var(--fg-mute)">Verified</span>
-              <span style="font-family:var(--font-mono);font-size:11px;color:var(--fg)">{{ loop.length }}</span>
+        </div>
+      </div>
+
+      <div class="bezel">
+        <div class="bezel-core">
+          <div class="card-k">Verification Rate</div>
+          <b class="metric" style="border:0;padding:0;margin-top:8px"><b style="font-size:36px;color:var(--ok)">100%</b></b>
+          <div class="body-sm" style="margin-top:6px;font-size:12px;color:var(--fg-faint)">Zero unproven claims</div>
+        </div>
+      </div>
+
+      <div class="bezel">
+        <div class="bezel-core">
+          <div class="card-k">Target Execution Time</div>
+          <b class="metric" style="border:0;padding:0;margin-top:8px"><b data-metric-duration style="font-size:36px">{{ assessment.duration_ms }}<em>ms</em></b></b>
+          <div class="body-sm" style="margin-top:6px;font-size:12px;color:var(--fg-faint)">Deterministic pipeline replay</div>
+        </div>
+      </div>
+
+      <div class="bezel">
+        <div class="bezel-core">
+          <div class="card-k">Mapped Surface</div>
+          <b class="metric" style="border:0;padding:0;margin-top:8px"><b data-metric-routes style="font-size:36px">{{ assessment.routes_discovered }}</b></b>
+          <div class="body-sm" style="margin-top:6px;font-size:12px;color:var(--fg-faint)">Routes, forms &amp; APIs</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Telemetry Stream Terminal -->
+    <div class="bezel reveal" style="margin-bottom:32px">
+      <div class="bezel-core" style="padding:0">
+        <div class="terminal" style="border:0;border-radius:0">
+          <div class="terminal-bar" style="justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:8px">
+              <b></b><b></b><b></b>
+              <span>live assessment telemetry — <span data-active-target-terminal>{{ assessment.target }}</span></span>
             </div>
-            {% endfor %}
-            {% for r in assessment.findings if r.confidence != 'verified' %}
-            <div style="background:var(--warn);width:6px;height:6px;border-radius:50%;display:grid;place-items:center;margin-bottom:6px"></div>
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <span class="txt-xs" style="color:var(--fg-mute)">Investigating</span>
-              <span style="font-family:var(--font-mono);font-size:11px;color:var(--fg)">{{ loop.length }}</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="status status--verified" style="font-size:9.5px;padding:3px 8px" data-stream-indicator><i aria-hidden="true"></i>STREAM ACTIVE</span>
             </div>
-            {% endfor %}
+          </div>
+          <div class="terminal-body" data-telemetry-body style="max-height:160px;overflow-y:auto">
+            <div class="l"><u>01</u><span class="cm">[00:00.120] INTAKE: Repository checked out at revision <code>a9f82d1</code> (clean sandbox)</span></div>
+            <div class="l"><u>02</u><span class="cm">[00:01.450] DISCOVER: Enumerated 14 HTTP routes, 3 forms, 9 JSON endpoints</span></div>
+            <div class="l"><u>03</u><span class="hl">[00:02.810] SAST: Taint sink in search.py:38 -> direct string concatenation into SQL query</span></div>
+            <div class="l"><u>04</u><span class="cm">[00:03.200] AGENT: Correlated route GET /search?q= with unvalidated query parameter</span></div>
+            <div class="l"><u>05</u><span class="add">[00:04.110] VERIFY: Dispatched deterministic probe -> Syntax verification payload confirmed BL-DEMO-001</span></div>
+            <div class="l"><u>06</u><span class="cm">[00:04.820] SUMMARY: Assessment complete · 3 findings recorded in append-only evidence store</span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="bezel reveal">
-      <div class="bezel-core">
-        <div class="stack-sm">
-          <div class="meta-row"><span class="meta-r"><span class="lbl">Assessment</span><span class="val">{{ assessment.assessment_id }}</span></span></div>
-          <div class="meta-row"><span class="meta-r"><span class="lbl">Target</span><span class="val">{{ assessment.target }}</span></span></div>
-          <div class="meta-row"><span class="meta-r"><span class="lbl">Status</span><span class="val">{{ assessment.status|upper }}</span></span></div>
-          <div class="meta-row"><span class="meta-r"><span class="lbl">Duration</span><span class="val">{{ assessment.duration_ms }} ms</span></span></div>
-          <div class="meta-row"><span class="meta-r"><span class="lbl">Routes</span><span class="val">{{ assessment.routes_discovered }}</span></span></div>
+    <!-- View Tabs: Findings Grid vs Raw Markdown Report vs Raw JSON -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:20px" class="reveal">
+      <div class="chip-row">
+        <button class="chip is-active" type="button" data-view-tab="findings" aria-pressed="true">Findings Explorer</button>
+        <button class="chip" type="button" data-view-tab="report" aria-pressed="false">Generated Report (Markdown)</button>
+        <button class="chip" type="button" data-view-tab="json" aria-pressed="false">Raw Telemetry JSON</button>
+      </div>
+
+      <!-- Severity Filter -->
+      <div class="filter-row" role="group" aria-label="Filter by severity" style="margin-bottom:0" data-filter-controls>
+        <button class="chip is-active" data-sev-filter="all" aria-pressed="true" type="button">All (<span data-count-all>{{ assessment.findings|length }}</span>)</button>
+        <button class="chip" data-sev-filter="high" aria-pressed="false" type="button">High (<span data-count-high>2</span>)</button>
+        <button class="chip" data-sev-filter="medium" aria-pressed="false" type="button">Medium (<span data-count-medium>1</span>)</button>
+        <button class="chip" data-sev-filter="low" aria-pressed="false" type="button">Low (<span data-count-low>0</span>)</button>
+      </div>
+    </div>
+
+    <!-- TAB 1: Findings Grid -->
+    <div data-view-panel="findings">
+      <div class="bento" data-findings>
+        {% for f in assessment.findings %}
+        <div class="b-4" data-finding data-finding-id="{{ f.id }}" data-sev="{{ f.severity }}">
+          <div class="bezel" style="height:100%"><div class="bezel-core finding-card" data-card-finding="{{ f.id }}">
+            <div class="artifact-top" style="border-bottom:0;padding-bottom:0">
+              <span class="artifact-id mono">{{ f.id }}</span>
+              {% with state=f.status %}{% include "components/status.html" %}{% endwith %}
+            </div>
+            <p class="h-card mt-l" style="margin-top:14px">{{ f.title }}</p>
+            <div class="keyline mt-l" style="margin-top:16px">
+              <div><span class="k">Severity</span><span class="v" style="font-weight:700;color:{% if f.severity == 'high' %}var(--bad){% elif f.severity == 'medium' %}var(--warn){% else %}var(--info){% endif %}">{{ f.severity|upper }}</span></div>
+              <div><span class="k">Confidence</span><span class="v" style="color:{% if f.confidence == 'verified' %}var(--ok){% else %}var(--warn){% endif %}">{{ f.confidence|upper }}</span></div>
+              <div><span class="k">Surface</span><span class="v"><code>{{ f.surface }}</code></span></div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid var(--hair)">
+              <span class="eyebrow" style="font-size:10px">Click to inspect</span>
+              <span class="link-arrow" style="font-size:12px">Evidence &amp; Fix →</span>
+            </div>
+          </div></div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Deep Finding Inspector Drawer / Modal -->
+      <div class="finding-detail-drawer mt-l" data-finding-drawer style="margin-top:28px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;border-bottom:1px solid var(--hair-strong);padding-bottom:18px">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="mono" data-drawer-id style="font-size:14px;font-weight:700;color:var(--fg)">BL-DEMO-001</span>
+              <span class="status status--verified" data-drawer-status><i aria-hidden="true"></i>VERIFIED</span>
+              <span class="chip" data-drawer-cwe style="font-size:10.5px">CWE-89: SQL Injection</span>
+            </div>
+            <h2 class="h-card" data-drawer-title style="font-size:22px;margin-top:10px">SQL injection in search parameter</h2>
+          </div>
+          <div class="chip-row">
+            <span class="eyebrow">Surface:</span>
+            <code data-drawer-surface style="font-size:13px;background:var(--ink-250);padding:5px 10px;border-radius:6px;border:1px solid var(--hair-strong)">GET /search?q=</code>
+          </div>
+        </div>
+
+        <div class="split mt-l" style="margin-top:24px">
+          <!-- Left Column: Source Context & Evidence Chain -->
+          <div>
+            <p class="card-k">1. Vulnerable Code Context</p>
+            <div class="terminal mt-l" style="margin-top:10px">
+              <div class="terminal-bar"><b></b><b></b><b></b><span data-drawer-code-file>search.py:38</span></div>
+              <div class="terminal-body" data-drawer-code-body>
+                <div class="l"><u>36</u><span class="cm">def search_products(request):</span></div>
+                <div class="l"><u>37</u><span class="cm">&nbsp;&nbsp;&nbsp;&nbsp;term = request.args.get('q', '')</span></div>
+                <div class="l hl"><u>38</u><span>&nbsp;&nbsp;&nbsp;&nbsp;query = "SELECT * FROM items WHERE name = '" + term + "'"</span></div>
+                <div class="l"><u>39</u><span class="cm">&nbsp;&nbsp;&nbsp;&nbsp;return db.engine.execute(query).fetchall()</span></div>
+              </div>
+            </div>
+
+            <p class="card-k mt-l" style="margin-top:20px">2. Evidence Provenance Chain</p>
+            <div class="evidence mt-l" data-drawer-evidence style="margin-top:10px">
+              <div class="evidence-row" data-sev="high">
+                <span class="sev" aria-hidden="true"></span>
+                <span class="src"><code>search.py:38 — AST Taint analysis sink</code></span>
+                <span class="kind">SAST</span>
+              </div>
+              <div class="evidence-row" data-sev="high">
+                <span class="sev" aria-hidden="true"></span>
+                <span class="src"><code>GET /search?q='%20OR%20'1'='1 → HTTP 200 with full DB dump</code></span>
+                <span class="kind">DAST PROBE</span>
+              </div>
+              <div class="evidence-row" data-sev="medium">
+                <span class="sev" aria-hidden="true"></span>
+                <span class="src"><code>Unparameterized SQL executed in 2 surrounding helper calls</code></span>
+                <span class="kind">CORRELATION</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: AI Reasoning & Remediation Diff -->
+          <div>
+            <p class="card-k">3. AI Security Analysis</p>
+            <div class="panel mt-l" style="margin-top:10px">
+              <p class="body-sm" data-drawer-reasoning style="color:var(--fg)">
+                The <code>q</code> query parameter is read directly from untrusted user input and concatenated without sanitization or SQL parameter binding. The verification probe confirmed that arbitrary SQL syntax executes against the SQLite datastore.
+              </p>
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px">
+              <p class="card-k">4. Remediation Patch</p>
+              <button class="btn btn-ghost btn-sm" type="button" data-copy-patch style="height:28px;padding:0 10px;font-size:11px">
+                <i class="fa-regular fa-copy" aria-hidden="true" style="margin-right:4px"></i><span data-copy-text>Copy Patch</span>
+              </button>
+            </div>
+            <div class="terminal mt-l" style="margin-top:10px">
+              <div class="terminal-bar"><b></b><b></b><b></b><span>git diff — search.py</span></div>
+              <div class="terminal-body" data-drawer-diff-body>
+                <div class="l"><u>1</u><span class="del">- query = "SELECT * FROM items WHERE name = '" + term + "'"</span></div>
+                <div class="l"><u>2</u><span class="del">- return db.engine.execute(query).fetchall()</span></div>
+                <div class="l"><u>3</u><span class="add">+ query = "SELECT * FROM items WHERE name = ?"</span></div>
+                <div class="l"><u>4</u><span class="add">+ return db.engine.execute(query, (term,)).fetchall()</span></div>
+              </div>
+            </div>
+
+            <div class="notice mt-l" style="margin-top:16px;background:rgba(127,209,168,0.06);border-color:rgba(127,209,168,0.3)">
+              <span aria-hidden="true"><i class="fa-solid fa-circle-check" style="color:var(--ok)"></i></span>
+              <span style="font-size:13px"><b style="color:var(--ok)">Retest Verified:</b> Replaying probe payload against patched code resulted in HTTP 200 with zero injected query syntax execution. Finding marked RESOLVED.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state mt-l" data-empty hidden>NO FINDINGS MATCH THIS FILTER</div>
+      <p class="body-sm mt-l" style="margin-top:18px"><span data-count-label>{{ assessment.findings|length }}</span> of {{ assessment.findings|length }} findings shown. Assessment replay is fully deterministic.</p>
+    </div>
+
+    <!-- TAB 2: Generated Markdown Report Preview -->
+    <div data-view-panel="report" hidden>
+      <div class="bezel">
+        <div class="bezel-core">
+          <div class="terminal">
+            <div class="terminal-bar" style="justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:8px">
+                <b></b><b></b><b></b>
+                <span>security-assessment-report.md</span>
+              </div>
+              <button class="btn btn-ghost btn-sm" type="button" data-copy-report style="height:28px;padding:0 10px;font-size:11px">
+                <i class="fa-regular fa-copy" aria-hidden="true" style="margin-right:4px"></i><span data-copy-report-text>Copy Markdown</span>
+              </button>
+            </div>
+            <div class="terminal-body" data-report-markdown-body style="line-height:1.7;font-size:13px">
+              <div class="l"><u>01</u><span class="cm"># Security Assessment Report — <span data-report-target>{{ assessment.target }}</span></span></div>
+              <div class="l"><u>02</u><span class="cm">**Assessment ID:** <span data-report-id>{{ assessment.assessment_id }}</span> | **Status:** COMPLETED | **Date:** 2026-09-19</span></div>
+              <div class="l"><u>03</u><span class="cm">---</span></div>
+              <div class="l"><u>04</u><span>## 1. Executive Summary</span></div>
+              <div class="l"><u>05</u><span>BreachLabs completed an autonomous security assessment of the target environment.</span></div>
+              <div class="l"><u>06</u><span>Total routes mapped: **14** | Discovered findings: **3** | Verified exploits: **2** | Unconfirmed: **0**</span></div>
+              <div class="l"><u>07</u><span class="cm">---</span></div>
+              <div class="l"><u>08</u><span>## 2. Verified Findings</span></div>
+              <div class="l"><u>09</u><span class="hl">### [BL-DEMO-001] SQL Injection in Search Parameter (Severity: HIGH, CVSS: 8.4)</span></div>
+              <div class="l"><u>10</u><span>- **Surface:** `GET /search?q=`</span></div>
+              <div class="l"><u>11</u><span>- **Source Context:** `search.py:38`</span></div>
+              <div class="l"><u>12</u><span>- **Evidence:** Probe payload confirmed unparameterized SQL execution returning database records.</span></div>
+              <div class="l"><u>13</u><span>- **Remediation:** Bind user parameter using prepared statements `cursor.execute(query, (term,))`.</span></div>
+              <div class="l"><u>14</u><span>- **Retest Status:** VERIFIED RESOLVED after patch application.</span></div>
+              <div class="l"><u>15</u><span class="hl">### [BL-DEMO-002] Reflected XSS in Comment Field (Severity: HIGH, CVSS: 7.2)</span></div>
+              <div class="l"><u>16</u><span>- **Surface:** `POST /comments`</span></div>
+              <div class="l"><u>17</u><span>- **Evidence:** Unescaped HTML rendering in comment stream verified via automated browser probe.</span></div>
+              <div class="l"><u>18</u><span class="cm">---</span></div>
+              <div class="l"><u>19</u><span>## 3. Stated Limitations</span></div>
+              <div class="l"><u>20</u><span>Automated assessment covers scoped surface only. Logic flaws outside tested paths are not assessed.</span></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<section class="section">
-  <div class="section-head reveal">
-    {% with idx="02", label="Findings" %}{% include "components/section-label.html" %}{% endwith %}
-    <h2 class="h-section" style="margin-bottom:24px">Detailed findings</h2>
-  </div>
-
-  <div class="filter-row" role="group" aria-label="Filter by severity">
-    <button class="chip" data-sev-filter="all" aria-pressed="true" type="button">All</button>
-    <button class="chip" data-sev-filter="high" aria-pressed="false" type="button">High</button>
-    <button class="chip" data-sev-filter="medium" aria-pressed="false" type="button">Medium</button>
-    <button class="chip" data-sev-filter="low" aria-pressed="false" type="button">Low</button>
-    <span class="body-sm" style="color:var(--fg-faint);margin-left:auto">Showing <span data-count>{{ assessment.findings|length }}</span> of {{ assessment.findings|length }}</span>
-  </div>
-
-    <div class="bento" data-findings>
-      {% for f in assessment.findings %}
-      <div class="b-4" data-finding data-sev="{{ f.severity }}">
-        <div class="bezel" style="height:100%"><div class="bezel-core">
-          <div class="artifact-top" style="border-bottom:0;padding-bottom:0">
-            <span class="artifact-id mono">{{ f.id }}</span>
-            {% with state=f.status %}{% include "components/status.html" %}{% endwith %}
+    <!-- TAB 3: Raw Telemetry JSON -->
+    <div data-view-panel="json" hidden>
+      <div class="bezel">
+        <div class="bezel-core">
+          <div class="terminal">
+            <div class="terminal-bar">
+              <b></b><b></b><b></b>
+              <span>assessment-telemetry.json</span>
+            </div>
+            <div class="terminal-body" data-report-json-body style="font-size:12px;line-height:1.65">
+              <div class="l"><u>01</u><span>{</span></div>
+              <div class="l"><u>02</u><span>&nbsp;&nbsp;"assessment_id": "<span data-json-id>{{ assessment.assessment_id }}</span>",</span></div>
+              <div class="l"><u>03</u><span>&nbsp;&nbsp;"status": "completed",</span></div>
+              <div class="l"><u>04</u><span>&nbsp;&nbsp;"target": "<span data-json-target>{{ assessment.target }}</span>",</span></div>
+              <div class="l"><u>05</u><span>&nbsp;&nbsp;"duration_ms": <span data-json-duration>{{ assessment.duration_ms }}</span>,</span></div>
+              <div class="l"><u>06</u><span>&nbsp;&nbsp;"routes_discovered": <span data-json-routes>{{ assessment.routes_discovered }}</span>,</span></div>
+              <div class="l"><u>07</u><span>&nbsp;&nbsp;"pipeline_stages": ["discovery", "sast", "dast", "agent_investigation", "verification", "retest"],</span></div>
+              <div class="l"><u>08</u><span>&nbsp;&nbsp;"findings_count": {{ assessment.findings|length }},</span></div>
+              <div class="l"><u>09</u><span>&nbsp;&nbsp;"findings_verified": 2,</span></div>
+              <div class="l"><u>10</u><span>&nbsp;&nbsp;"verification_rate": 1.0</span></div>
+              <div class="l"><u>11</u><span>}</span></div>
+            </div>
           </div>
-          <p class="h-card mt-l">{{ f.title }}</p>
-          <div class="keyline mt-l">
-            <div><span class="k">Severity</span><span class="v">{{ f.severity|upper }}</span></div>
-            <div><span class="k">Confidence</span><span class="v">{{ f.confidence|upper }}</span></div>
-            <div><span class="k">Surface</span><span class="v">{{ f.surface }}</span></div>
-          </div>
-        </div></div>
+        </div>
       </div>
-      {% endfor %}
     </div>
-
-    <div class="empty-state mt-l" data-empty hidden>NO FINDINGS MATCH THIS FILTER</div>
-    <p class="body-sm mt-l"><span data-count-label>{{ assessment.findings|length }}</span> of {{ assessment.findings|length }} findings shown.</p>
   </section>
 </div>
 {% endblock %}

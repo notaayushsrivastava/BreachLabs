@@ -56,6 +56,7 @@
   <div class="idx-line"><span class="eyebrow">Assessment thread</span><i aria-hidden="true"></i><span class="eyebrow">Repository → Environment → Assessment → Evidence</span></div>
   <p class="body-sm mt-l" style="max-width:66ch">*Hero signals are illustrative product values, not verified operating measurements. Everywhere else on this site, evidence is shown as evidence — with its source.</p>
 </section>
+
 <!-- ============================ 01 — THE GAP ============================ -->
 <section class="section" id="gap">
   <div class="section-head reveal">
@@ -68,27 +69,34 @@
     <div class="stack reveal">
       <div class="bezel">
         <div class="bezel-core">
-          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><path d="M6 3v18M10 5v14M14 7v12M18 9v10" stroke-dasharray="3 3"/><circle cx="12" cy="11" r="1.6"/><path d="M9 10h6M9 13h6"/></svg></span>
+          <span class="card-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </span>
           <p class="card-k">Before</p>
-          <p class="h-card">Scanners produce lists.</p>
-          <p class="body-sm mt-l">A tool reports a pattern. There is no source line, no runtime observation, and no attempt to prove the issue is reachable. Triage becomes guesswork.</p>
+          <p class="h-card mt-l" style="margin-top:8px">Scanners produce lists.</p>
+          <p class="body-sm mt-l" style="margin-top:10px">A tool reports a pattern. There is no source line, no runtime observation, and no attempt to prove the issue is reachable. Triage becomes guesswork.</p>
         </div>
       </div>
-      <div class="bezel">
+      <div class="bezel bezel-highlight">
         <div class="bezel-core">
-          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><rect x="3" y="5" width="7" height="7" rx="1"/><rect x="14" y="9" width="7" height="7" rx="1"/><path d="M10 8h4"/><path d="M13 10v4"/><path d="M6 8h2M18 8h2M6 14h2M18 14h2"/></svg></span>
-          <p class="card-k">Instead</p>
-          <p class="h-card">Investigation produces evidence.</p>
-          <p class="body-sm mt-l">BreachLabs correlates source context, runtime behaviour, and related signals, then states what it can and cannot prove.</p>
+          <span class="card-ico" aria-hidden="true" style="color:var(--ok)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          </span>
+          <p class="card-k" style="color:var(--ok)">Instead</p>
+          <p class="h-card mt-l" style="margin-top:8px">Investigation produces evidence.</p>
+          <p class="body-sm mt-l" style="margin-top:10px">BreachLabs correlates source context, runtime behaviour, and related signals, then states what it can and cannot prove.</p>
         </div>
       </div>
     </div>
 
     <div class="reveal">
-      <div class="bezel">
+      <div class="bezel" style="height:100%">
         <div class="bezel-core">
+          <span class="card-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg>
+          </span>
           <p class="card-k">The operating principle</p>
-          <p class="lede mt-l" style="max-width:none">Deterministic tools do the measuring. The agent does the reasoning. Evidence connects the two, and nothing is called verified until a targeted check confirms it.</p>
+          <p class="lede mt-l" style="max-width:none;margin-top:12px">Deterministic tools do the measuring. The agent does the reasoning. Evidence connects the two, and nothing is called verified until a targeted check confirms it.</p>
           <div class="keyline mt-l">
             <div><span class="k">Detection</span><span class="v">deterministic tooling</span></div>
             <div><span class="k">Interpretation</span><span class="v">agent reasoning</span></div>
@@ -137,7 +145,7 @@
       <div class="bezel" style="height:100%">
         <div class="bezel-core">
           <p class="card-k">Discovered surface</p>
-          <div class="terminal mt-l">
+          <div class="terminal mt-l" style="margin-top:14px">
             <div class="terminal-bar"><b></b><b></b><b></b><span>recon — breachlabs-demo</span></div>
             <div class="terminal-body">
               <div class="l"><u>01</u><span>routes <span class="cm">→</span> 14 discovered</span></div>
@@ -148,7 +156,7 @@
               <div class="l"><u>06</u><span>assets <span class="cm">·</span> 37 static files</span></div>
             </div>
           </div>
-          <p class="body-sm mt-l">Illustrative recon output. Real assessments record the same fields from the running application.</p>
+          <p class="body-sm mt-l" style="margin-top:14px">Illustrative recon output. Real assessments record the same fields from the running application.</p>
         </div>
       </div>
     </div>
@@ -157,7 +165,7 @@
       <div class="bezel">
         <div class="bezel-core">
           <p class="card-k">Surface counters</p>
-          <div class="keyline mt-l">
+          <div class="keyline mt-l" style="margin-top:14px">
             <div><span class="k">Routes discovered</span><span class="v">14</span></div>
             <div><span class="k">Forms</span><span class="v">3</span></div>
             <div><span class="k">API endpoints</span><span class="v">9</span></div>
@@ -168,9 +176,11 @@
       </div>
       <div class="bezel">
         <div class="bezel-core">
-          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><circle cx="5.5" cy="5.5" r="2"/><circle cx="18.5" cy="5.5" r="2"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/><path d="M7.5 6.5 10.5 10"/><path d="M16.5 6.5 13.5 10"/><path d="M9.5 17.5 12.5 13.5"/><path d="M3 8h2M21 8h2M3 16h2M21 16h2"/></svg></span>
+          <span class="card-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+          </span>
           <p class="card-k">Scope</p>
-          <p class="body-sm">Every subsequent test is scoped to the discovered surface. Nothing is probed outside the authorised target.</p>
+          <p class="body-sm mt-l" style="margin-top:8px">Every subsequent test is scoped to the discovered surface. Nothing is probed outside the authorised target.</p>
         </div>
       </div>
     </div>
@@ -186,33 +196,42 @@
   </div>
 
   <div class="flow reveal">
-    <div><p class="card-k">SAST</p><p class="node-t mt-l">Source patterns</p></div>
-    <div><p class="card-k">Dependencies</p><p class="node-t mt-l">Known-vulnerable versions</p></div>
-    <div><p class="card-k">Secrets</p><p class="node-t mt-l">Committed credentials</p></div>
-    <div><p class="card-k">DAST</p><p class="node-t mt-l">Runtime behaviour</p></div>
-    <div><p class="card-k">Browser</p><p class="node-t mt-l">Client-side state</p></div>
+    <div><p class="card-k">SAST</p><p class="node-t mt-l" style="margin-top:10px">Source patterns</p></div>
+    <div><p class="card-k">Dependencies</p><p class="node-t mt-l" style="margin-top:10px">Known-vulnerable versions</p></div>
+    <div><p class="card-k">Secrets</p><p class="node-t mt-l" style="margin-top:10px">Committed credentials</p></div>
+    <div><p class="card-k">DAST</p><p class="node-t mt-l" style="margin-top:10px">Runtime behaviour</p></div>
+    <div><p class="card-k">Browser</p><p class="node-t mt-l" style="margin-top:10px">Client-side state</p></div>
   </div>
 
   <div class="grid-3 mt-l stagger reveal">
     <div class="bezel">
       <div class="bezel-core">
+        <span class="card-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </span>
         <p class="card-k">Result</p>
-        <p class="h-card mt-l">Signals</p>
-        <p class="body-sm">Raw, deterministic, reproducible. A signal is a fact about the code or the running application — not yet a claim about risk.</p>
+        <p class="h-card mt-l" style="margin-top:8px">Signals</p>
+        <p class="body-sm mt-l" style="margin-top:8px">Raw, deterministic, reproducible. A signal is a fact about the code or the running application — not yet a claim about risk.</p>
       </div>
     </div>
     <div class="bezel">
       <div class="bezel-core">
+        <span class="card-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </span>
         <p class="card-k">Correlation</p>
-        <p class="h-card mt-l">Evidence graph</p>
-        <p class="body-sm">Signals are linked to the source location, the request that reached it, and any related observations.</p>
+        <p class="h-card mt-l" style="margin-top:8px">Evidence graph</p>
+        <p class="body-sm mt-l" style="margin-top:8px">Signals are linked to the source location, the request that reached it, and any related observations.</p>
       </div>
     </div>
     <div class="bezel">
       <div class="bezel-core">
+        <span class="card-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </span>
         <p class="card-k">Output</p>
-        <p class="h-card mt-l">Findings</p>
-        <p class="body-sm">A finding carries severity, confidence, the affected surface, and the evidence behind it.</p>
+        <p class="h-card mt-l" style="margin-top:8px">Findings</p>
+        <p class="body-sm mt-l" style="margin-top:8px">A finding carries severity, confidence, the affected surface, and the evidence behind it.</p>
       </div>
     </div>
   </div>
@@ -230,32 +249,38 @@
     <div class="stack reveal">
       <div class="bezel">
         <div class="bezel-core">
-          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><path d="M5 5h14v14H5z"/><path d="M5 9h14M5 13h14M5 17h14"/><path d="M9 5v14M15 5v14"/><rect x="11" y="11.5" width="1.8" height="2.5" rx="0.5" fill="currentColor"/></svg></span>
+          <span class="card-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </span>
           <p class="card-k">Step 1 — Source context</p>
-          <p class="body-sm mt-l">Read the file around the reported line and identify how the untrusted value is constructed and used.</p>
+          <p class="body-sm mt-l" style="margin-top:8px">Read the file around the reported line and identify how the untrusted value is constructed and used.</p>
         </div>
       </div>
       <div class="bezel">
         <div class="bezel-core">
-          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 8h18"/><path d="M3 12h18"/><path d="M8 3v18"/><path d="M16 3v18"/><path d="M12 3v18"/><circle cx="12" cy="10" r="1.2"/><circle cx="9" cy="7" r="1.2"/><circle cx="15" cy="7" r="1.2"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="13" r="1.2"/></svg></span>
+          <span class="card-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="6" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M6 9v6"/><path d="M18 15V9a9 9 0 0 0-9-9"/></svg>
+          </span>
           <p class="card-k">Step 2 — Reachability</p>
-          <p class="body-sm mt-l">Correlate the source location with the route that reached it during the running assessment.</p>
+          <p class="body-sm mt-l" style="margin-top:8px">Correlate the source location with the route that reached it during the running assessment.</p>
         </div>
       </div>
       <div class="bezel">
         <div class="bezel-core">
-          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><circle cx="12" cy="12" r="9.5"/><path d="M8.5 12.5l3 3 4-5.5"/></svg></span>
+          <span class="card-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+          </span>
           <p class="card-k">Step 3 — Confidence</p>
-          <p class="body-sm mt-l">State confidence honestly: source-confirmed evidence does not automatically become a verified exploit.</p>
+          <p class="body-sm mt-l" style="margin-top:8px">State confidence honestly: source-confirmed evidence does not automatically become a verified exploit.</p>
         </div>
       </div>
     </div>
 
     <div class="reveal">
-      <div class="bezel">
+      <div class="bezel" style="height:100%">
         <div class="bezel-core">
           <p class="card-k">Reasoning trace</p>
-          <div class="terminal mt-l">
+          <div class="terminal mt-l" style="margin-top:14px">
             <div class="terminal-bar"><b></b><b></b><b></b><span>investigate — BL-DEMO-001</span></div>
             <div class="terminal-body">
               <div class="l"><u>01</u><span class="cm">signal: tainted input reaches query construction</span></div>
@@ -268,7 +293,7 @@
               <div class="l"><u>08</u><span>next <span class="cm">→</span> targeted verification required</span></div>
             </div>
           </div>
-          <p class="body-sm mt-l">Investigation raises confidence and adds context. It does not by itself promote a finding to VERIFIED.</p>
+          <p class="body-sm mt-l" style="margin-top:14px">Investigation raises confidence and adds context. It does not by itself promote a finding to VERIFIED.</p>
         </div>
       </div>
     </div>
@@ -287,31 +312,31 @@
     <div class="bezel">
       <div class="bezel-core">
         <div>{% with state="detected" %}{% include "components/status.html" %}{% endwith %}</div>
-        <p class="h-card mt-l">A tool reported something.</p>
-        <p class="body-sm mt-l">Deterministic output exists, but reachability and impact are not yet established.</p>
+        <p class="h-card mt-l" style="margin-top:14px">A tool reported something.</p>
+        <p class="body-sm mt-l" style="margin-top:10px">Deterministic output exists, but reachability and impact are not yet established.</p>
       </div>
     </div>
     <div class="bezel">
       <div class="bezel-core">
         <div>{% with state="investigating" %}{% include "components/status.html" %}{% endwith %}</div>
-        <p class="h-card mt-l">The agent is correlating.</p>
-        <p class="body-sm mt-l">Source context and runtime observations are being linked to determine whether the claim holds.</p>
+        <p class="h-card mt-l" style="margin-top:14px">The agent is correlating.</p>
+        <p class="body-sm mt-l" style="margin-top:10px">Source context and runtime observations are being linked to determine whether the claim holds.</p>
       </div>
     </div>
-    <div class="bezel">
+    <div class="bezel bezel-highlight">
       <div class="bezel-core">
         <div class="chip-row">
           {% with state="verified" %}{% include "components/status.html" %}{% endwith %}
           {% with state="unconfirmed" %}{% include "components/status.html" %}{% endwith %}
         </div>
-        <p class="h-card mt-l">The attempt resolved it either way.</p>
-        <p class="body-sm mt-l">A successful reproduction is verified. A failed one is unconfirmed — and said out loud.</p>
+        <p class="h-card mt-l" style="margin-top:14px">The attempt resolved it either way.</p>
+        <p class="body-sm mt-l" style="margin-top:10px">A successful reproduction is verified. A failed one is unconfirmed — and said out loud.</p>
       </div>
     </div>
   </div>
 
   <div class="notice mt-l reveal">
-    <span aria-hidden="true">⚠</span>
+    <span aria-hidden="true"><i class="fa-solid fa-triangle-exclamation" style="color:var(--warn)"></i></span>
     <span><b>No silent certainty.</b> Automated assessment can miss issues and can misread context. A clean report is not proof that an application is secure.</span>
   </div>
 </section>
@@ -349,14 +374,14 @@
       <div class="bezel">
         <div class="bezel-core">
           <p class="card-k">Why this is verified</p>
-          <p class="body-sm mt-l">A probe reconstructed the request from a second session and compared the response to the authorised view. The difference was reproducible, so the finding moved from investigating to verified.</p>
+          <p class="body-sm mt-l" style="margin-top:10px">A probe reconstructed the request from a second session and compared the response to the authorised view. The difference was reproducible, so the finding moved from investigating to verified.</p>
         </div>
       </div>
       <div class="bezel">
         <div class="bezel-core">
           <p class="card-k">Remediation</p>
-          <p class="body-sm mt-l">Enforce session identity on lookup and drop fields the caller is not entitled to, rather than filtering them in the response layer.</p>
-          <div class="terminal mt-l">
+          <p class="body-sm mt-l" style="margin-top:10px">Enforce session identity on lookup and drop fields the caller is not entitled to, rather than filtering them in the response layer.</p>
+          <div class="terminal mt-l" style="margin-top:14px">
             <div class="terminal-body">
               <div class="l"><u>1</u><span class="del">- row = db.get_profile(request.args["id"])</span></div>
               <div class="l"><u>2</u><span class="add">+ row = db.get_profile(session.user_id)</span></div>
@@ -367,6 +392,8 @@
       </div>
     </div>
   </div>
+</section>
+
 <!-- ============================ 08 — FIX & RETEST ============================ -->
 <section class="section" id="fix">
   <div class="section-head reveal">
@@ -379,22 +406,22 @@
     <div class="bezel">
       <div class="bezel-core">
         <p class="card-k">Stage 1</p>
-        <p class="h-card mt-l">Remediation</p>
-        <p class="body-sm mt-l">The fix is described for the specific code path, with the reason it removes the condition rather than the symptom.</p>
+        <p class="h-card mt-l" style="margin-top:8px">Remediation</p>
+        <p class="body-sm mt-l" style="margin-top:8px">The fix is described for the specific code path, with the reason it removes the condition rather than the symptom.</p>
       </div>
     </div>
     <div class="bezel">
       <div class="bezel-core">
         <p class="card-k">Stage 2</p>
-        <p class="h-card mt-l">Patch applied</p>
-        <p class="body-sm mt-l">The change lands in the application, or in the tracked change set for the assessed branch.</p>
+        <p class="h-card mt-l" style="margin-top:8px">Patch applied</p>
+        <p class="body-sm mt-l" style="margin-top:8px">The change lands in the application, or in the tracked change set for the assessed branch.</p>
       </div>
     </div>
-    <div class="bezel">
+    <div class="bezel bezel-highlight">
       <div class="bezel-core">
-        <p class="card-k">Stage 3</p>
-        <p class="h-card mt-l">Retest</p>
-        <p class="body-sm mt-l">The verification probe repeats. Passing the retest is the evidence that the finding is resolved.</p>
+        <p class="card-k" style="color:var(--ok)">Stage 3</p>
+        <p class="h-card mt-l" style="margin-top:8px">Retest</p>
+        <p class="body-sm mt-l" style="margin-top:8px">The verification probe repeats. Passing the retest is the evidence that the finding is resolved.</p>
       </div>
     </div>
   </div>
@@ -404,7 +431,7 @@
       <div class="split">
         <div>
           <p class="card-k">Retest result</p>
-          <div class="terminal mt-l">
+          <div class="terminal mt-l" style="margin-top:14px">
             <div class="terminal-bar"><b></b><b></b><b></b><span>retest — BL-0142</span></div>
             <div class="terminal-body">
               <div class="l"><u>01</u><span class="cm">before · session B received owner fields → exposed</span></div>
@@ -419,6 +446,13 @@
             {% with state="verified" %}{% include "components/status.html" %}{% endwith %}
             {% with state="resolved" %}{% include "components/status.html" %}{% endwith %}
           </div>
+          <p class="body-sm mt-l" style="margin-top:10px">Current MVP scope: BreachLabs explains and prepares remediation and re-runs verification against the changed application. Fully automated patching of arbitrary codebases is a roadmap capability, not a claim made today.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============================ 09 — REPORT ============================ -->
 <section class="section" id="report">
   <div class="section-head reveal">
@@ -432,7 +466,7 @@
       <div class="bezel" style="height:100%">
         <div class="bezel-core">
           <p class="card-k">Report anatomy</p>
-          <div class="keyline mt-l">
+          <div class="keyline mt-l" style="margin-top:14px">
             <div><span class="k">Scope</span><span class="v">target · commit · environment</span></div>
             <div><span class="k">Coverage</span><span class="v">what was tested</span></div>
             <div><span class="k">Findings</span><span class="v">severity · confidence · evidence</span></div>
@@ -447,7 +481,7 @@
       <div class="bezel" style="height:100%">
         <div class="bezel-core">
           <p class="card-k">Preview</p>
-          <div class="terminal mt-l">
+          <div class="terminal mt-l" style="margin-top:14px">
             <div class="terminal-bar"><b></b><b></b><b></b><span>report.md — breachlabs-demo</span></div>
             <div class="terminal-body">
               <div class="l"><u>01</u><span class="cm"># Security assessment — breachlabs-demo</span></div>
@@ -455,9 +489,9 @@
               <div class="l"><u>03</u><span>3 findings · 2 verified · 1 investigating</span></div>
               <div class="l hl"><u>04</u><span class="cm">## BL-DEMO-001 — SQL injection in search parameter</span></div>
               <div class="l"><u>05</u><span>severity high · confidence verified · GET /search?q=</span></div>
-              <div class="l"><u>06</u><span class="cm">### Evidence</span> · source · runtime · related</span></div>
-              <div class="l"><u>07</u><span class="cm">### Remediation</span> · parameterise the query</span></div>
-              <div class="l"><u>08</u><span class="cm">## Limitations</span></div>
+              <div class="l"><u>06</u><span class="cm">### Evidence</span> · source · runtime · related</div>
+              <div class="l"><u>07</u><span class="cm">### Remediation</span> · parameterise the query</div>
+              <div class="l"><u>08</u><span class="cm">## Limitations · stated explicitly</span></div>
             </div>
           </div>
         </div>
@@ -479,10 +513,3 @@
 </section>
 
 {% endblock %}
-          <p class="body-sm">Current MVP scope: BreachLabs explains and prepares remediation and re-runs verification against the changed application. Fully automated patching of arbitrary codebases is a roadmap capability, not a claim made today.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-</section>

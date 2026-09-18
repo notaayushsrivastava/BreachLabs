@@ -1,24 +1,32 @@
 <article class="artifact">
-<div class="artifact-top">
-<span class="artifact-id">FINDING {{ finding.id }}</span>
-{% with state=finding.status %}{% include "components/status.html" %}{% endwith %}
-</div>
-<h3>{{ finding.title }}</h3>
-<p class="sub">{{ finding.summary }}</p>
-<div class="meta">
-<div><span>Severity</span><b>{{ finding.severity|upper }}</b></div>
-<div><span>Confidence</span><b>{{ finding.confidence|upper }}</b></div>
-<div><span>Surface</span><b>{{ finding.surface }}</b></div>
-</div>
-<div class="evidence mt-l">
-{% for e in finding.evidence %}
-<div class="evidence-row" data-sev="{{ e.sev }}">
-<span class="sev" aria-hidden="true"></span>
-<span class="src">{{ e.source }}</span>
-<span class="kind">{{ e.kind }}</span>
-</div>
-{% endfor %}
-</div>
-<p class="note">{{ finding.note }}</p>
-<span class="stamp"><i aria-hidden="true"></i>{{ finding.stamp }}</span>
+  <div class="artifact-top">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="artifact-id mono">{{ finding.id }}</span>
+      <span class="eyebrow" style="font-size:10px;background:rgba(0,0,0,0.06);padding:2px 8px;border-radius:4px">Verified Report</span>
+    </div>
+    {% with state=finding.status %}{% include "components/status.html" %}{% endwith %}
+  </div>
+  <h3>{{ finding.title }}</h3>
+  <p class="sub">{{ finding.summary }}</p>
+  <div class="meta">
+    <div><span>Severity</span><b>{{ finding.severity|upper }}</b></div>
+    <div><span>Confidence</span><b>{{ finding.confidence|upper }}</b></div>
+    <div><span>Affected Surface</span><b><code>{{ finding.surface }}</code></b></div>
+  </div>
+  <div class="evidence mt-l" style="margin-top:20px">
+    {% for e in finding.evidence %}
+    <div class="evidence-row" data-sev="{{ e.sev }}">
+      <span class="sev" aria-hidden="true"></span>
+      <span class="src"><code>{{ e.source }}</code></span>
+      <span class="kind">{{ e.kind }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% if finding.note %}
+  <p class="note">{{ finding.note }}</p>
+  {% endif %}
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:20px;padding-top:14px;border-top:1px solid rgba(17,17,20,0.1)">
+    <span class="stamp"><i aria-hidden="true"></i>{{ finding.stamp }}</span>
+    <span class="mono" style="font-size:11px;color:#71717a">BreachLabs Provenance Chain ✓</span>
+  </div>
 </article>
