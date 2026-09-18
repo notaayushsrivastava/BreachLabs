@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640" role="img" aria-label="BreachLabs Logo 1280x640">
+  <defs>
+    <radialGradient id="ambientGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7fd1a8" stop-opacity="0.12"/>
+      <stop offset="60%" stop-color="#8fb8d8" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e4e4e7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark Background -->
+  <rect width="1280" height="640" fill="#060608"/>
+  <rect width="1280" height="640" fill="url(#ambientGlow)"/>
+
+  <!-- Symbol Emblem -->
+  <g transform="translate(420, 310)">
+    <!-- Outer Hexagon -->
+    <polygon points="0,-150 129.9,-75 129.9,75 0,150 -129.9,75 -129.9,-75" fill="none" stroke="#FFFFFF" stroke-width="24" stroke-linejoin="round"/>
+    <!-- Inner Solid Hexagon -->
+    <polygon points="0,-94 81.4,-47 81.4,47 0,94 -81.4,47 -81.4,-47" fill="#FFFFFF"/>
+    <!-- Center Keyhole Notch & Dot -->
+    <rect x="-11" y="-42" width="22" height="64" rx="7" fill="#060608"/>
+    <circle cx="0" cy="38" r="10" fill="#060608"/>
+    <!-- Status Indicator Nodes -->
+    <circle cx="-85" cy="175" r="9" fill="#7FD1A8"/>
+    <circle cx="85" cy="175" r="9" fill="#E0B567"/>
+  </g>
+
+  <!-- Typography Lockup -->
+  <g transform="translate(620, 275)">
+    <text x="0" y="50" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="78" font-weight="700" letter-spacing="-2" fill="url(#textGrad)">BreachLabs</text>
+    <text x="4" y="100" font-family="'JetBrains Mono', 'SFMono-Regular', monospace" font-size="14" font-weight="600" letter-spacing="4" fill="#7FD1A8">BUILD · BREAK · VERIFY · FIX</text>
+    <text x="4" y="132" font-family="'Inter', -apple-system, system-ui, sans-serif" font-size="15" font-weight="400" letter-spacing="0.2" fill="#8E8E98">Autonomous AI Application Security Engineer</text>
+  </g>
+</svg>

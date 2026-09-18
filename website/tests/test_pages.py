@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import pytest
 from app import create_app
 
-ROUTES = ["/", "/how-it-works", "/architecture", "/security", "/capabilities", "/demo", "/about"]
+ROUTES = ["/", "/how-it-works", "/architecture", "/security", "/capabilities", "/demo", "/about", "/install"]
 
 
 @pytest.fixture

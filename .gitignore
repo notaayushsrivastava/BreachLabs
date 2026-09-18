@@ -8,3 +8,5 @@ implementation_plan.md
 */__pycache__/*
 */node_modules/*
 PRD.md
+*.env
+.env.example

@@ -10,7 +10,7 @@ def client():
     return app.test_client()
 
 @pytest.mark.parametrize("path", ["/", "/how-it-works", "/architecture",
-    "/security", "/capabilities", "/demo", "/about"])
+    "/security", "/capabilities", "/demo", "/about", "/install"])
 def test_routes_200(client, path):
     r = client.get(path)
     assert r.status_code == 200

@@ -1,5 +1,8 @@
 # BreachLabs
 
+![BreachLabs](website/static/logo-1280x640.png)
+
+
 > **Build. Break. Verify. Fix.**
 
 BreachLabs is an autonomous AI application-security engineer designed to assess software immediately after it is built.

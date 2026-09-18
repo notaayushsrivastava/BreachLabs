@@ -23,6 +23,7 @@ dependencies = [
 
 [project.optional-dependencies]
 browser = ["playwright>=1.40,<2.0"]
+llm = ["openai>=1.0,<2.0"]
 sast = ["semgrep>=1.40,<2.0"]
 sandbox = ["docker>=7.0,<8.0"]
 dev = [
@@ -66,6 +67,12 @@ ignore = ["S101"]  # asserts allowed in this codebase (tests + demo verification
 # Test fixtures spawn the controlled demo target, mirroring test_pipeline.py.
 "breachlabs/tests/test_verify.py" = ["S603", "S110", "S113"]
 "breachlabs/tests/test_agent.py" = ["S603", "S110"]
+"breachlabs/tests/test_browser.py" = ["S603", "S110"]
+# The browser driver intentionally binds/checks loopback hosts only.
+"breachlabs/browser/driver.py" = ["S104", "N818"]
+"breachlabs/core/budget.py" = ["N818"]
+# The demo login workflow uses the demo target's published default creds.
+"breachlabs/browser/workflows.py" = ["S107"]
 "breachlabs/mcp/tool.py" = ["E501", "S104"]
 
 [tool.mypy]

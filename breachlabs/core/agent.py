@@ -40,13 +40,19 @@ class SecurityAgent:
     def __init__(self, registry: ToolRegistry | None = None) -> None:
         self.registry = registry
         self._attack_surface: Any | None = None
+        self._budget = None
+        self._llm = None
 
     def run(self, assessment: Assessment, sandbox: LocalSandbox) -> Assessment:
         """Full pipeline: intake → build → recon → static → dynamic →
-        investigation → verification (PRD.md section 11)."""
+        browser → investigation → verification (PRD.md section 11)."""
+        from breachlabs.core.budget import Budget
+        from breachlabs.core.llm import LLMClient
         from breachlabs.mcp.tools import build_default_registry
 
         self.registry = self.registry or build_default_registry()
+        self._budget = Budget()
+        self._llm = LLMClient()  # unavailable unless a key is configured
         if assessment.started_at is None:
             assessment.started_at = utcnow()
         assessment.status = AssessmentStatus.IN_PROGRESS
@@ -61,11 +67,160 @@ class SecurityAgent:
         self._attack_surface = self._to_attack_surface(surface)
         static_findings = self._phase_static(assessment, context)
         dynamic_findings = self._phase_dynamic(assessment, context, surface)
-        correlated = self.investigate(assessment, static_findings + dynamic_findings, context)
-        self.verify(assessment, correlated, context)
+        browser_findings = self._phase_browser(assessment, context, surface)
+        try:
+            correlated = self.investigate(
+                assessment, static_findings + dynamic_findings + browser_findings,
+                context,
+            )
+            self.verify(assessment, correlated, context)
+        finally:
+            self._cleanup_browser(assessment)
 
+        return self._finalize(assessment, correlated)
+
+    # ------------------------------------------------------------------
+    # Phase F: browser investigation (PRD.md section 11 Phase F)
+    # ------------------------------------------------------------------
+
+    def _phase_browser(
+        self, assessment: Assessment, context: ToolContext, surface: dict[str, Any]
+    ) -> list[Finding]:
+        """Drive representative browser workflows; skipped without Playwright."""
+        from breachlabs.browser import (
+            BrowserUnavailable,
+            browser_available,
+        )
+        from breachlabs.browser.driver import BrowserDriver
+        from breachlabs.browser.workflows import discover_workflows
+        from breachlabs.core.budget import BudgetExceeded
+
+        if not browser_available():
+            assessment.add_event(
+                "Browser skipped: Playwright not installed (browser extra)",
+                phase=Phase.BROWSER,
+            )
+            return []
+
+        page_paths = [
+            r["path"] for r in surface.get("routes", [])
+            if r.get("kind") in ("page", "api")
+        ]
+        has_login = any("login" in p.lower() for p in page_paths)
+        if not page_paths and not has_login:
+            assessment.add_event(
+                "Browser phase skipped: no page routes to explore",
+                phase=Phase.BROWSER,
+            )
+            return []
+
+        paths = ["/"]
+        for p in page_paths:
+            if p not in paths and len(paths) < 3:
+                paths.append(p)
+        if has_login and "/login" not in paths:
+            paths.append("/login")
+
+        try:
+            self._budget.check_browser_action()  # type: ignore[union-attr]
+            driver = BrowserDriver(allowed_hosts=context.allowed_hosts)
+            records = discover_workflows(driver, context.target_base_url or "", paths)
+            driver.stop()
+        except (BudgetExceeded, BrowserUnavailable) as exc:
+            assessment.add_event(f"Browser phase stopped: {exc}", phase=Phase.BROWSER)
+            return []
+        except Exception as exc:  # noqa: BLE001 - browser must not fail run
+            assessment.add_event(
+                f"Browser phase failed safely: {exc}", phase=Phase.BROWSER,
+            )
+            return []
+
+        self._budget.browser_actions_used += len(records)  # type: ignore[union-attr]
+        assessment.add_event(
+            f"Browser explored {len(records)} workflows",
+            phase=Phase.BROWSER, tool="open_page",
+        )
+        return self._browser_records_to_findings(records, assessment)
+
+    def _browser_records_to_findings(
+        self, records: list[dict[str, Any]], assessment: Assessment
+    ) -> list[Finding]:
+        """Convert workflow records into browser-source findings."""
+        findings: list[Finding] = []
+        for record in records:
+            if record.get("workflow") == "login" and record.get("authenticated"):
+                finding = Finding(
+                    title="Browser: login workflow reaches authenticated page",
+                    category="authentication",
+                    severity=Severity.MEDIUM,
+                    location={"route": record.get("login_page", "/login")},
+                    description=(
+                        "Browser-driven login with default credentials reached "
+                        "an authenticated page."
+                    ),
+                    impact="Default credentials allow unauthorized access.",
+                    remediation="Enforce strong, unique credentials; add rate "
+                                "limiting and lockout; never ship defaults.",
+                )
+                finding.add_evidence(Evidence(
+                    source="browser",
+                    description="Browser login workflow record",
+                    data={
+                        "form_fields": record.get("form_fields", []),
+                        "submitted_to": record.get("submitted_to"),
+                        "console_errors": record.get("console_errors", []),
+                    },
+                ))
+                findings.append(finding)
+            elif record.get("forms"):
+                for form in record["forms"]:
+                    if not form.get("inputs"):
+                        continue
+                    finding = Finding(
+                        title=f"Browser: form on {record.get('path', '/')}",
+                        category="input-validation",
+                        severity=Severity.LOW,
+                        location={"route": record.get("path", "/")},
+                        description=(
+                            f"Browser found a form with {len(form['inputs'])} "
+                            "inputs; validate each server-side."
+                        ),
+                        impact="Unvalidated form inputs are injection vectors.",
+                        remediation="Validate every field server-side; encode "
+                                    "output for its context.",
+                    )
+                    finding.add_evidence(Evidence(
+                        source="browser",
+                        description="Browser form discovery",
+                        data={"form": form},
+                    ))
+                    findings.append(finding)
+        return findings
+
+    def _cleanup_browser(self, assessment: Assessment) -> None:
+        try:
+            from breachlabs.browser import reset_browser_driver
+
+            reset_browser_driver()
+        except Exception:  # noqa: S110, BLE001 - teardown must not fail run
+            pass
+        remaining = self._budget.summary() if self._budget is not None else {}
+        assessment.add_event(
+            f"Browser driver torn down (budget: {remaining})",
+            phase=Phase.REPORT,
+        )
+
+    def _finalize(
+        self, assessment: Assessment, correlated: list[Finding]
+    ) -> Assessment:
+        """Attach report-phase events and close the assessment."""
         assessment.findings = correlated
+        assessment.add_event(
+            f"Budget consumed: {getattr(self._budget, 'summary', lambda: {})()}",
+            phase=Phase.REPORT,
+        )
         assessment.add_event("Assessment pipeline completed", phase=Phase.REPORT)
+        assessment.completed_at = utcnow()
         assessment.status = AssessmentStatus.COMPLETED
         return assessment
 
@@ -230,8 +385,62 @@ class SecurityAgent:
                 finding.status = FindingStatus.INVESTIGATING
         return run_investigation(assessment, prioritized, context, self._attack_surface)
 
+    def _llm_enrich(self, finding: Finding, assessment: Assessment) -> None:
+        """Optional LLM pass: investigation note + remediation draft.
+
+        Never fails the assessment. Never confirms anything. Never sees
+        raw secrets (redact_finding masks them first).
+        """
+        llm = getattr(self, "_llm", None)
+        if llm is None or not llm.available:
+            return
+        try:
+            from breachlabs.core.llm import redact_finding
+
+            redacted = redact_finding(finding)
+            note = llm.complete(
+                system=(
+                    "You are a security analyst reviewing one finding from an "
+                    "automated assessment of a deliberately vulnerable demo app. "
+                    "Write a 2-3 sentence investigation note explaining why this "
+                    "finding matters in context. Never invent evidence. Plain text."
+                ),
+                user=(
+                    f"Finding: {redacted['title']} "
+                    f"(severity {redacted['severity']}, "
+                    f"confidence {redacted['confidence']}, "
+                    f"sources {', '.join(redacted['sources'] or ['n/a'])}). "
+                    f"Description: {redacted['description']}"
+                ),
+            )
+            finding.add_evidence(Evidence(
+                source="ai",
+                description=f"LLM investigation note ({llm.model}): {note.strip()[:600]}",
+                data={"model": llm.model, "provider": llm.provider},
+            ))
+            if not finding.remediation or "generic" in finding.remediation.lower():
+                fix = llm.complete(
+                    system=(
+                        "You are a security engineer writing remediation guidance "
+                        "for a developer. Give 3-4 concrete sentences: what to "
+                        "change, an example of secure code, and how to verify "
+                        "the fix. Plain text, no markdown headers."
+                    ),
+                    user=(
+                        f"Finding: {redacted['title']}. "
+                        f"Location: {redacted['location']}. "
+                        f"Description: {redacted['description']}"
+                    ),
+                )
+                finding.remediation = fix.strip()[:1500]
+        except Exception as exc:  # noqa: BLE001 - LLM is an enhancer, never fatal
+            assessment.add_event(
+                f"LLM enrichment skipped for {finding.id}: {exc}",
+                phase=Phase.INVESTIGATION, tool="ai_triage",
+            )
+
     # ------------------------------------------------------------------
-    # Phase H: verification
+    # Phase H: verification (PRD.md section 11 Phase H)
     # ------------------------------------------------------------------
 
     def verify(
@@ -241,7 +450,8 @@ class SecurityAgent:
 
         Top findings are re-probed via a scoped runtime check. A reproduced
         alert becomes CONFIRMED; anything else stays suspected — never
-        overstated (PRD.md section 5.1).
+        overstated (PRD.md section 5.1). When an LLM is configured, it drafts
+        investigation notes and remediation per finding as an extra pass.
         """
         high_value = [
             f for f in findings
@@ -270,6 +480,7 @@ class SecurityAgent:
                 finding.verification = finding.verification.model_copy(
                     update={"attempted": True}
                 )
+            self._llm_enrich(finding, assessment)
         assessment.add_event(
             "Verification completed", phase=Phase.VERIFICATION, tool="verify_finding"
         )

@@ -47,6 +47,9 @@ PAGE_META: dict[str, PageMeta] = {
     "about": {"title": "About — BreachLabs Hackathon Context & Roadmap",
         "description": "What BreachLabs is, why it exists, current MVP boundaries, and roadmap.",
         "canonical_path": "/about", "og_image": "/static/images/logo.webp"},
+    "install": {"title": "Install — BreachLabs MCP Server & Agent Skills",
+        "description": "Install BreachLabs MCP tools and autonomous security engineering skills in Antigravity, Claude, Cursor, Windsurf, Cline, and Universal agents.",
+        "canonical_path": "/install", "og_image": "/static/images/logo.webp"},
 }
 
 def get_page_meta(key: str) -> PageMeta:
@@ -120,6 +123,10 @@ def create_app() -> Flask:
     @app.route("/about")
     def about():
         return render_template("about.html", meta=get_page_meta("about"))
+
+    @app.route("/install")
+    def install():
+        return render_template("install.html", meta=get_page_meta("install"))
 
     @app.route("/robots.txt")
     def robots():

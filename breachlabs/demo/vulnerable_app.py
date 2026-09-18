@@ -46,11 +46,26 @@ def _init_db() -> None:
     conn.executescript(
         """
         CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT, password TEXT, role TEXT);
-        INSERT INTO users (username, password, role) VALUES
-            ('admin', 'admin123', 'admin'),
-            ('alice', 'alice123', 'user'),
-            ('bob', 'bob123', 'user');
         CREATE TABLE notes (id INTEGER PRIMARY KEY, owner TEXT, body TEXT);
+        """
+    )
+    # --- Intentional weakness: MD5 password hashing (weakness 6) ----------
+    # Seeded with MD5 digests so the login flow actually authenticates while
+    # the weak algorithm remains present and SAST-detectable.
+    def _weak_hash(raw: str) -> str:
+        return hashlib.md5(raw.encode()).hexdigest()  # deliberate: weak hash
+
+    for username, password, role in (
+        ("admin", "admin123", "admin"),
+        ("alice", "alice123", "user"),
+        ("bob", "bob123", "user"),
+    ):
+        conn.execute(
+            "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
+            (username, _weak_hash(password), role),
+        )
+    conn.executescript(
+        """
         INSERT INTO notes (owner, body) VALUES ('alice', 'first note'), ('bob', 'second note');
         """
     )

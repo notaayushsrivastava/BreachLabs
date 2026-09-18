@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-flow">
+  <!-- Header -->
+  <div class="section-tight" style="max-width:var(--shell);margin:0 auto;padding-inline:var(--gut)">
+    <div class="idx-line"><span class="eyebrow">Integrations</span><i aria-hidden="true"></i><span class="eyebrow">MCP Server &amp; Agent Skills</span></div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-top:18px">
+      <div>
+        <h1 class="page-title">Give your coding agent an autonomous security engine.</h1>
+        <p class="lede mt-l" style="margin-top:12px">
+          Connect BreachLabs to <strong>Google Antigravity</strong>, <strong>Claude</strong>, <strong>Cursor</strong>, <strong>Windsurf</strong>, <strong>Roo/Cline</strong>, or any MCP-compatible coding agent. Provide your AI pair-programmer with tools to map attack surfaces, inspect source files, verify reachability with targeted probes, and retest patches automatically.
+        </p>
+      </div>
+      <div class="chip-row">
+        <span class="status status--verified"><i aria-hidden="true"></i>MCP PROTOCOL v1.0</span>
+        <span class="chip" style="border-color:rgba(127,209,168,0.3)">Agent Skills Ready</span>
+      </div>
+    </div>
+    <div class="chip-row mt-l" style="margin-top:18px">
+      <span class="chip">Model Context Protocol</span>
+      <span class="chip">STDIO &amp; SSE Transports</span>
+      <span class="chip">Deterministic Tooling</span>
+      <span class="chip">Zero Telemetry Leakage</span>
+    </div>
+  </div>
+
+  <!-- Agent Selection & Setup Section -->
+  <section class="section" style="padding-top:20px">
+    <div class="section-head reveal">
+      {% with idx="01", label="Select Agent Platform" %}{% include "components/section-label.html" %}{% endwith %}
+      <h2 class="h-section">Choose your coding environment</h2>
+      <p class="lede">Select your primary AI assistant or IDE to generate the exact MCP server configuration and skill instructions.</p>
+    </div>
+
+    <!-- Agent Selector Cards -->
+    <div class="agent-grid reveal" data-agent-selector>
+      <!-- Antigravity -->
+      <div class="agent-card" data-agent="antigravity" data-active="true">
+        <div class="agent-card-top">
+          <div class="agent-icon-box" style="color:#7fd1a8">
+            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+          </div>
+          <span class="status status--verified" style="font-size:9.5px;padding:2px 8px"><i aria-hidden="true"></i>RECOMMENDED</span>
+        </div>
+        <div>
+          <div class="agent-name">Google Antigravity</div>
+          <div class="agent-desc mt-l" style="margin-top:6px">Built-in subagent tool registration, sidecars, and autonomous skill triggers.</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--hair)">
+          <span class="eyebrow" style="font-size:10px">MCP + Builtin Skill</span>
+          <span class="link-arrow" style="font-size:12px">Configure →</span>
+        </div>
+      </div>
+
+      <!-- Claude Desktop & Code -->
+      <div class="agent-card" data-agent="claude" data-active="false">
+        <div class="agent-card-top">
+          <div class="agent-icon-box" style="color:#e0b567">
+            <i class="fa-solid fa-brain" aria-hidden="true"></i>
+          </div>
+          <span class="chip" style="font-size:9.5px;padding:2px 8px">Desktop &amp; CLI</span>
+        </div>
+        <div>
+          <div class="agent-name">Claude (Desktop &amp; Code)</div>
+          <div class="agent-desc mt-l" style="margin-top:6px">Native <code>claude_desktop_config.json</code> and Claude Code CLI integration.</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--hair)">
+          <span class="eyebrow" style="font-size:10px">Stdio Server</span>
+          <span class="link-arrow" style="font-size:12px">Configure →</span>
+        </div>
+      </div>
+
+      <!-- Cursor -->
+      <div class="agent-card" data-agent="cursor" data-active="false">
+        <div class="agent-card-top">
+          <div class="agent-icon-box" style="color:#8fb8d8">
+            <i class="fa-solid fa-code" aria-hidden="true"></i>
+          </div>
+          <span class="chip" style="font-size:9.5px;padding:2px 8px">IDE Extension</span>
+        </div>
+        <div>
+          <div class="agent-name">Cursor</div>
+          <div class="agent-desc mt-l" style="margin-top:6px">Project-level <code>.cursor/mcp.json</code> and tailored <code>.cursorrules</code>.</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--hair)">
+          <span class="eyebrow" style="font-size:10px">MCP Tools + Rules</span>
+          <span class="link-arrow" style="font-size:12px">Configure →</span>
+        </div>
+      </div>
+
+      <!-- Windsurf -->
+      <div class="agent-card" data-agent="windsurf" data-active="false">
+        <div class="agent-card-top">
+          <div class="agent-icon-box" style="color:#7fd1a8">
+            <i class="fa-solid fa-wind" aria-hidden="true"></i>
+          </div>
+          <span class="chip" style="font-size:9.5px;padding:2px 8px">Cascade Engine</span>
+        </div>
+        <div>
+          <div class="agent-name">Windsurf / Cascade</div>
+          <div class="agent-desc mt-l" style="margin-top:6px">Codeium Cascade agent setup via <code>mcp_config.json</code> and workflow instructions.</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--hair)">
+          <span class="eyebrow" style="font-size:10px">Cascade Tools</span>
+          <span class="link-arrow" style="font-size:12px">Configure →</span>
+        </div>
+      </div>
+
+      <!-- Roo Code / Cline -->
+      <div class="agent-card" data-agent="cline" data-active="false">
+        <div class="agent-card-top">
+          <div class="agent-icon-box" style="color:#ff8a8a">
+            <i class="fa-solid fa-terminal" aria-hidden="true"></i>
+          </div>
+          <span class="chip" style="font-size:9.5px;padding:2px 8px">VS Code Addon</span>
+        </div>
+        <div>
+          <div class="agent-name">Roo Code / Cline</div>
+          <div class="agent-desc mt-l" style="margin-top:6px">Direct MCP tool integration in VS Code via <code>cline_mcp_settings.json</code>.</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--hair)">
+          <span class="eyebrow" style="font-size:10px">VS Code Settings</span>
+          <span class="link-arrow" style="font-size:12px">Configure →</span>
+        </div>
+      </div>
+
+      <!-- Universal / CLI -->
+      <div class="agent-card" data-agent="universal" data-active="false">
+        <div class="agent-card-top">
+          <div class="agent-icon-box" style="color:#ffffff">
+            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+          </div>
+          <span class="chip" style="font-size:9.5px;padding:2px 8px">Any MCP Client</span>
+        </div>
+        <div>
+          <div class="agent-name">Universal / CLI &amp; Docker</div>
+          <div class="agent-desc mt-l" style="margin-top:6px">Standard NPX command, Python UV runner, or isolated Docker container.</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--hair)">
+          <span class="eyebrow" style="font-size:10px">NPX / Docker / UV</span>
+          <span class="link-arrow" style="font-size:12px">Configure →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Setup Panel -->
+    <div class="bezel reveal mt-l" style="margin-top:28px" data-setup-panel>
+      <div class="bezel-core">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;border-bottom:1px solid var(--hair);padding-bottom:16px">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="eyebrow" style="color:var(--ok)">STEP 1</span>
+              <h3 class="h-card" data-platform-title style="font-size:20px;color:var(--fg)">Google Antigravity MCP Configuration</h3>
+            </div>
+            <p class="body-sm" data-platform-file-desc style="margin-top:4px">
+              Add the BreachLabs MCP server to your Antigravity agent configuration (e.g. in <code>~/.gemini/antigravity/mcp/BreachLabs/</code> or project configuration).
+            </p>
+          </div>
+          <div class="chip-row">
+            <button class="chip is-active" type="button" data-format-tab="json" aria-pressed="true">JSON Config</button>
+            <button class="chip" type="button" data-format-tab="cli" aria-pressed="false">CLI Command</button>
+            <button class="chip" type="button" data-format-tab="uv" aria-pressed="false">Python / UV</button>
+            <button class="chip" type="button" data-format-tab="docker" aria-pressed="false">Docker</button>
+          </div>
+        </div>
+
+        <!-- Config Code Terminal -->
+        <div class="terminal mt-l" style="margin-top:18px">
+          <div class="terminal-bar" style="justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:8px">
+              <b></b><b></b><b></b>
+              <span data-config-filename>mcp_config.json</span>
+            </div>
+            <button class="btn btn-ghost btn-sm" type="button" data-copy-config style="height:28px;padding:0 12px;font-size:11.5px">
+              <i class="fa-regular fa-copy" aria-hidden="true" style="margin-right:5px"></i><span data-copy-config-text>Copy Config</span>
+            </button>
+          </div>
+          <div class="terminal-body" data-config-body style="font-size:12.5px;line-height:1.7;overflow-x:auto">
+            <pre style="margin:0;font-family:var(--font-mono);color:var(--fg)"><code data-code-content>{
+  "mcpServers": {
+    "breachlabs": {
+      "command": "npx",
+      "args": ["-y", "@breachlabs/mcp-server@latest"],
+      "env": {
+        "BREACHLABS_SANDBOX": "true",
+        "BREACHLABS_AUTO_VERIFY": "true"
+      }
+    }
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Skill Instructions Block -->
+        <div style="margin-top:24px;border-top:1px solid var(--hair);padding-top:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <span class="eyebrow" style="color:var(--ok)">STEP 2</span>
+                <h4 class="h-card" style="font-size:17px">Agent Security Skill &amp; Prompt Instructions</h4>
+              </div>
+              <p class="body-sm" style="margin-top:4px">
+                Equip your agent with the BreachLabs Security Engineering Loop prompt (save to <code>SKILL.md</code>, <code>.cursorrules</code>, or system instructions).
+              </p>
+            </div>
+            <button class="btn btn-ghost btn-sm" type="button" data-copy-skill style="height:28px;padding:0 12px;font-size:11.5px">
+              <i class="fa-regular fa-copy" aria-hidden="true" style="margin-right:5px"></i><span data-copy-skill-text>Copy Prompt</span>
+            </button>
+          </div>
+
+          <div class="terminal mt-l" style="margin-top:14px">
+            <div class="terminal-bar">
+              <b></b><b></b><b></b>
+              <span data-skill-filename>SKILL.md — Autonomous Security Engineer</span>
+            </div>
+            <div class="terminal-body" data-skill-body style="font-size:12px;line-height:1.75;max-height:200px;overflow-y:auto">
+              <div class="l"><span class="cm"># Role: Autonomous Application Security Engineer</span></div>
+              <div class="l"><span>When testing software or validating newly generated code, follow the 7-stage BreachLabs loop:</span></div>
+              <div class="l"><span class="hl">1. INTAKE &amp; DISCOVERY: Call `breachlabs_surface_map` to discover routes, forms, and APIs.</span></div>
+              <div class="l"><span class="hl">2. DETERMINISTIC TESTS: Run SAST, dependency checks, and secret scans via `breachlabs_sast_scan`.</span></div>
+              <div class="l"><span class="hl">3. AI INVESTIGATION: Correlate code context with runtime HTTP reachability. Trace untrusted sources to sinks.</span></div>
+              <div class="l"><span class="hl">4. TARGETED VERIFICATION: Call `breachlabs_verify_exploit` to confirm reproducibility. Never assert without proof.</span></div>
+              <div class="l"><span class="hl">5. REMEDIATION: Formulate precise root-cause code patch avoiding naive input filtering.</span></div>
+              <div class="l"><span class="hl">6. RETEST PROOF: Execute `breachlabs_retest_patch` against the changed revision to confirm resolution.</span></div>
+              <div class="l"><span class="cm">Always provide evidence with exact line numbers, HTTP request/response diffs, and stated confidence.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MCP Tools Capability Reference -->
+  <section class="section">
+    <div class="section-head reveal">
+      {% with idx="02", label="Exposed MCP Tools" %}{% include "components/section-label.html" %}{% endwith %}
+      <h2 class="h-section">Seven bounded tools, zero open shells.</h2>
+      <p class="lede">BreachLabs exposes an allowlisted set of structured tools to your agent. Each tool performs one specific security operation and returns structured JSON evidence.</p>
+    </div>
+
+    <div class="grid-3 stagger reveal">
+      <div class="tool-card">
+        <div class="tool-name">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          breachlabs_surface_map
+        </div>
+        <p class="body-sm mt-l" style="margin-top:10px">Enumerates all HTTP routes, form inputs, JSON endpoints, and authentication flows on the target.</p>
+        <div class="keyline mt-l" style="margin-top:14px">
+          <div><span class="k">Input</span><span class="v">target_url</span></div>
+          <div><span class="k">Output</span><span class="v">RouteTree JSON</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-name">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          breachlabs_sast_scan
+        </div>
+        <p class="body-sm mt-l" style="margin-top:10px">Performs AST-level taint tracking, secret scanning, and unsafe pattern matching across the repository.</p>
+        <div class="keyline mt-l" style="margin-top:14px">
+          <div><span class="k">Input</span><span class="v">repo_path, rules</span></div>
+          <div><span class="k">Output</span><span class="v">TaintSinks[]</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-name">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+          breachlabs_dast_probe
+        </div>
+        <p class="body-sm mt-l" style="margin-top:10px">Executes scoped runtime HTTP probes against the isolated sandbox service to observe response behavior.</p>
+        <div class="keyline mt-l" style="margin-top:14px">
+          <div><span class="k">Input</span><span class="v">route, method, payload</span></div>
+          <div><span class="k">Output</span><span class="v">HTTPResponse</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-name">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+          breachlabs_verify_exploit
+        </div>
+        <p class="body-sm mt-l" style="margin-top:10px">Dispatches deterministic reproduction check to confirm whether suspected issue is reachable and exploitable.</p>
+        <div class="keyline mt-l" style="margin-top:14px">
+          <div><span class="k">Input</span><span class="v">finding_id, probe</span></div>
+          <div><span class="k">Output</span><span class="v">VerificationProof</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-name">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          breachlabs_generate_patch
+        </div>
+        <p class="body-sm mt-l" style="margin-top:10px">Synthesizes targeted code diff remediation targeting the vulnerable code path rather than surface filtering.</p>
+        <div class="keyline mt-l" style="margin-top:14px">
+          <div><span class="k">Input</span><span class="v">finding_id, file</span></div>
+          <div><span class="k">Output</span><span class="v">GitDiff</span></div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-name">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          breachlabs_retest_patch
+        </div>
+        <p class="body-sm mt-l" style="margin-top:10px">Replays the exact verification probe against the updated application commit to measure resolution.</p>
+        <div class="keyline mt-l" style="margin-top:14px">
+          <div><span class="k">Input</span><span class="v">finding_id, patch_ref</span></div>
+          <div><span class="k">Output</span><span class="v">PASS / FAIL</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Handshake Simulation Tester -->
+  <section class="section">
+    <div class="section-head reveal">
+      {% with idx="03", label="Connection Tester" %}{% include "components/section-label.html" %}{% endwith %}
+      <h2 class="h-section">Test Agent MCP Handshake</h2>
+      <p class="lede">Verify JSON-RPC protocol compatibility between your coding agent and the BreachLabs MCP server.</p>
+    </div>
+
+    <div class="bezel reveal">
+      <div class="bezel-core">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="card-k">MCP PROTOCOL SIMULATOR</span>
+            <span class="status status--verified" data-handshake-status><i aria-hidden="true"></i>READY TO TEST</span>
+          </div>
+          <button class="btn btn-primary btn-sm" type="button" data-run-handshake>
+            <span class="btn-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </span>
+            Test Handshake Simulation
+          </button>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <b></b><b></b><b></b>
+            <span>mcp-jsonrpc-session.log</span>
+          </div>
+          <div class="terminal-body" data-handshake-body style="font-size:12px;line-height:1.7;max-height:220px;overflow-y:auto">
+            <div class="l"><u>01</u><span class="cm">[READY] Click 'Test Handshake Simulation' to simulate MCP JSON-RPC protocol negotiation.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band">
+    <div class="section reveal">
+      <h2 class="h-statement" style="max-width:24ch;margin:0 auto">Start assessing your applications today.</h2>
+      <p class="lede measure mt-l" style="margin-left:auto;margin-right:auto">Build with confidence. Ship software backed by deterministic verification.</p>
+      <div class="hero-cta">
+        <a class="cta-glow" href="/demo">Try the Demo</a>
+        <a class="cta-quiet" href="/architecture">View Architecture</a>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}<script type="module" src="/static/js/install.js" defer></script>{% endblock %}
