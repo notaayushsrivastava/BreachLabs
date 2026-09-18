@@ -7,3 +7,4 @@ implementation_plan.md
 *.pyc
 */__pycache__/*
 */node_modules/*
+PRD.md

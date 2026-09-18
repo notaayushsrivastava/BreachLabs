@@ -74,12 +74,39 @@ def main() -> int:
     print("", flush=True)
     print(f"Assessment status: {assessment.status.value}", flush=True)
     print(f"Findings: {len(assessment.findings)}", flush=True)
+
+    investigated = sum(1 for f in assessment.findings if f.remediation)
+
+    def _vres(f):
+        v = f.verification
+        return v.result.value if (v.attempted and v.result is not None) else ""
+
+    verified = sum(1 for f in assessment.findings if _vres(f) == "confirmed")
+    inconclusive = sum(1 for f in assessment.findings if _vres(f) == "inconclusive")
+    print(
+        f"Investigated: {investigated} | Verified: {verified} | "
+        f"Inconclusive: {inconclusive}",
+        flush=True,
+    )
+    print("", flush=True)
+
     for finding in assessment.findings:
         print(
             f"  - {finding.id} [{finding.severity.value}/{finding.confidence.value}] "
             f"{finding.title} (sources: {', '.join(finding.sources) or 'n/a'})",
             flush=True,
         )
+        print(
+            f"      status={finding.status.value} "
+            f"evidence={len(finding.evidence)} "
+            f"verification={_vres(finding) or 'not attempted'}",
+            flush=True,
+        )
+        probe_evidence = [e for e in finding.evidence if e.source == "verification"]
+        for ev in probe_evidence[:1]:
+            print(f"      probe: {ev.description}", flush=True)
+        if finding.remediation:
+            print(f"      fix: {finding.remediation[:140]}", flush=True)
 
     print("", flush=True)
     print("=" * 72, flush=True)

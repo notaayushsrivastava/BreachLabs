@@ -201,6 +201,65 @@ class Finding(BaseModel):
             attempted=True, result=VerificationResult.REJECTED, details=reason
         )
 
+    @classmethod
+    def remediation_guide(cls, category: str, sources: list[str], description: str = "") -> str:
+        """Generate category-specific remediation guidance (PRD 7.1 resp. 14)."""
+        guides = {
+            "injection": (
+                "Use parameterized queries or prepared statements instead of string "
+                "formatting. Never interpolate user input into SQL, command, or template "
+                "strings. Validate and escape input at the boundary; apply least-privilege "
+                "permissions on the database user."
+            ),
+            "xss": (
+                "Encode output for the correct context (HTML body, attribute, JavaScript, "
+                "URL) using a vetted escaping library. Add a Content-Security-Policy "
+                "header as defense-in-depth. Prefer frameworks that auto-escape by "
+                "default and avoid raw HTML injection of user data."
+            ),
+            "authorization": (
+                "Enforce authorization checks server-side on every request that accesses "
+                "a protected resource. Deny by default; verify the authenticated user is "
+                "permitted to perform the action on the specific object. Add tests for "
+                "cross-user access attempts."
+            ),
+            "idor": (
+                "Replace sequential or guessable object references with access-controlled "
+                "lookups: verify object ownership on every request, avoid exposing "
+                "internal IDs in URLs where possible, and add authorization tests that "
+                "attempt cross-tenant access."
+            ),
+            "headers": (
+                "Set security headers on every response: Content-Security-Policy, "
+                "X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and "
+                "Strict-Transport-Security (for HTTPS deployments). Centralize header "
+                "configuration in middleware or the framework's response pipeline."
+            ),
+            "secrets": (
+                "Remove hardcoded credentials from source code. Load secrets from "
+                "environment variables or a secrets manager, rotate the exposed values "
+                "immediately, and purge them from version-control history. Add "
+                "secret-scanning to CI to prevent regressions."
+            ),
+            "configuration": (
+                "Disable debug mode and verbose errors in production configurations. "
+                "Return generic error pages and log details server-side only. Review "
+                "deployment settings so insecure defaults cannot reach production."
+            ),
+            "cryptography": (
+                "Replace weak algorithms with modern standards: use bcrypt/argon2/scrypt "
+                "for password hashing (never MD5/SHA1), use TLS 1.2+ for transport, and "
+                "use vetted library APIs instead of custom cryptography."
+            ),
+        }
+        default = (
+            "Review the finding location, apply input validation and output encoding "
+            "where appropriate, and follow secure defaults for the affected component. "
+            "Verify the fix resolves the issue before deploying."
+        )
+        return guides.get((category or "").strip().lower(), default)
+
+
 
 class Scope(BaseModel):
     """Explicit authorization scope for an assessment (PRD.md section 5.3)."""

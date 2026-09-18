@@ -12,7 +12,10 @@ breachlabs/api/__init__.py
 breachlabs/api/server.py
 breachlabs/core/__init__.py
 breachlabs/core/agent.py
+breachlabs/core/fix_retest.py
+breachlabs/core/investigate.py
 breachlabs/core/types.py
+breachlabs/core/verify.py
 breachlabs/demo/__init__.py
 breachlabs/demo/app.py
 breachlabs/demo/vulnerable_app.py
@@ -24,9 +27,14 @@ breachlabs/report/__init__.py
 breachlabs/report/generator.py
 breachlabs/sandbox/__init__.py
 breachlabs/sandbox/manager.py
+breachlabs/skills/__init__.py
+breachlabs/skills/security-assessment/__init__.py
 breachlabs/tests/__init__.py
 breachlabs/tests/test_agent.py
+breachlabs/tests/test_fix_retest.py
+breachlabs/tests/test_investigate.py
 breachlabs/tests/test_mcp.py
 breachlabs/tests/test_pipeline.py
 breachlabs/tests/test_report.py
 breachlabs/tests/test_types.py
+breachlabs/tests/test_verify.py

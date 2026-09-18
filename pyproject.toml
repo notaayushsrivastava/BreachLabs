@@ -58,6 +58,14 @@ ignore = ["S101"]  # asserts allowed in this codebase (tests + demo verification
 "breachlabs/sandbox/manager.py" = ["S603", "S110", "E501"]
 # Scanner rule tables and probe URLs contain long literal strings.
 "breachlabs/mcp/tools/scanners.py" = ["E501"]
+# Verification probes are scoped HTTP GETs against the isolated sandbox target,
+# not arbitrary network calls; S110/S101 match the codebase's established style.
+"breachlabs/core/verify.py" = ["S110", "S113", "S310"]
+# Investigation intentionally swallows file-read errors (missing/malformed files).
+"breachlabs/core/investigate.py" = ["S110"]
+# Test fixtures spawn the controlled demo target, mirroring test_pipeline.py.
+"breachlabs/tests/test_verify.py" = ["S603", "S110", "S113"]
+"breachlabs/tests/test_agent.py" = ["S603", "S110"]
 "breachlabs/mcp/tool.py" = ["E501", "S104"]
 
 [tool.mypy]

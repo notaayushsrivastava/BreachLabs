@@ -39,6 +39,7 @@ class SecurityAgent:
 
     def __init__(self, registry: ToolRegistry | None = None) -> None:
         self.registry = registry
+        self._attack_surface: Any | None = None
 
     def run(self, assessment: Assessment, sandbox: LocalSandbox) -> Assessment:
         """Full pipeline: intake → build → recon → static → dynamic →
@@ -51,11 +52,13 @@ class SecurityAgent:
         assessment.status = AssessmentStatus.IN_PROGRESS
 
         context = self._build_context(assessment, sandbox)
+        self._attack_surface = None
         self._phase_intake(assessment)
         if not self._phase_build(assessment, sandbox):
             assessment.status = AssessmentStatus.FAILED
             return assessment
         surface = self._phase_recon(assessment, context)
+        self._attack_surface = self._to_attack_surface(surface)
         static_findings = self._phase_static(assessment, context)
         dynamic_findings = self._phase_dynamic(assessment, context, surface)
         correlated = self.investigate(assessment, static_findings + dynamic_findings, context)
@@ -109,6 +112,18 @@ class SecurityAgent:
             phase=Phase.RECON, tool="list_routes",
         )
         return result
+
+    @staticmethod
+    def _to_attack_surface(surface: dict[str, Any]) -> Any:
+        """Convert the list_routes tool output into an AttackSurface model."""
+        from breachlabs.core.types import AttackSurface, Route
+
+        rebuilt = AttackSurface()
+        for raw in surface.get("routes", []):
+            rebuilt.routes.append(Route(**raw))
+        for raw in surface.get("api_endpoints", []):
+            rebuilt.api_endpoints.append(Route(**raw))
+        return rebuilt
 
     def _phase_static(self, assessment: Assessment, context: ToolContext) -> list[Finding]:
         findings: list[Finding] = []
@@ -196,11 +211,14 @@ class SecurityAgent:
     ) -> list[Finding]:
         """Correlate, prioritize, and enrich candidate findings.
 
-        The MVP triage policy is deterministic (no external LLM required for
-        the demo): correlated multi-source signals are elevated, and
-        duplicates are merged. Unverified findings are never "confirmed"
+        Triage policy (PRD.md section 11 Phase G): correlated multi-source
+        signals are elevated, duplicates are merged, and every finding is
+        enriched with source context, attack-surface correlation, and
+        remediation guidance. Unverified findings are never "confirmed"
         (PRD.md section 5.1).
         """
+        from breachlabs.core.investigate import run_investigation
+
         correlated = correlate_signals(findings)
         prioritized = prioritize(correlated)
         assessment.add_event(
@@ -210,7 +228,7 @@ class SecurityAgent:
         for finding in prioritized:
             if finding.status is FindingStatus.UNVERIFIED:
                 finding.status = FindingStatus.INVESTIGATING
-        return prioritized
+        return run_investigation(assessment, prioritized, context, self._attack_surface)
 
     # ------------------------------------------------------------------
     # Phase H: verification
@@ -256,23 +274,40 @@ class SecurityAgent:
             "Verification completed", phase=Phase.VERIFICATION, tool="verify_finding"
         )
 
-    def _attempt_reproduction(self, finding: Finding, context: ToolContext) -> bool | None:
-        """Scoped runtime reproduction. True / False / None (not verifiable)."""
-        import httpx
+    def _attempt_reproduction(
+        self, finding: Finding, context: ToolContext
+    ) -> bool | None:
+        """Scoped runtime reproduction. True / False / None (not verifiable).
 
-        if not context.target_base_url or "dast" not in finding.sources:
+        Delegates to the category-specific verification probes in
+        breachlabs.core.verify (SQL tautology/error, XSS reflection, header
+        inspection, IDOR auth bypass). Falls back to None for categories
+        that have no runtime probe (e.g. secrets, cryptography).
+        """
+        from breachlabs.core.verify import verify_finding
+
+        if not context.target_base_url:
             return None
-        url = finding.location.route
-        if not url:
+        probe = verify_finding(finding, context, self._attack_surface)
+        if probe is None:
             return None
-        try:
-            response = httpx.get(url, timeout=10.0)
-        except httpx.HTTPError:
-            return False
-        if "Missing security header" in finding.title:
-            header = finding.title.rsplit(":", 1)[-1].strip()
-            return header.lower() not in {k.lower() for k in response.headers}
-        return bool(finding.description and finding.description[:40] in response.text)
+        # Persist the probe outcome as evidence for the report.
+        finding.add_evidence(Evidence(
+            source="verification",
+            description=f"Probe '{probe.probe}': {probe.details}",
+            data={
+                "probe": probe.probe,
+                "succeeded": probe.succeeded,
+                "evidence_url": probe.evidence_url,
+                "evidence_snippet": probe.evidence_snippet,
+            },
+        ))
+        if probe.succeeded:
+            return True
+        # Distinguish "probe ran and rejected" (inconclusive) from
+        # "probe never ran" (None). A missing-header finding re-probed after
+        # a fix is an example of a clean False.
+        return False
 
 
 # ---------------------------------------------------------------------------
