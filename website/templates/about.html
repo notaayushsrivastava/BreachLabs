@@ -1,5 +1,90 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="section"><h1>About</h1>
-<p class="copy-max">BreachLabs gives every application its own security engineer: build, break, verify, fix. Hackathon-built MVP focused on evidence-backed verification; roadmap adds deeper browser automation and reporting.</p></section>
+<div class="page-flow">
+<div class="section-tight" style="max-width:var(--shell);margin:0 auto;padding-inline:var(--gut)">
+  <div class="idx-line"><span class="eyebrow">Project</span><i aria-hidden="true"></i><span class="eyebrow">About</span></div>
+  <h1 class="page-title" style="margin-top:18px">Build. Break. Verify. Fix.</h1>
+  <p class="lede mt-l">BreachLabs is an autonomous application-security engineer. It inspects, tests, investigates, verifies, explains, fixes, and retests software — and it is explicit about which of those it does today and which are still ahead of it.</p>
+</div>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="01", label="Why it exists" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">Security tooling produces lists. Engineers need answers.</h2>
+    <p class="lede">The gap is not detection. It is the distance between a scanner's output and a decision someone can act on. BreachLabs exists to close that distance: correlate the signal, state the confidence, show the evidence, propose the fix, then prove the fix held.</p>
+  </div>
+  <div class="grid-3 stagger reveal">
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Position</p>
+      <p class="body-sm mt-l">An autonomous security engineer that operates inside the build loop, rather than a scanner that reports after the fact.</p>
+    </div></div>
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Method</p>
+      <p class="body-sm mt-l">Deterministic tools for measurement, an agent for reasoning, targeted probes for verification.</p>
+    </div></div>
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Standard</p>
+      <p class="body-sm mt-l">No silent certainty. Unconfirmed stays unconfirmed, and limitations are printed next to results.</p>
+    </div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="02", label="Build status" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">What works today, and what does not yet.</h2>
+    <p class="lede">This is a hackathon-built MVP. The list below is the honest version.</p>
+  </div>
+  <div class="split">
+    <div class="bezel reveal"><div class="bezel-core">
+      <p class="card-k">Working now</p>
+      <div class="keyline mt-l">
+        <div><span class="k">Assessment pipeline</span><span class="v">end to end</span></div>
+        <div><span class="k">Reconnaissance</span><span class="v">routes · forms · endpoints</span></div>
+        <div><span class="k">Investigation</span><span class="v">source context · correlation</span></div>
+        <div><span class="k">Verification</span><span class="v">targeted probes</span></div>
+        <div><span class="k">Reporting</span><span class="v">severity · evidence · limits</span></div>
+        <div><span class="k">Retesting</span><span class="v">probe replay after change</span></div>
+      </div>
+    </div></div>
+    <div class="bezel reveal"><div class="bezel-core">
+      <p class="card-k">Not done yet</p>
+      <div class="keyline mt-l">
+        <div><span class="k">Automated patch generation</span><span class="v">roadmap</span></div>
+        <div><span class="k">Deeper browser automation</span><span class="v">roadmap</span></div>
+        <div><span class="k">Dependency advisory database</span><span class="v">roadmap</span></div>
+        <div><span class="k">Continuous CI integration</span><span class="v">roadmap</span></div>
+        <div><span class="k">Multi-language depth parity</span><span class="v">in progress</span></div>
+      </div>
+      <div class="notice mt-l">
+        <span aria-hidden="true">⚠</span>
+        <span><b>Scope honesty.</b> The website demo is a static replay. Live assessment runs happen in the BreachLabs pipeline, not on this site.</span>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="03", label="Principles" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">Four rules the product is built on.</h2>
+  </div>
+  <div class="grid-2 stagger reveal">
+    <div class="bezel"><div class="bezel-core"><p class="card-k">01</p><p class="h-card mt-l">Measure deterministically.</p><p class="body-sm mt-l">Detection must not vary between runs. A language model is never the measuring instrument.</p></div></div>
+    <div class="bezel"><div class="bezel-core"><p class="card-k">02</p><p class="h-card mt-l">Show the source.</p><p class="body-sm mt-l">Every finding names where it came from: a file and line, a request and response, or both.</p></div></div>
+    <div class="bezel"><div class="bezel-core"><p class="card-k">03</p><p class="h-card mt-l">Verify before asserting.</p><p class="body-sm mt-l">Confidence is a stated value, and unverified claims are never presented as verified ones.</p></div></div>
+    <div class="bezel"><div class="bezel-core"><p class="card-k">04</p><p class="h-card mt-l">Stay in scope.</p><p class="body-sm mt-l">Authorised targets only, isolated execution, allowlisted tools, synthetic credentials.</p></div></div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="section reveal">
+    <h2 class="h-section" style="margin:0 auto;max-width:24ch">Give every application its own security engineer.</h2>
+    <div class="hero-cta">
+      <a class="cta-glow" href="/demo">Open the demo</a>
+      <a class="cta-quiet" href="/security">Security model</a>
+    </div>
+  </div>
+</section>
+</div>
 {% endblock %}

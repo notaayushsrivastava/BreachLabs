@@ -1,3 +1,8 @@
-<div class="arch-node" data-node="{{ node_id }}">
-<strong class="mono">{{ title }}</strong><p>{{ desc }}</p>
-</div>
+<button class="node" type="button" data-node="{{ node_id }}" data-active="{{ 'true' if active|default(false) else 'false' }}">
+<span class="node-ico" aria-hidden="true">{{ icon|safe }}</span>
+<span>
+<span class="node-k">{{ kind }}</span>
+<span class="node-t">{{ title }}</span>
+</span>
+<span class="node-k">{{ meta|default('') }}</span>
+</button>

@@ -1,96 +1,488 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="page-hero">
-<div class="bg" aria-hidden="true">
-<video class="bg-video" autoplay muted loop playsinline>
-<source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4" type="video/mp4">
-</video>
+
+<!-- ============================ HERO (PRD §10) ============================ -->
+<div class="page">
+  <div class="bg" aria-hidden="true">
+    <video class="bg-video" autoplay muted loop playsinline>
+      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="mesh" aria-hidden="true"><i class="m1"></i><i class="m2"></i><i class="m3"></i></div>
+
+  <nav class="hero-nav" aria-label="Hero navigation">
+    <a class="logo-btn" href="/" aria-label="BreachLabs home">
+      <img src="/static/images/logo.webp" alt="" width="46" height="46">
+    </a>
+    <div class="hero-pill">
+      <a class="is-active" href="/" aria-current="page">Home</a>
+      <a href="/how-it-works">Product</a>
+      <a href="/architecture">Architecture</a>
+      <a href="/security">Security</a>
+      <a href="/about">About</a>
+    </div>
+    <a class="hero-signin" href="/demo">Demo</a>
+  </nav>
+
+  <div class="hero-body">
+    <div class="trust-row" aria-label="Product signals">
+      <span class="trust-ring"><span><i class="fa-brands fa-github" aria-hidden="true"></i></span></span>
+      <span class="trust-ring"><span><i class="fa-brands fa-docker" aria-hidden="true"></i></span></span>
+      <span class="trust-ring"><span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span></span>
+      <span class="trust-pill">Open Source · MCP · SAST · DAST</span>
+    </div>
+
+    <h1 class="hero-headline"><span>Intelligence</span><span>Designed To Evolve</span></h1>
+
+    <p class="hero-sub">Build applications that reason, adapt and collaborate using a modular AI platform designed for production.</p>
+    <p class="hero-context">An autonomous security engineer for the software you just built.</p>
+
+    <div class="hero-cta">
+      <a class="cta-glow" href="/demo">Get Started</a>
+      <a class="cta-quiet" href="/how-it-works">How it works</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    {% with glyph="⌗", to="14", suffix="", decimals="0", label="Routes mapped*" %}{% include "components/metric.html" %}{% endwith %}
+    {% with glyph="⬡", to="5", suffix="", decimals="0", label="Tool families*" %}{% include "components/metric.html" %}{% endwith %}
+    {% with glyph="✓", to="4", suffix="", decimals="0", label="Verification checks*" %}{% include "components/metric.html" %}{% endwith %}
+    {% with glyph="⟳", to="7", suffix="", decimals="0", label="Stage security loop*" %}{% include "components/metric.html" %}{% endwith %}
+  </div>
 </div>
-<div class="hero-body">
-<div class="trust-row" aria-label="Product signals">
-<span class="trust-ring"><span><i class="fa-brands fa-microsoft" aria-hidden="true"></i></span></span>
-<span class="trust-ring"><span><i class="fa-brands fa-amazon" aria-hidden="true"></i></span></span>
-<span class="trust-ring"><span><i class="fa-brands fa-google" aria-hidden="true"></i></span></span>
-<span class="trust-pill">Open Source · MCP · SAST · DAST</span>
-</div>
-<h1 class="hero-headline"><span>Intelligence</span><span>Designed To Evolve</span></h1>
-<p class="hero-sub">Build applications that reason, adapt and collaborate using a modular AI platform designed for production.</p>
-<p class="hero-context">An autonomous security engineer for the software you just built.</p>
-<div class="cta-row">
-<a class="cta-glow" href="/demo">Get Started</a>
-<a class="cta-ghost" href="/how-it-works">How it works</a>
-</div>
-</div>
-<div class="hero-stats" aria-label="Illustrative product signals">
-{% with value="14", label="routes mapped*" %}{% include "components/metric.html" %}{% endwith %}
-{% with value="5", label="tool families*" %}{% include "components/metric.html" %}{% endwith %}
-{% with value="4", label="verification checks*" %}{% include "components/metric.html" %}{% endwith %}
-{% with value="7", label="stage security loop*" %}{% include "components/metric.html" %}{% endwith %}
-</div>
-</div>
-<section class="section reveal" id="signal">
-{% with label="01 — Product signal" %}{% include "components/section-label.html" %}{% endwith %}
-<h2>Security should run where software runs.</h2>
-<p class="copy-max">BreachLabs enters the build loop instead of treating security as a separate end-of-cycle task. *Illustrative signals.</p>
-<div class="assess-line" aria-hidden="true"></div>
-<p class="mono">Repository → Environment → Assessment → Evidence</p>
+
+<!-- ============================ SIGNAL STRIP ============================ -->
+<section class="section section-tight reveal" aria-label="Assessment thread">
+  <div class="idx-line"><span class="eyebrow">Assessment thread</span><i aria-hidden="true"></i><span class="eyebrow">Repository → Environment → Assessment → Evidence</span></div>
+  <p class="body-sm mt-l" style="max-width:66ch">*Hero signals are illustrative product values, not verified operating measurements. Everywhere else on this site, evidence is shown as evidence — with its source.</p>
 </section>
-<section class="section reveal" id="loop">
-{% with label="02 — The security loop" %}{% include "components/section-label.html" %}{% endwith %}
-<h2>Build. Discover. Test. Investigate. Verify. Fix. Retest.</h2>
-<div class="demo-console mono" data-workflow>
-<p>BUILD — Create or receive the application.</p>
-<p>DISCOVER — Map routes, forms, APIs, auth flows.</p>
-<p>TEST — SAST, dependency, secret, DAST checks.</p>
-<p>INVESTIGATE — Correlate results with evidence.</p>
-<p>VERIFY — Targeted checks before certainty.</p>
-<p>FIX — Explain remediation, prepare targeted fix.</p>
-<p>RETEST — Repeat assessment, confirm resolution.</p>
-</div>
-<p><a class="cta-ghost" href="/how-it-works">Explore the loop</a></p>
+<!-- ============================ 01 — THE GAP ============================ -->
+<section class="section" id="gap">
+  <div class="section-head reveal">
+    {% with idx="01", label="The gap" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-statement">Security is still the last thing that happens to software.</h2>
+    <p class="lede">Modern teams ship faster than any security review cycle. Findings arrive after the release, stripped of context, and someone has to reconstruct a decision that was made weeks ago. BreachLabs moves the assessment into the loop that produced the code.</p>
+  </div>
+
+  <div class="split">
+    <div class="stack reveal">
+      <div class="bezel">
+        <div class="bezel-core">
+          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><path d="M6 3v18M10 5v14M14 7v12M18 9v10" stroke-dasharray="3 3"/><circle cx="12" cy="11" r="1.6"/><path d="M9 10h6M9 13h6"/></svg></span>
+          <p class="card-k">Before</p>
+          <p class="h-card">Scanners produce lists.</p>
+          <p class="body-sm mt-l">A tool reports a pattern. There is no source line, no runtime observation, and no attempt to prove the issue is reachable. Triage becomes guesswork.</p>
+        </div>
+      </div>
+      <div class="bezel">
+        <div class="bezel-core">
+          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><rect x="3" y="5" width="7" height="7" rx="1"/><rect x="14" y="9" width="7" height="7" rx="1"/><path d="M10 8h4"/><path d="M13 10v4"/><path d="M6 8h2M18 8h2M6 14h2M18 14h2"/></svg></span>
+          <p class="card-k">Instead</p>
+          <p class="h-card">Investigation produces evidence.</p>
+          <p class="body-sm mt-l">BreachLabs correlates source context, runtime behaviour, and related signals, then states what it can and cannot prove.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div class="bezel">
+        <div class="bezel-core">
+          <p class="card-k">The operating principle</p>
+          <p class="lede mt-l" style="max-width:none">Deterministic tools do the measuring. The agent does the reasoning. Evidence connects the two, and nothing is called verified until a targeted check confirms it.</p>
+          <div class="keyline mt-l">
+            <div><span class="k">Detection</span><span class="v">deterministic tooling</span></div>
+            <div><span class="k">Interpretation</span><span class="v">agent reasoning</span></div>
+            <div><span class="k">Confirmation</span><span class="v">targeted verification</span></div>
+            <div><span class="k">Resolution</span><span class="v">retest against the patch</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
-<section class="section reveal" id="recon">
-{% with label="03 — From repository to attack surface" %}{% include "components/section-label.html" %}{% endwith %}
-<h2>From repository to attack surface.</h2>
-<div class="demo-console mono">
-<p>routes found 14 · forms discovered 3 · APIs observed 9 · auth flow 1 · static assets 37</p>
-<p>*Illustrative output.</p>
-</div>
+
+<!-- ============================ 02 — THE LOOP ============================ -->
+<section class="section" id="loop">
+  <div class="section-head reveal">
+    {% with idx="02", label="The security loop" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-statement">Build. Discover. Test. Investigate. Verify. Fix. Retest.</h2>
+    <p class="lede">Seven stages, each with an explicit output. The loop is the product: an assessment is not a report at the end, it is a sequence of measured steps.</p>
+  </div>
+
+  <div class="rail reveal" data-rail>
+    <span class="rail-track" aria-hidden="true"></span>
+    <span class="rail-fill" data-rail-fill aria-hidden="true"></span>
+    <ol class="rail-list">
+      <li class="rail-item"><span class="idx">01</span><div><p class="h-card">BUILD</p><p class="body-sm">An application is created, modified, or handed over for assessment.</p></div></li>
+      <li class="rail-item"><span class="idx">02</span><div><p class="h-card">DISCOVER</p><p class="body-sm">Routes, forms, API endpoints, authentication flows, and entry points are enumerated.</p></div></li>
+      <li class="rail-item"><span class="idx">03</span><div><p class="h-card">TEST</p><p class="body-sm">Static analysis, dependency review, secret detection, and dynamic checks run as deterministic tools.</p></div></li>
+      <li class="rail-item"><span class="idx">04</span><div><p class="h-card">INVESTIGATE</p><p class="body-sm">The agent reads the surrounding source, correlates runtime observations, and explains what each signal means.</p></div></li>
+      <li class="rail-item"><span class="idx">05</span><div><p class="h-card">VERIFY</p><p class="body-sm">A targeted check attempts reproduction. Findings stay unconfirmed unless the check succeeds.</p></div></li>
+      <li class="rail-item"><span class="idx">06</span><div><p class="h-card">FIX</p><p class="body-sm">Remediation is generated for the specific code path, with the reason it resolves the issue.</p></div></li>
+      <li class="rail-item"><span class="idx">07</span><div><p class="h-card">RETEST</p><p class="body-sm">The same assessment runs again against the changed application to confirm resolution.</p></div></li>
+    </ol>
+  </div>
 </section>
-<section class="section reveal" id="tools">
-{% with label="04 — Deterministic tools" %}{% include "components/section-label.html" %}{% endwith %}
-<h2>AI does not replace the tools. It makes the tools useful together.</h2>
-<p class="mono">SAST + SCA + Secrets + DAST + Browser → Evidence Graph</p>
-<p class="copy-max">Measurement stays deterministic. Reasoning correlates the measurements.</p>
+
+<!-- ============================ 03 — RECON ============================ -->
+<section class="section" id="recon">
+  <div class="section-head reveal">
+    {% with idx="03", label="Reconnaissance" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-statement">You cannot assess an attack surface you have not mapped.</h2>
+    <p class="lede">Before a single check runs, BreachLabs enumerates what the application actually exposes — then treats that map as the scope for every measurement that follows.</p>
+  </div>
+
+  <div class="bento">
+    <div class="b-7 reveal">
+      <div class="bezel" style="height:100%">
+        <div class="bezel-core">
+          <p class="card-k">Discovered surface</p>
+          <div class="terminal mt-l">
+            <div class="terminal-bar"><b></b><b></b><b></b><span>recon — breachlabs-demo</span></div>
+            <div class="terminal-body">
+              <div class="l"><u>01</u><span>routes <span class="cm">→</span> 14 discovered</span></div>
+              <div class="l hl"><u>02</u><span>search <span class="cm">·</span> GET /search?q= <span class="cm">·</span> unvalidated input</span></div>
+              <div class="l"><u>03</u><span>comments <span class="cm">·</span> POST /comments <span class="cm">·</span> reflected output</span></div>
+              <div class="l"><u>04</u><span>profile <span class="cm">·</span> GET /api/profile?id= <span class="cm">·</span> object reference</span></div>
+              <div class="l"><u>05</u><span>auth <span class="cm">·</span> 1 session flow <span class="cm">·</span> cookie scope observed</span></div>
+              <div class="l"><u>06</u><span>assets <span class="cm">·</span> 37 static files</span></div>
+            </div>
+          </div>
+          <p class="body-sm mt-l">Illustrative recon output. Real assessments record the same fields from the running application.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="b-5 stack reveal">
+      <div class="bezel">
+        <div class="bezel-core">
+          <p class="card-k">Surface counters</p>
+          <div class="keyline mt-l">
+            <div><span class="k">Routes discovered</span><span class="v">14</span></div>
+            <div><span class="k">Forms</span><span class="v">3</span></div>
+            <div><span class="k">API endpoints</span><span class="v">9</span></div>
+            <div><span class="k">Auth flows</span><span class="v">1</span></div>
+            <div><span class="k">Static assets</span><span class="v">37</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bezel">
+        <div class="bezel-core">
+          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><circle cx="5.5" cy="5.5" r="2"/><circle cx="18.5" cy="5.5" r="2"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/><path d="M7.5 6.5 10.5 10"/><path d="M16.5 6.5 13.5 10"/><path d="M9.5 17.5 12.5 13.5"/><path d="M3 8h2M21 8h2M3 16h2M21 16h2"/></svg></span>
+          <p class="card-k">Scope</p>
+          <p class="body-sm">Every subsequent test is scoped to the discovered surface. Nothing is probed outside the authorised target.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
-<section class="section reveal" id="investigate">
-{% with label="05 — AI investigation" %}{% include "components/section-label.html" %}{% endwith %}
-<h2>Signal becomes evidence.</h2>
-<p class="mono">Signal → Source context → Runtime context → Related evidence → Confidence</p>
-<p>SOURCE MATCHED · RUNTIME OBSERVED · REPRODUCTION ATTEMPTED</p>
+
+<!-- ============================ 04 — TOOLS ============================ -->
+<section class="section" id="tools">
+  <div class="section-head reveal">
+    {% with idx="04", label="Deterministic tooling" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-statement">AI does not replace the tools. It makes the tools useful together.</h2>
+    <p class="lede">Each tool family answers one question precisely. The agent's job is to connect the answers — not to invent them.</p>
+  </div>
+
+  <div class="flow reveal">
+    <div><p class="card-k">SAST</p><p class="node-t mt-l">Source patterns</p></div>
+    <div><p class="card-k">Dependencies</p><p class="node-t mt-l">Known-vulnerable versions</p></div>
+    <div><p class="card-k">Secrets</p><p class="node-t mt-l">Committed credentials</p></div>
+    <div><p class="card-k">DAST</p><p class="node-t mt-l">Runtime behaviour</p></div>
+    <div><p class="card-k">Browser</p><p class="node-t mt-l">Client-side state</p></div>
+  </div>
+
+  <div class="grid-3 mt-l stagger reveal">
+    <div class="bezel">
+      <div class="bezel-core">
+        <p class="card-k">Result</p>
+        <p class="h-card mt-l">Signals</p>
+        <p class="body-sm">Raw, deterministic, reproducible. A signal is a fact about the code or the running application — not yet a claim about risk.</p>
+      </div>
+    </div>
+    <div class="bezel">
+      <div class="bezel-core">
+        <p class="card-k">Correlation</p>
+        <p class="h-card mt-l">Evidence graph</p>
+        <p class="body-sm">Signals are linked to the source location, the request that reached it, and any related observations.</p>
+      </div>
+    </div>
+    <div class="bezel">
+      <div class="bezel-core">
+        <p class="card-k">Output</p>
+        <p class="h-card mt-l">Findings</p>
+        <p class="body-sm">A finding carries severity, confidence, the affected surface, and the evidence behind it.</p>
+      </div>
+    </div>
+  </div>
 </section>
-<section class="section reveal" id="verify">
-{% with label="06 — Verification" %}{% include "components/section-label.html" %}{% endwith %}
-<h2>Evidence before certainty.</h2>
-<p>DETECTED → INVESTIGATING → VERIFIED or UNCONFIRMED</p>
+
+<!-- ============================ 05 — INVESTIGATION ============================ -->
+<section class="section" id="investigate">
+  <div class="section-head reveal">
+    {% with idx="05", label="AI investigation" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-statement">A signal becomes evidence when someone can explain it.</h2>
+    <p class="lede">The agent opens the source around the reported location, traces how the value reaches it, and records the reasoning next to the observation it came from.</p>
+  </div>
+
+  <div class="split">
+    <div class="stack reveal">
+      <div class="bezel">
+        <div class="bezel-core">
+          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><path d="M5 5h14v14H5z"/><path d="M5 9h14M5 13h14M5 17h14"/><path d="M9 5v14M15 5v14"/><rect x="11" y="11.5" width="1.8" height="2.5" rx="0.5" fill="currentColor"/></svg></span>
+          <p class="card-k">Step 1 — Source context</p>
+          <p class="body-sm mt-l">Read the file around the reported line and identify how the untrusted value is constructed and used.</p>
+        </div>
+      </div>
+      <div class="bezel">
+        <div class="bezel-core">
+          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 8h18"/><path d="M3 12h18"/><path d="M8 3v18"/><path d="M16 3v18"/><path d="M12 3v18"/><circle cx="12" cy="10" r="1.2"/><circle cx="9" cy="7" r="1.2"/><circle cx="15" cy="7" r="1.2"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="13" r="1.2"/></svg></span>
+          <p class="card-k">Step 2 — Reachability</p>
+          <p class="body-sm mt-l">Correlate the source location with the route that reached it during the running assessment.</p>
+        </div>
+      </div>
+      <div class="bezel">
+        <div class="bezel-core">
+          <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><circle cx="12" cy="12" r="9.5"/><path d="M8.5 12.5l3 3 4-5.5"/></svg></span>
+          <p class="card-k">Step 3 — Confidence</p>
+          <p class="body-sm mt-l">State confidence honestly: source-confirmed evidence does not automatically become a verified exploit.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div class="bezel">
+        <div class="bezel-core">
+          <p class="card-k">Reasoning trace</p>
+          <div class="terminal mt-l">
+            <div class="terminal-bar"><b></b><b></b><b></b><span>investigate — BL-DEMO-001</span></div>
+            <div class="terminal-body">
+              <div class="l"><u>01</u><span class="cm">signal: tainted input reaches query construction</span></div>
+              <div class="l"><u>02</u><span>open search.py:38 <span class="cm">±15</span></span></div>
+              <div class="l hl"><u>03</u><span>query = "… WHERE name = '" + term + "'"</span></div>
+              <div class="l"><u>04</u><span class="cm">term ← request.args.get("q") — unvalidated</span></div>
+              <div class="l"><u>05</u><span class="cm">route GET /search?q= reached during assessment</span></div>
+              <div class="l"><u>06</u><span class="cm">related signal: missing parameterisation at 3 sites</span></div>
+              <div class="l"><u>07</u><span>confidence <span class="cm">→</span> SOURCE + ROUTE CONFIRMED</span></div>
+              <div class="l"><u>08</u><span>next <span class="cm">→</span> targeted verification required</span></div>
+            </div>
+          </div>
+          <p class="body-sm mt-l">Investigation raises confidence and adds context. It does not by itself promote a finding to VERIFIED.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
-<section class="section reveal" id="evidence">
-{% with label="07 — Evidence-backed finding" %}{% include "components/section-label.html" %}{% endwith %}
-<h2>One finding, fully shown.</h2>
-{% with finding={"id": "BL-0142", "title": "Sensitive Data Exposure", "severity": "high", "confidence": "verified", "status": "verified", "surface": "GET /api/profile"} %}{% include "components/finding.html" %}{% endwith %}
+
+<!-- ============================ 06 — VERIFICATION ============================ -->
+<section class="section" id="verify">
+  <div class="section-head reveal">
+    {% with idx="06", label="Verification" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-statement">Evidence before certainty.</h2>
+    <p class="lede">Verification is a targeted attempt to reproduce the specific claim. If the attempt fails, the finding is reported as unconfirmed rather than quietly kept.</p>
+  </div>
+
+  <div class="grid-3 stagger reveal">
+    <div class="bezel">
+      <div class="bezel-core">
+        <div>{% with state="detected" %}{% include "components/status.html" %}{% endwith %}</div>
+        <p class="h-card mt-l">A tool reported something.</p>
+        <p class="body-sm mt-l">Deterministic output exists, but reachability and impact are not yet established.</p>
+      </div>
+    </div>
+    <div class="bezel">
+      <div class="bezel-core">
+        <div>{% with state="investigating" %}{% include "components/status.html" %}{% endwith %}</div>
+        <p class="h-card mt-l">The agent is correlating.</p>
+        <p class="body-sm mt-l">Source context and runtime observations are being linked to determine whether the claim holds.</p>
+      </div>
+    </div>
+    <div class="bezel">
+      <div class="bezel-core">
+        <div class="chip-row">
+          {% with state="verified" %}{% include "components/status.html" %}{% endwith %}
+          {% with state="unconfirmed" %}{% include "components/status.html" %}{% endwith %}
+        </div>
+        <p class="h-card mt-l">The attempt resolved it either way.</p>
+        <p class="body-sm mt-l">A successful reproduction is verified. A failed one is unconfirmed — and said out loud.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice mt-l reveal">
+    <span aria-hidden="true">⚠</span>
+    <span><b>No silent certainty.</b> Automated assessment can miss issues and can misread context. A clean report is not proof that an application is secure.</span>
+  </div>
 </section>
-<section class="section reveal" id="fix">
-{% with label="08 — Fix and retest" %}{% include "components/section-label.html" %}{% endwith %}
-<h2>The loop closes.</h2>
-<p class="mono">Finding → Remediation → Patch → Retest → Verified resolved</p>
-<p class="mono">BEFORE unsafe behavior · AFTER corrected behavior · RETEST: PASS</p>
-<p class="copy-max">Current MVP provides remediation guidance; automated patching is a supported/future capability.</p>
+
+<!-- ============================ 07 — EVIDENCE ============================ -->
+<section class="section" id="evidence">
+  <div class="section-head reveal">
+    {% with idx="07", label="Evidence-backed finding" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-statement">One finding, shown in full.</h2>
+    <p class="lede">This is the unit of output. Not a count, not a score — a claim with its source, its reachability, its confidence, and its remediation.</p>
+  </div>
+
+  <div class="split">
+    <div class="reveal">
+      {% with finding={
+        "id": "BL-0142",
+        "title": "Sensitive data exposure on profile endpoint",
+        "summary": "The profile endpoint returns fields the requesting session is not authorised to read.",
+        "severity": "high",
+        "confidence": "verified",
+        "status": "verified",
+        "surface": "GET /api/profile",
+        "evidence": [
+          {"sev": "high", "source": "app/api/profile.py:64", "kind": "source"},
+          {"sev": "high", "source": "GET /api/profile?id=2 → 200 with owner fields", "kind": "runtime"},
+          {"sev": "medium", "source": "session scope: user_id not enforced on lookup", "kind": "auth"},
+          {"sev": "low", "source": "related: 2 endpoints share the lookup helper", "kind": "related"}
+        ],
+        "note": "Reproduction succeeded using a second authenticated session. The response contained fields belonging to a different account.",
+        "stamp": "Retested after fix · resolved"
+      } %}{% include "components/finding.html" %}{% endwith %}
+    </div>
+
+    <div class="stack reveal">
+      <div class="bezel">
+        <div class="bezel-core">
+          <p class="card-k">Why this is verified</p>
+          <p class="body-sm mt-l">A probe reconstructed the request from a second session and compared the response to the authorised view. The difference was reproducible, so the finding moved from investigating to verified.</p>
+        </div>
+      </div>
+      <div class="bezel">
+        <div class="bezel-core">
+          <p class="card-k">Remediation</p>
+          <p class="body-sm mt-l">Enforce session identity on lookup and drop fields the caller is not entitled to, rather than filtering them in the response layer.</p>
+          <div class="terminal mt-l">
+            <div class="terminal-body">
+              <div class="l"><u>1</u><span class="del">- row = db.get_profile(request.args["id"])</span></div>
+              <div class="l"><u>2</u><span class="add">+ row = db.get_profile(session.user_id)</span></div>
+              <div class="l"><u>3</u><span class="add">+ return serialise(row, allow=SESSION_FIELDS)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- ============================ 08 — FIX & RETEST ============================ -->
+<section class="section" id="fix">
+  <div class="section-head reveal">
+    {% with idx="08", label="Fix and retest" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-statement">The loop only closes if someone proves it closed.</h2>
+    <p class="lede">After a change, the assessment runs again and the finding is re-evaluated against the new behaviour. Resolution is a measurement, not an assertion.</p>
+  </div>
+
+  <div class="grid-3 stagger reveal">
+    <div class="bezel">
+      <div class="bezel-core">
+        <p class="card-k">Stage 1</p>
+        <p class="h-card mt-l">Remediation</p>
+        <p class="body-sm mt-l">The fix is described for the specific code path, with the reason it removes the condition rather than the symptom.</p>
+      </div>
+    </div>
+    <div class="bezel">
+      <div class="bezel-core">
+        <p class="card-k">Stage 2</p>
+        <p class="h-card mt-l">Patch applied</p>
+        <p class="body-sm mt-l">The change lands in the application, or in the tracked change set for the assessed branch.</p>
+      </div>
+    </div>
+    <div class="bezel">
+      <div class="bezel-core">
+        <p class="card-k">Stage 3</p>
+        <p class="h-card mt-l">Retest</p>
+        <p class="body-sm mt-l">The verification probe repeats. Passing the retest is the evidence that the finding is resolved.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bezel mt-l reveal">
+    <div class="bezel-core">
+      <div class="split">
+        <div>
+          <p class="card-k">Retest result</p>
+          <div class="terminal mt-l">
+            <div class="terminal-bar"><b></b><b></b><b></b><span>retest — BL-0142</span></div>
+            <div class="terminal-body">
+              <div class="l"><u>01</u><span class="cm">before · session B received owner fields → exposed</span></div>
+              <div class="l"><u>02</u><span class="cm">after&nbsp; · session B received own record only</span></div>
+              <div class="l"><u>03</u><span>probe result <span class="cm">→</span> no cross-account data returned</span></div>
+              <div class="l hl"><u>04</u><span>RETEST: PASS — finding resolved</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="chip-row">
+            {% with state="verified" %}{% include "components/status.html" %}{% endwith %}
+            {% with state="resolved" %}{% include "components/status.html" %}{% endwith %}
+          </div>
+<!-- ============================ 09 — REPORT ============================ -->
+<section class="section" id="report">
+  <div class="section-head reveal">
+    {% with idx="09", label="The report" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-statement">The output is a document you can act on.</h2>
+    <p class="lede">Findings are ordered by severity, each with its evidence and remediation. Coverage and limitations are stated alongside the results, so the report can be read honestly.</p>
+  </div>
+
+  <div class="bento">
+    <div class="b-5 reveal">
+      <div class="bezel" style="height:100%">
+        <div class="bezel-core">
+          <p class="card-k">Report anatomy</p>
+          <div class="keyline mt-l">
+            <div><span class="k">Scope</span><span class="v">target · commit · environment</span></div>
+            <div><span class="k">Coverage</span><span class="v">what was tested</span></div>
+            <div><span class="k">Findings</span><span class="v">severity · confidence · evidence</span></div>
+            <div><span class="k">Remediation</span><span class="v">per finding</span></div>
+            <div><span class="k">Retest</span><span class="v">before · after · result</span></div>
+            <div><span class="k">Limitations</span><span class="v">stated explicitly</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="b-7 reveal">
+      <div class="bezel" style="height:100%">
+        <div class="bezel-core">
+          <p class="card-k">Preview</p>
+          <div class="terminal mt-l">
+            <div class="terminal-bar"><b></b><b></b><b></b><span>report.md — breachlabs-demo</span></div>
+            <div class="terminal-body">
+              <div class="l"><u>01</u><span class="cm"># Security assessment — breachlabs-demo</span></div>
+              <div class="l"><u>02</u><span class="cm">## Summary</span></div>
+              <div class="l"><u>03</u><span>3 findings · 2 verified · 1 investigating</span></div>
+              <div class="l hl"><u>04</u><span class="cm">## BL-DEMO-001 — SQL injection in search parameter</span></div>
+              <div class="l"><u>05</u><span>severity high · confidence verified · GET /search?q=</span></div>
+              <div class="l"><u>06</u><span class="cm">### Evidence</span> · source · runtime · related</span></div>
+              <div class="l"><u>07</u><span class="cm">### Remediation</span> · parameterise the query</span></div>
+              <div class="l"><u>08</u><span class="cm">## Limitations</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
-<section class="section reveal" id="cta">
-{% with label="Final — CTA" %}{% include "components/section-label.html" %}{% endwith %}
-<h2>Give every application its own security engineer.</h2>
-<p class="copy-max">Build faster. Validate earlier. Ship with evidence.</p>
-<div class="cta-row"><a class="cta-glow" href="/demo">View Demo</a>
-<a class="cta-ghost" href="/architecture">Explore Architecture</a></div>
+
+<!-- ============================ CTA ============================ -->
+<section class="cta-band">
+  <div class="section reveal">
+    <h2 class="h-statement" style="max-width:22ch;margin:0 auto">Give every application its own security engineer.</h2>
+    <p class="lede measure mt-l" style="margin-left:auto;margin-right:auto">Build faster. Validate earlier. Ship with evidence you can point at.</p>
+    <div class="hero-cta">
+      <a class="cta-glow" href="/demo">View the demo</a>
+      <a class="cta-quiet" href="/architecture">Explore the architecture</a>
+    </div>
+  </div>
 </section>
+
 {% endblock %}
+          <p class="body-sm">Current MVP scope: BreachLabs explains and prepares remediation and re-runs verification against the changed application. Fully automated patching of arbitrary codebases is a roadmap capability, not a claim made today.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</section>

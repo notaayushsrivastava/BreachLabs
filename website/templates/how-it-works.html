@@ -1,5 +1,175 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="section"><h1>How it works</h1>
-<p class="copy-max">BUILD → DISCOVER → TEST → INVESTIGATE → VERIFY → FIX → RETEST. AI investigates. Deterministic tools measure. Evidence connects them.</p></section>
+<div class="page-flow">
+<div class="section-tight" style="max-width:var(--shell);margin:0 auto;padding-inline:var(--gut)">
+  <div class="idx-line"><span class="eyebrow">Product</span><i aria-hidden="true"></i><span class="eyebrow">The security loop</span></div>
+  <h1 class="page-title" style="margin-top:18px">A security engineer inside the build loop.</h1>
+  <p class="lede mt-l">BreachLabs is not a scanner with a chat interface. It is a sequence of seven stages, each producing a specific artefact, each dependent on the one before it. This page is that sequence in detail.</p>
+  <div class="chip-row mt-l">
+    <span class="chip">Deterministic measurement</span>
+    <span class="chip">Agent reasoning</span>
+    <span class="chip">Targeted verification</span>
+    <span class="chip">Retest after change</span>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="01", label="Build" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">An application is created, modified, or handed over.</h2>
+    <p class="lede">The loop starts from an artefact that exists: a repository, a running service, or both. BreachLabs records what it was given so every later claim can be traced back to a specific revision.</p>
+  </div>
+  <div class="grid-3 stagger reveal">
+    <div class="bezel"><div class="bezel-core"><p class="card-k">Input</p><p class="body-sm mt-l">Repository path or service endpoint, plus the environment it should run in.</p></div></div>
+    <div class="bezel"><div class="bezel-core"><p class="card-k">Action</p><p class="body-sm mt-l">Validate the target, record the revision, confirm authorisation to test it.</p></div></div>
+    <div class="bezel"><div class="bezel-core"><p class="card-k">Output</p><p class="body-sm mt-l">A scoped, reproducible assessment target with a fixed reference point.</p></div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="02", label="Discover" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">The application tells you what it exposes.</h2>
+    <p class="lede">Reconnaissance is not guesswork about hidden endpoints. It is a structured enumeration of what the running application already answers to.</p>
+  </div>
+  <div class="bento">
+    <div class="b-7 reveal">
+      <div class="bezel" style="height:100%"><div class="bezel-core">
+        <p class="card-k">Enumerated surface</p>
+        <div class="terminal mt-l">
+          <div class="terminal-bar"><b></b><b></b><b></b><span>discover — surface map</span></div>
+          <div class="terminal-body">
+            <div class="l"><u>·</u><span>HTTP routes and methods</span></div>
+            <div class="l"><u>·</u><span>Form actions and accepted parameters</span></div>
+            <div class="l"><u>·</u><span>API endpoints and their response shapes</span></div>
+            <div class="l"><u>·</u><span>Authentication and session flows</span></div>
+            <div class="l"><u>·</u><span>Static assets and client-side entry points</span></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div class="b-5 stack reveal">
+      <div class="bezel"><div class="bezel-core">
+        <p class="card-k">Why it matters</p>
+        <p class="body-sm mt-l">A finding without a surface is not actionable. Every later stage attaches to something on this map — which is why discovery comes before any test runs.</p>
+      </div></div>
+      <div class="bezel"><div class="bezel-core">
+        <p class="card-k">Boundary</p>
+        <p class="body-sm mt-l">Enumeration is limited to the authorised target. If the map is incomplete, the report says so rather than implying full coverage.</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="03", label="Test" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">Deterministic tools, one question each.</h2>
+    <p class="lede">Each tool family answers a narrow question precisely and reproducibly. Measurement is not delegated to a language model, because measurement should not vary between runs.</p>
+  </div>
+  <div class="flow reveal">
+    <div><p class="card-k">SAST</p><p class="node-t mt-l">Where are risky patterns in the source?</p></div>
+    <div><p class="card-k">Dependencies</p><p class="node-t mt-l">Which versions have known issues?</p></div>
+    <div><p class="card-k">Secrets</p><p class="node-t mt-l">Did credentials reach the repository?</p></div>
+    <div><p class="card-k">DAST</p><p class="node-t mt-l">How does the running service respond?</p></div>
+    <div><p class="card-k">Browser</p><p class="node-t mt-l">What is observable client-side?</p></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="04", label="Investigate" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">Reasoning is written down, not implied.</h2>
+    <p class="lede">The agent opens the source around each reported location, traces the data flow, and correlates it with what the running application did. The trace is part of the output.</p>
+  </div>
+  <div class="split">
+    <div class="reveal">
+      <div class="bezel" style="height:100%"><div class="bezel-core">
+        <p class="card-k">What investigation adds</p>
+        <div class="keyline mt-l">
+          <div><span class="k">Source context</span><span class="v">file · line · surrounding code</span></div>
+          <div><span class="k">Data flow</span><span class="v">where the value came from</span></div>
+          <div><span class="k">Reachability</span><span class="v">which route exercised it</span></div>
+          <div><span class="k">Related signals</span><span class="v">the same pattern elsewhere</span></div>
+          <div><span class="k">Confidence</span><span class="v">stated, not assumed</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="reveal">
+      <div class="bezel" style="height:100%"><div class="bezel-core">
+        <p class="card-k">What investigation does not do</p>
+        <p class="body-sm mt-l">It does not promote a finding to verified. Correlation raises confidence and produces context; only a targeted reproduction attempt can change the verification state.</p>
+        <div class="notice mt-l">
+          <span aria-hidden="true">⚠</span>
+          <span><b>Correlation is not proof.</b> A pattern that looks exploitable can be unreachable in practice. BreachLabs reports it as investigating until a check says otherwise.</span>
+        </div>
+      </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="05", label="Verify" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">Reproduce it, or say you could not.</h2>
+    <p class="lede">Verification probes are specific to the claim: parameterisation behaviour for injection, reflection for output encoding, authorisation comparison for object references.</p>
+  </div>
+  <div class="grid-2 stagger reveal">
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Attempt succeeds</p>
+      <p class="h-card mt-l">VERIFIED</p>
+      <p class="body-sm mt-l">The probe reproduced the behaviour and the evidence is attached to the finding.</p>
+      <div class="chip-row mt-l">{% with state="verified" %}{% include "components/status.html" %}{% endwith %}</div>
+    </div></div>
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Attempt fails</p>
+      <p class="h-card mt-l">UNCONFIRMED</p>
+      <p class="body-sm mt-l">The claim could not be reproduced. It stays in the report with that state, rather than being dropped or overstated.</p>
+      <div class="chip-row mt-l">{% with state="unconfirmed" %}{% include "components/status.html" %}{% endwith %}</div>
+    </div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="06", label="Fix" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">Remediation for this code path.</h2>
+    <p class="lede">Guidance names the file, the construct to change, and the reason the change removes the condition — not just the symptom.</p>
+  </div>
+  <div class="bezel reveal"><div class="bezel-core">
+    <p class="card-k">Example</p>
+    <div class="terminal mt-l">
+      <div class="terminal-bar"><b></b><b></b><b></b><span>remediation — BL-DEMO-001</span></div>
+      <div class="terminal-body">
+        <div class="l"><u>·</u><span class="cm">condition: untrusted value concatenated into a query</span></div>
+        <div class="l"><u>·</u><span class="del">- query = "… WHERE name = '" + term + "'"</span></div>
+        <div class="l"><u>·</u><span class="add">+ query = "… WHERE name = ?"</span></div>
+        <div class="l"><u>·</u><span class="add">+ cursor.execute(query, (term,))</span></div>
+        <div class="l"><u>·</u><span class="cm">why: the value can no longer change the query's structure</span></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="07", label="Retest" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">Then prove the condition is gone.</h2>
+    <p class="lede">A retest repeats the same probe against the changed application. Resolution is recorded only when the probe no longer reproduces the behaviour.</p>
+  </div>
+  <div class="grid-3 stagger reveal">
+    <div class="bezel"><div class="bezel-core"><p class="card-k">Scope</p><p class="body-sm mt-l">The probe is replayed for the affected surface, not the whole suite.</p></div></div>
+    <div class="bezel"><div class="bezel-core"><p class="card-k">Comparison</p><p class="body-sm mt-l">Before and after behaviour are recorded side by side.</p></div></div>
+    <div class="bezel"><div class="bezel-core"><p class="card-k">Result</p><p class="body-sm mt-l">Pass, fail, or still unconfirmed — with the evidence either way.</p></div></div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="section reveal">
+    <h2 class="h-section" style="margin:0 auto;max-width:26ch">See the loop run on a deterministic target.</h2>
+    <div class="hero-cta">
+      <a class="cta-glow" href="/demo">Open the demo</a>
+      <a class="cta-quiet" href="/architecture">See the architecture</a>
+    </div>
+  </div>
+</section>
+</div>
 {% endblock %}

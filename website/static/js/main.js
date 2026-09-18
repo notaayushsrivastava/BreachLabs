@@ -1,20 +1,25 @@
+/**
+ * Shared entry point for all pages.
+ * Imports activate each page's own module, which self-initializes on its own
+ * DOMContentLoaded. This file focuses on the things every route needs:
+ * nav behaviour, scroll progress, reveal timing, and the route-independent skeleton.
+ */
 import { initNav } from "./nav.js";
-import { initReveal, initScrollProgress } from "./motion.js";
+import { initReveal, initScrollProgress, initRail } from "./motion.js";
 import { initCounters } from "./counters.js";
 import { initWorkflow } from "./workflow.js";
-import { initArchitecture } from "./architecture.js";
-import { prefersReducedMotion } from "./reduced-motion.js";
 
 export function init() {
-  try { initNav(); } catch (e) { console.error(e); }
-  try { initReveal(); } catch (e) { console.error(e); }
-  try { initScrollProgress(); } catch (e) { console.error(e); }
-  try { initCounters(); } catch (e) { console.error(e); }
-  try { initWorkflow(); } catch (e) { console.error(e); }
-  try { initArchitecture(); } catch (e) { console.error(e); }
-  const y = document.getElementById("year");
-  if (y) y.textContent = String(new Date().getFullYear());
-  document.documentElement.dataset.motion =
-    prefersReducedMotion() ? "reduced" : "full";
+  initNav();
+  initScrollProgress();
+  initReveal();
+  initRail();
+  initCounters();
+  initWorkflow();
 }
-document.addEventListener("DOMContentLoaded", init);
+
+if (typeof window !== "undefined") {
+  window.document.addEventListener("DOMContentLoaded", () => {
+    try { init(); } catch (e) { console.error(e); }
+  });
+}

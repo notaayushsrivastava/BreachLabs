@@ -1,6 +1,94 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="section"><h1>Architecture</h1>
-<p class="mono">Repository → Isolated Env → Orchestrator → AI Agent → MCP Tools (SAST/DAST/Browser) → Evidence → Verification → Report</p>
-<p class="copy-max">Controlled tools, scoped execution, isolated environments. Application content is treated as untrusted.</p></section>
+<div class="page-flow">
+<div class="section-tight" style="max-width:var(--shell);margin:0 auto;padding-inline:var(--gut)">
+  <div class="idx-line"><span class="eyebrow">Engineering</span><i aria-hidden="true"></i><span class="eyebrow">Architecture</span></div>
+  <h1 class="page-title" style="margin-top:18px">An orchestrator, an agent, and tools that stay bounded.</h1>
+  <p class="lede mt-l">BreachLabs separates execution from judgement. The orchestrator runs deterministic steps in a controlled environment; the agent interprets what those steps produced. Neither is allowed to improvise its way outside the authorised scope.</p>
+</div>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="01", label="System shape" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">Five layers, one direction of flow.</h2>
+    <p class="lede">Each layer has a narrow responsibility. Data flows forward into evidence; control over tool execution stays with the orchestrator.</p>
+  </div>
+
+  <div class="split">
+    <div class="reveal">
+      <div class="nodes" data-arch>
+        {% with node_id="env", kind="layer 01", title="Isolated environment", meta="sandboxed", active=true,
+          icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="6" y="7" width="3.5" height="3.5"/><rect x="10.5" y="7" width="3.5" height="3.5"/><rect x="15" y="7" width="3.5" height="3.5"/><rect x="6" y="12.5" width="3.5" height="3"/><rect x="10.5" y="12.5" width="3.5" height="3"/><rect x="15" y="12.5" width="3.5" height="3"/></svg>' %}
+          {% include "components/architecture-node.html" %}{% endwith %}
+        {% with node_id="orch", kind="layer 02", title="Orchestrator", meta="deterministic",
+          icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="12" r="6" stroke-dasharray="2 2"/><path d="M12 6v0M12 20v0M6 12h0M18 12h0M7 7l4 4M17 7l-4 4M7 17l4-4M17 17l-4-4"/> </svg>' %}
+          {% include "components/architecture-node.html" %}{% endwith %}
+        {% with node_id="agent", kind="layer 03", title="AI agent", meta="reasoning",
+          icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><path d="M9 4h6M7 9h10M8 14h8M6 19h12M12 7v7M10 10h4M11 13h2M9 16h6"/><circle cx="12" cy="12" r="1.5"/></svg>' %}
+          {% include "components/architecture-node.html" %}{% endwith %}
+        {% with node_id="mcp", kind="layer 04", title="MCP tool servers", meta="allowlisted",
+          icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><rect x="4" y="8" width="16" height="8" rx="2"/><path d="M8 12h8M7 10v4M10 10v4M14 10v4M17 10v4"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/></svg></svg>' %}
+          {% include "components/architecture-node.html" %}{% endwith %}
+        {% with node_id="evid", kind="layer 05", title="Evidence store & report", meta="append-only",
+          icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><path d="M4 4h12l4 4v12H4z"/><path d="M8 10h8M8 13h6M8 16h4M4 9l2 2M20 9l-2 2"/><path d="M13 17l3 3-5 2" fill="currentColor"/></svg></svg>' %}
+          {% include "components/architecture-node.html" %}{% endwith %}
+      </div>
+    </div>
+
+    <div class="reveal" data-arch-panel>
+      <div class="bezel" style="height:100%"><div class="bezel-core">
+        <p class="card-k" data-arch-kind>Layer 01</p>
+        <h3 class="h-card mt-l" data-arch-title>Isolated environment</h3>
+        <p class="body-sm mt-l" data-arch-body>The target runs inside an isolated environment. The assessment never touches production, and the environment is rebuilt from the recorded revision for each run.</p>
+        <div class="keyline mt-l">
+          <div><span class="k">Network</span><span class="v">target-only egress</span></div>
+          <div><span class="k">State</span><span class="v">recreated per assessment</span></div>
+          <div><span class="k">Secrets</span><span class="v">synthetic, non-production</span></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="02", label="Trust boundaries" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">What the agent can and cannot do.</h2>
+    <p class="lede">The agent never receives an open shell or unrestricted network access. It requests specific, allowlisted operations and receives structured results.</p>
+  </div>
+  <div class="grid-3 stagger reveal">
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Permitted</p>
+      <div class="keyline mt-l">
+        <div><span class="k">Inspect</span><span class="v">read scoped source</span></div>
+        <div><span class="k">Invoke</span><span class="v">allowlisted tool calls</span></div>
+        <div><span class="k">Compare</span><span class="v">responses within scope</span></div>
+      </div>
+    </div></div>
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Refused</p>
+      <div class="keyline mt-l">
+        <div><span class="k">Arbitrary commands</span><span class="v">not exposed</span></div>
+        <div><span class="k">Out-of-scope hosts</span><span class="v">blocked</span></div>
+        <div><span class="k">Real credentials</span><span class="v">never injected</span></div>
+      </div>
+    </div></div>
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Untrusted input</p>
+      <p class="body-sm mt-l">Source files, responses, and tool output are treated as data to be inspected — not as instructions to be followed. Application content cannot redirect the agent.</p>
+    </div></div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="section reveal">
+    <h2 class="h-section" style="margin:0 auto;max-width:26ch">Read the security model behind these boundaries.</h2>
+    <div class="hero-cta">
+      <a class="cta-glow" href="/security">Security model</a>
+      <a class="cta-quiet" href="/capabilities">Capabilities</a>
+    </div>
+  </div>
+</section>
+</div>
 {% endblock %}
+{% block scripts %}<script type="module" src="/static/js/architecture.js" defer></script>{% endblock %}

@@ -1,1 +1,5 @@
-<div class="metric"><b>{{ value }}</b><span>{{ label }}</span></div>
+<div class="metric">
+{% if glyph %}<span class="glyph" aria-hidden="true">{{ glyph }}</span>{% endif %}
+<b class="num" data-count-to="{{ to|default(value, true) }}" data-suffix="{{ suffix|default('') }}" data-decimals="{{ decimals|default(0) }}">{{ to|default(value, true) }}{{ suffix|default('') }}</b>
+<span>{{ label }}</span>
+</div>

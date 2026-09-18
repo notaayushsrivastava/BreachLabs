@@ -1,5 +1,100 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="section"><h1>Security model</h1>
-<p class="copy-max">Authorized defensive testing only. Isolated environments. Allowlisted tools. No live secrets. A clean report is not a guarantee of security.</p></section>
+<div class="page-flow">
+<div class="section-tight" style="max-width:var(--shell);margin:0 auto;padding-inline:var(--gut)">
+  <div class="idx-line"><span class="eyebrow">Engineering</span><i aria-hidden="true"></i><span class="eyebrow">Security model</span></div>
+  <h1 class="page-title" style="margin-top:18px">A security tool should be able to explain its own boundaries.</h1>
+  <p class="lede mt-l">BreachLabs probes applications for a living, so it is held to the same standard: explicit scope, isolated execution, allowlisted tools, and limitations stated in writing.</p>
+</div>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="01", label="Authorised scope" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">Defensive testing, on targets you are allowed to test.</h2>
+    <p class="lede">BreachLabs exists to help teams find and fix weaknesses in their own software before someone else does. It is not a tool for probing systems you do not control.</p>
+  </div>
+  <div class="grid-2 stagger reveal">
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Intended use</p>
+      <p class="body-sm mt-l">Assessing applications you own or have explicit written permission to test — your own repositories, staging environments, and purpose-built demo targets.</p>
+    </div></div>
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Not supported</p>
+      <p class="body-sm mt-l">Scanning third-party systems, circumventing authorisation, or operating against any target outside a confirmed scope. The website demo is a static illustrative replay — it performs no scanning at all.</p>
+    </div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="02", label="Isolation and tool control" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">Execution is contained and enumerated.</h2>
+  </div>
+  <div class="grid-3 stagger reveal">
+    <div class="bezel"><div class="bezel-core">
+      <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><path d="M12 2.5l3.4 6.8 7.4 1.1-5.2 4.9 1.5 7.3L12 18l-6.2 3.7 1.5-7.3L1.2 10.4l7.4-1.1L12 2.5z"/><path d="M10 11.5l2.8 3M14.8 11.5l-2.8 3"/></svg></span>
+      <p class="card-k">Environment isolation</p>
+      <p class="body-sm mt-l">Assessment runs happen in a disposable environment rebuilt from the recorded revision. Nothing persists into the next run.</p>
+    </div></div>
+    <div class="bezel"><div class="bezel-core">
+      <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><rect x="5" y="9" width="14" height="10" rx="1.5"/><path d="M8 9V6a4 4 0 017.2-2 4 4 0 017.2 2v3"/><path d="M12 17v3M9 15h6"/></svg></span>
+      <p class="card-k">Allowlisted tools</p>
+      <p class="body-sm mt-l">Only enumerated tool operations are reachable. There is no generic shell and no arbitrary command surface for the agent to misuse.</p>
+    </div></div>
+    <div class="bezel"><div class="bezel-core">
+      <span class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"><path d="M12 3l8 4v5c0 5-4 8-9 10-5-2-9-5-9-10V7z"/><circle cx="12" cy="10" r="1.5"/><path d="M12 13v2"/></svg></span>
+      <p class="card-k">Credential hygiene</p>
+      <p class="body-sm mt-l">Assessments use synthetic values. Production secrets are not injected into the environment, and detected secrets are redacted in output.</p>
+    </div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="03", label="Untrusted content" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">Application content is data, not instruction.</h2>
+    <p class="lede">Source files, HTTP responses, error messages, and tool output are all attacker-influenceable in a hostile codebase. BreachLabs reads them as evidence and does not act on text found inside them.</p>
+  </div>
+  <div class="notice reveal">
+    <span aria-hidden="true">⚠</span>
+    <span><b>Indirect injection is a real risk for agentic tooling.</b> A comment in a file or a string in a response could attempt to redirect an agent. Content is never treated as an instruction source, and tool access stays bounded regardless of what the content says.</span>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="04", label="Limitations" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section">What this cannot promise.</h2>
+    <p class="lede">Honest tooling states its failure modes. These are the ones that matter.</p>
+  </div>
+  <div class="grid-2 stagger reveal">
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Coverage</p>
+      <p class="body-sm mt-l">Automated assessment cannot enumerate every reachable path. Logic flaws, business-rule abuse, and multi-step attack chains can be missed entirely.</p>
+    </div></div>
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Context</p>
+      <p class="body-sm mt-l">Some reported patterns are safe in context, and some exploitable patterns are unreachable in practice. Verification reduces this error window but cannot eliminate it.</p>
+    </div></div>
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Interpretation</p>
+      <p class="body-sm mt-l">Severity and confidence are judgements with stated inputs. They are decision support, not a substitute for an engineer's review.</p>
+    </div></div>
+    <div class="bezel"><div class="bezel-core">
+      <p class="card-k">Completeness</p>
+      <p class="body-sm mt-l">A clean report means the checks that ran found nothing. It is not a statement that the application is secure, and it should never be presented as one.</p>
+    </div></div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="section reveal">
+    <h2 class="h-section" style="margin:0 auto;max-width:28ch">Boundaries you can read are boundaries you can trust.</h2>
+    <div class="hero-cta">
+      <a class="cta-glow" href="/architecture">See the architecture</a>
+      <a class="cta-quiet" href="/how-it-works">How it works</a>
+    </div>
+  </div>
+</section>
+</div>
 {% endblock %}

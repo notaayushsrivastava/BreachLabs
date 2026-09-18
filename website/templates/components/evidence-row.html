@@ -1,2 +1,5 @@
-<div class="evidence-row mono"><span>{{ source }}</span><span>{{ kind }}</span>
-{% with state=state %}{% include "components/status.html" %}{% endwith %}</div>
+<div class="evidence-row" data-sev="{{ sev|default('low') }}">
+<span class="sev" aria-hidden="true"></span>
+<span class="src">{{ source }}</span>
+<span class="kind">{{ kind }}</span>
+</div>

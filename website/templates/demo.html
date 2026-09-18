@@ -1,15 +1,96 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="section"><h1>Demo — deterministic assessment</h1>
-<p class="copy-max"><strong>Clearly labeled illustrative demo.</strong> No live scanning, no external targets, no shell commands.</p>
-<div class="demo-console mono" id="demo-console">
-<p>Assessment {{ assessment.assessment_id }} · {{ assessment.status }} · target {{ assessment.target }}</p>
-<p>routes_discovered {{ assessment.routes_discovered }} · duration {{ assessment.duration_ms }}ms</p>
-{% for f in assessment.findings %}
-<p>{{ f.id }} · {{ f.title }} · {{ f.severity|upper }} · {{ f.status|upper }} · {{ f.surface }}</p>
-{% endfor %}
+<div class="page-flow">
+<div class="section-tight" style="max-width:var(--shell);margin:0 auto;padding-inline:var(--gut)">
+  <div class="idx-line"><span class="eyebrow">Demo</span><i aria-hidden="true"></i><span class="eyebrow">Security assessment report</span></div>
+  <h1 class="page-title" style="margin-top:18px;color:var(--fg)">{{ assessment.assessment_id }}</h1>
+  <p class="body-sm mt-l" style="color:var(--fg-soft)">{{ assessment.status|title }} assessment · breachlabs-demo · {{ assessment.duration_ms }}ms · {{ assessment.routes_discovered }} routes</p>
 </div>
-<script>window.DEMO_ASSESSMENT = {{ assessment | tojson }};</script>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="01", label="At a glance" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section" style="margin-bottom:24px">{{ assessment.assessment_id }} — Summary</h2>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:28px">
+    <div class="bezel reveal">
+      <div class="bezel-core">
+        <div class="stack-sm">
+          <div style="text-align:center">
+            <div style="font-family:var(--font-display);font-weight:400;font-size:clamp(32px,4vw,50px);line-height:1;letter-spacing:-0.03em;color:var(--fg)">{{ assessment.findings|length }}</div>
+            <div class="body-sm" style="margin-top:6px">Findings</div>
+          </div>
+          <div class="keyline" style="margin:0">
+            {% for r in assessment.findings if r.confidence == 'verified' %}
+            <div style="background:var(--ok);width:6px;height:6px;border-radius:50%;display:grid;place-items:center;margin-bottom:6px"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="txt-xs" style="color:var(--fg-mute)">Verified</span>
+              <span style="font-family:var(--font-mono);font-size:11px;color:var(--fg)">{{ loop.length }}</span>
+            </div>
+            {% endfor %}
+            {% for r in assessment.findings if r.confidence != 'verified' %}
+            <div style="background:var(--warn);width:6px;height:6px;border-radius:50%;display:grid;place-items:center;margin-bottom:6px"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="txt-xs" style="color:var(--fg-mute)">Investigating</span>
+              <span style="font-family:var(--font-mono);font-size:11px;color:var(--fg)">{{ loop.length }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bezel reveal">
+      <div class="bezel-core">
+        <div class="stack-sm">
+          <div class="meta-row"><span class="meta-r"><span class="lbl">Assessment</span><span class="val">{{ assessment.assessment_id }}</span></span></div>
+          <div class="meta-row"><span class="meta-r"><span class="lbl">Target</span><span class="val">{{ assessment.target }}</span></span></div>
+          <div class="meta-row"><span class="meta-r"><span class="lbl">Status</span><span class="val">{{ assessment.status|upper }}</span></span></div>
+          <div class="meta-row"><span class="meta-r"><span class="lbl">Duration</span><span class="val">{{ assessment.duration_ms }} ms</span></span></div>
+          <div class="meta-row"><span class="meta-r"><span class="lbl">Routes</span><span class="val">{{ assessment.routes_discovered }}</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
+
+<section class="section">
+  <div class="section-head reveal">
+    {% with idx="02", label="Findings" %}{% include "components/section-label.html" %}{% endwith %}
+    <h2 class="h-section" style="margin-bottom:24px">Detailed findings</h2>
+  </div>
+
+  <div class="filter-row" role="group" aria-label="Filter by severity">
+    <button class="chip" data-sev-filter="all" aria-pressed="true" type="button">All</button>
+    <button class="chip" data-sev-filter="high" aria-pressed="false" type="button">High</button>
+    <button class="chip" data-sev-filter="medium" aria-pressed="false" type="button">Medium</button>
+    <button class="chip" data-sev-filter="low" aria-pressed="false" type="button">Low</button>
+    <span class="body-sm" style="color:var(--fg-faint);margin-left:auto">Showing <span data-count>{{ assessment.findings|length }}</span> of {{ assessment.findings|length }}</span>
+  </div>
+
+    <div class="bento" data-findings>
+      {% for f in assessment.findings %}
+      <div class="b-4" data-finding data-sev="{{ f.severity }}">
+        <div class="bezel" style="height:100%"><div class="bezel-core">
+          <div class="artifact-top" style="border-bottom:0;padding-bottom:0">
+            <span class="artifact-id mono">{{ f.id }}</span>
+            {% with state=f.status %}{% include "components/status.html" %}{% endwith %}
+          </div>
+          <p class="h-card mt-l">{{ f.title }}</p>
+          <div class="keyline mt-l">
+            <div><span class="k">Severity</span><span class="v">{{ f.severity|upper }}</span></div>
+            <div><span class="k">Confidence</span><span class="v">{{ f.confidence|upper }}</span></div>
+            <div><span class="k">Surface</span><span class="v">{{ f.surface }}</span></div>
+          </div>
+        </div></div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="empty-state mt-l" data-empty hidden>NO FINDINGS MATCH THIS FILTER</div>
+    <p class="body-sm mt-l"><span data-count-label>{{ assessment.findings|length }}</span> of {{ assessment.findings|length }} findings shown.</p>
+  </section>
+</div>
 {% endblock %}
 {% block scripts %}<script type="module" src="/static/js/demo.js" defer></script>{% endblock %}

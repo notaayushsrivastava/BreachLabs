@@ -83,11 +83,11 @@ def create_app() -> Flask:
         resp.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         resp.headers["Content-Security-Policy"] = (
             "default-src 'self'; "
-            "script-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; "
+            "script-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://db.onlinewebfonts.com; "
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com "
             "https://db.onlinewebfonts.com https://cdnjs.cloudflare.com; "
-            "font-src 'self' https://fonts.gstatic.com https://db.onlinewebfonts.com data:; "
-            "img-src 'self' data:; "
+            "font-src 'self' https://fonts.gstatic.com https://db.onlinewebfonts.com https://cdnjs.cloudflare.com data:; "
+            "img-src 'self' data: blob:; "
             "media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; "
             "connect-src 'self'; frame-ancestors 'none'")
         return resp

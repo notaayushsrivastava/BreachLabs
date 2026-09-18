@@ -1,23 +1,72 @@
+/**
+ * Nav behaviour: mobile sheet, floating header reveal, scrolled glass state.
+ * The header stays hidden on the home hero until the hero is scrolled past,
+ * so the hero keeps the PRD §10 three-region composition at rest.
+ */
 export function initNav() {
-  const btn = document.querySelector("[data-nav-toggle]");
+  const header = document.querySelector("[data-site-header]");
+  const toggle = document.querySelector("[data-nav-toggle]");
   const sheet = document.getElementById("mobile-sheet");
-  if (!btn || !sheet) return;
-  const close = () => {
-    sheet.classList.remove("is-open");
-    btn.setAttribute("aria-expanded", "false");
-  };
-  btn.addEventListener("click", () => {
-    const open = sheet.classList.toggle("is-open");
-    btn.setAttribute("aria-expanded", String(open));
+  const hero = document.querySelector(".page");
+
+  if (header && hero) {
+    let raf = 0;
+    const sync = () => {
+      raf = 0;
+      const past = window.scrollY > window.innerHeight * 0.72;
+      header.classList.toggle("is-revealed", past);
+      header.classList.toggle("is-scrolled", window.scrollY > window.innerHeight * 0.9);
+    };
+    const onScroll = () => {
+      if (!raf) raf = window.requestAnimationFrame(sync);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    sync();
+  } else if (header) {
+    // Sub-pages have no hero: the header is present throughout and gains
+    // its glass treatment once the page moves.
+    let raf = 0;
+    const sync = () => {
+      raf = 0;
+      header.classList.add("is-revealed");
+      header.classList.toggle("is-scrolled", window.scrollY > 8);
+    };
+    window.addEventListener("scroll", () => {
+      if (!raf) raf = window.requestAnimationFrame(sync);
+    }, { passive: true });
+    sync();
+  }
+
+  if (!toggle || !sheet) return;
+
+  const setOpen = (open) => {
+    sheet.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    sheet.setAttribute("aria-hidden", String(!open));
     if (open) {
       const first = sheet.querySelector("a");
       if (first) first.focus();
     }
+  };
+
+  setOpen(false);
+
+  toggle.addEventListener("click", () => {
+    setOpen(toggle.getAttribute("aria-expanded") !== "true");
   });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") { close(); btn.focus(); }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && sheet.classList.contains("is-open")) {
+      setOpen(false);
+      toggle.focus();
+    }
   });
-  sheet.addEventListener("click", (e) => {
-    if (e.target === sheet) close();
+
+  sheet.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
   });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 720) setOpen(false);
+  }, { passive: true });
 }

@@ -1,7 +1,24 @@
-<article class="finding-artifact">
-<p class="mono">FINDING {{ finding.id }}</p>
-<h3>{{ finding.title }}</h3>
-<p>Severity {{ finding.severity|upper }} · Confidence {{ finding.confidence|upper }}</p>
-<p class="mono">Surface {{ finding.surface }}</p>
+<article class="artifact">
+<div class="artifact-top">
+<span class="artifact-id">FINDING {{ finding.id }}</span>
 {% with state=finding.status %}{% include "components/status.html" %}{% endwith %}
+</div>
+<h3>{{ finding.title }}</h3>
+<p class="sub">{{ finding.summary }}</p>
+<div class="meta">
+<div><span>Severity</span><b>{{ finding.severity|upper }}</b></div>
+<div><span>Confidence</span><b>{{ finding.confidence|upper }}</b></div>
+<div><span>Surface</span><b>{{ finding.surface }}</b></div>
+</div>
+<div class="evidence mt-l">
+{% for e in finding.evidence %}
+<div class="evidence-row" data-sev="{{ e.sev }}">
+<span class="sev" aria-hidden="true"></span>
+<span class="src">{{ e.source }}</span>
+<span class="kind">{{ e.kind }}</span>
+</div>
+{% endfor %}
+</div>
+<p class="note">{{ finding.note }}</p>
+<span class="stamp"><i aria-hidden="true"></i>{{ finding.stamp }}</span>
 </article>
