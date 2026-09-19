@@ -15,6 +15,9 @@ pytest-cov<6.0,>=4.1
 ruff<1.0,>=0.1
 mypy<2.0,>=1.7
 
+[llm]
+openai<2.0,>=1.0
+
 [sandbox]
 docker<8.0,>=7.0
 

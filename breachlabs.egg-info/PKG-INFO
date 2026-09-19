@@ -15,6 +15,8 @@ Requires-Dist: pyyaml<7.0,>=6.0
 Requires-Dist: python-multipart>=0.0.6
 Provides-Extra: browser
 Requires-Dist: playwright<2.0,>=1.40; extra == "browser"
+Provides-Extra: llm
+Requires-Dist: openai<2.0,>=1.0; extra == "llm"
 Provides-Extra: sast
 Requires-Dist: semgrep<2.0,>=1.40; extra == "sast"
 Provides-Extra: sandbox
@@ -27,6 +29,9 @@ Requires-Dist: ruff<1.0,>=0.1; extra == "dev"
 Requires-Dist: mypy<2.0,>=1.7; extra == "dev"
 
 # BreachLabs
+
+![BreachLabs](website/static/logo-1280x640.png)
+
 
 > **Build. Break. Verify. Fix.**
 

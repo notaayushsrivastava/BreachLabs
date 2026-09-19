@@ -1,7 +1,7 @@
 <header class="site-header{% if not on_home %} is-revealed{% endif %}" data-site-header>
 <div class="nav-bar">
 <a class="brand" href="/" aria-label="BreachLabs home">
-<img class="brand-mark" src="/static/images/logo.webp" alt="" width="30" height="30">
+<img class="brand-mark" src="/static/images/logo.svg" alt="" width="30" height="30">
 <span class="brand-word">BreachLabs</span>
 </a>
 <nav class="nav-pill" aria-label="Primary">
@@ -9,11 +9,11 @@
 <a class="nav-link{% if request.path == '/how-it-works' %} is-active{% endif %}" {% if request.path == '/how-it-works' %}aria-current="page"{% endif %} href="/how-it-works">Product</a>
 <a class="nav-link{% if request.path == '/architecture' %} is-active{% endif %}" {% if request.path == '/architecture' %}aria-current="page"{% endif %} href="/architecture">Architecture</a>
 <a class="nav-link{% if request.path == '/security' %} is-active{% endif %}" {% if request.path == '/security' %}aria-current="page"{% endif %} href="/security">Security</a>
-<a class="nav-link{% if request.path == '/install' %} is-active{% endif %}" {% if request.path == '/install' %}aria-current="page"{% endif %} href="/install">Install MCP</a>
+<a class="nav-link{% if request.path == '/install' %} is-active{% endif %}" {% if request.path == '/install' %}aria-current="page"{% endif %} href="/install">Install</a>
 <a class="nav-link{% if request.path == '/about' %} is-active{% endif %}" {% if request.path == '/about' %}aria-current="page"{% endif %} href="/about">About</a>
 </nav>
 <div class="nav-actions">
-<a class="signin-pill" href="/demo">Open demo</a>
+<a class="signin-pill" href="/install">Get Started</a>
 <button class="nav-burger" type="button" data-nav-toggle aria-expanded="false" aria-controls="mobile-sheet" aria-label="Open menu"><span></span></button>
 </div>
 </div>

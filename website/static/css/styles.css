@@ -576,11 +576,11 @@ button {
 .hero-nav {
   position: relative; z-index: 2;
   display: flex; align-items: center; justify-content: center;
-  gap: clamp(18px, 2.8vw, 28px); max-width: 720px; margin: 0 auto;
+  gap: clamp(8px, 1.8vw, 20px); max-width: 920px; width: 100%; margin: 0 auto;
   animation: slideDown 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .logo-btn {
-  width: clamp(40px, 4.4vw, 46px); height: clamp(40px, 4.4vw, 46px);
+  width: clamp(38px, 4.2vw, 44px); height: clamp(38px, 4.2vw, 44px);
   border-radius: 50%; background: #fff; display: grid; place-items: center;
   box-shadow: var(--nav-shadow); flex: none;
   transition: transform 320ms var(--ease-spring);
@@ -590,26 +590,29 @@ button {
 .hero-pill {
   display: flex; align-items: center; gap: 2px;
   background: #fff; color: var(--nav-text);
-  height: clamp(44px, 5.2vw, 48px); max-width: 430px; padding: 4px 8px;
+  height: clamp(40px, 4.6vw, 46px); max-width: none; padding: 4px 6px;
   border-radius: 999px; box-shadow: var(--nav-shadow);
+  white-space: nowrap;
 }
 .hero-pill a {
-  position: relative; color: var(--nav-text); font-size: 14px;
-  padding: 8px 12px; border-radius: 999px; opacity: 0.5;
+  position: relative; color: var(--nav-text); font-size: 13.5px;
+  padding: 6px 11px; border-radius: 999px; opacity: 0.55;
+  white-space: nowrap;
   transition: opacity 260ms var(--ease-expo);
 }
-.hero-pill a:hover { opacity: 0.75; }
-.hero-pill a.is-active { opacity: 1; font-weight: 500; }
+.hero-pill a:hover { opacity: 0.85; }
+.hero-pill a.is-active { opacity: 1; font-weight: 600; }
 .hero-pill a.is-active::after {
-  content: ""; position: absolute; left: 50%; bottom: 2px; translate: -50% 0;
+  content: ""; position: absolute; left: 50%; bottom: 3px; translate: -50% 0;
   width: 3px; height: 3px; border-radius: 50%; background: var(--nav-text);
   box-shadow: 5px 0 0 var(--nav-text), -5px 0 0 var(--nav-text);
 }
 .hero-signin {
-  display: inline-flex; align-items: center;
-  height: clamp(44px, 5.2vw, 48px); padding: 0 20px; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  height: clamp(40px, 4.6vw, 46px); padding: 0 18px; border-radius: 999px;
   background: var(--pill-dark); color: var(--sign-in-text);
-  box-shadow: var(--nav-shadow); font-size: 14px;
+  box-shadow: var(--nav-shadow); font-size: 13.5px; font-weight: 500;
+  white-space: nowrap; flex: none;
   transition: background-color 280ms var(--ease-expo), color 280ms var(--ease-expo), transform 280ms var(--ease-spring);
 }
 .hero-signin:hover { background: #323234; color: #fff; transform: translateY(-1px); }
