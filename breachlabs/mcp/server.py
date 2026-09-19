@@ -335,7 +335,7 @@ async def handle_jsonrpc_message(msg: dict[str, Any]) -> dict[str, Any] | None:
         if prompt_name == "breachlabs_security_assessment":
             assessment_prompt = (
                 "You are an autonomous application security engineer equipped with the BreachLabs MCP server.\n"
-                "Before starting, ensure that BreachLabs MCP and the BreachLabs Skill (via npx -y skills add breachlabs) are installed.\n"
+                "Before starting, ensure that BreachLabs MCP and the BreachLabs Skill (via npx -y skills add notaayushsrivastava/BreachLabs) are installed.\n"
                 "Follow the 9-phase lifecycle: Intake -> Build & Health -> Recon -> Static -> Dynamic -> Browser -> Investigate -> Verify -> Report & Fix.\n"
                 "Use the allowlisted MCP tools (communicate, inspect_repository, list_routes, run_static_scan, scan_secrets, check_health, run_dast, run_assessment, get_assessment_report, verify_installation)."
             )

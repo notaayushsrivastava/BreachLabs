@@ -309,7 +309,7 @@ description: >-
 Before executing security assessments, verify both BreachLabs MCP and Skill are active:
 - MCP Server Check: Call \`verify_installation\` or check tool availability (\`inspect_repository\`, \`run_static_scan\`, \`run_dast\`).
 - If MCP is missing: Prompt user to start MCP (\`python run_breachlabs.py\`) and connect \`http://127.0.0.1:8000/mcp\`.
-- If Skill is missing: Prompt user to install via \`npx -y skills add breachlabs\`.
+- If Skill is missing: Prompt user to install via \`npx -y skills add notaayushsrivastava/BreachLabs\`.
 - If both are missing: Output dual-installation prompt and link to \`http://127.0.0.1:8000/install\`.
 
 ## Authorized Scope & Safety Rules
@@ -359,10 +359,10 @@ function updateSetupPanel() {
       if (copySkillTextEl) copySkillTextEl.textContent = "Copy Command";
 
       const rows = [
-        { num: "01", prefix: "$", text: "npx skills add breachlabs", cls: "hl" },
+        { num: "01", prefix: "$", text: "npx skills add notaayushsrivastava/BreachLabs", cls: "hl" },
         { num: "02", prefix: "#", text: "Installs breachlabs autonomous security engineering skill from skills.sh", cls: "cm" },
         { num: "03", prefix: "#", text: "Compatible with Antigravity, Claude, Cursor, Windsurf, Cline & Universal agents", cls: "cm" },
-        { num: "04", prefix: "#", text: "Alternative: npx -y skills add breachlabs", cls: "cm" }
+        { num: "04", prefix: "#", text: "Alternative: npx -y skills add notaayushsrivastava/BreachLabs", cls: "cm" }
       ];
 
       rows.forEach(r => {
@@ -468,7 +468,7 @@ function initCopyActions() {
       let resetLabel = "Copy Prompt";
 
       if (currentSkillTabKey === "npx") {
-        textToCopy = "npx -y skills add breachlabs";
+        textToCopy = "npx -y skills add notaayushsrivastava/BreachLabs";
         resetLabel = "Copy Command";
       } else if (currentSkillTabKey === "skillmd") {
         textToCopy = UNIVERSAL_SKILL_MD;

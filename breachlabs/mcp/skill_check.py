@@ -77,7 +77,7 @@ def check_skill_installation(repo_path: str | None = None) -> dict[str, Any]:
         prompt = (
             "⚠️ Notice: The BreachLabs Skill is not installed in your agent environment.\n"
             "To install the skill, run:\n"
-            "  $ npx -y skills add breachlabs\n"
+            "  $ npx -y skills add notaayushsrivastava/BreachLabs\n"
             "Or copy the universal SKILL.md from http://127.0.0.1:8000/install"
         )
 
@@ -90,7 +90,7 @@ def check_skill_installation(repo_path: str | None = None) -> dict[str, Any]:
         "message": message,
         "prompt": prompt,
         "install_commands": {
-            "skill": "npx -y skills add breachlabs",
+            "skill": "npx -y skills add notaayushsrivastava/BreachLabs",
             "mcp_start": "python run_breachlabs.py",
             "mcp_url": "http://127.0.0.1:8000/mcp",
             "install_hub": "http://127.0.0.1:8000/install",
@@ -110,7 +110,7 @@ def format_installation_prompt(
             "   Run: python run_breachlabs.py (or breachlabs serve)\n"
             "   Configure your agent with URL: http://127.0.0.1:8000/mcp\n\n"
             "2. Install the Agent Skill:\n"
-            "   Run: npx -y skills add breachlabs\n\n"
+            "   Run: npx -y skills add notaayushsrivastava/BreachLabs\n\n"
             "Visit http://127.0.0.1:8000/install for guided one-click configuration."
         )
     if mcp_missing:
@@ -125,7 +125,7 @@ def format_installation_prompt(
         return (
             "⚠️ BreachLabs Agent Skill is not installed.\n\n"
             "To install the universal security engineering skill:\n"
-            "   Run: npx -y skills add breachlabs\n"
+            "   Run: npx -y skills add notaayushsrivastava/BreachLabs\n"
             "Or visit http://127.0.0.1:8000/install for manual SKILL.md setup."
         )
     return "✓ Both BreachLabs MCP Server and Agent Skill are installed and ready."

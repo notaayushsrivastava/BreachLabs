@@ -51,13 +51,13 @@ The agent **MUST** halt and prompt the user with the following instruction:
 ### 3. If the Skill is NOT Installed Permanently:
 The agent should notify the user to install the universal skill:
 > 💡 **Notice:** To ensure permanent availability of the BreachLabs security workflow across all sessions, install the skill:  
-> `$ npx -y skills add breachlabs`
+> `$ npx -y skills add notaayushsrivastava/BreachLabs`
 
 ### 4. If NEITHER Component is Installed:
 The agent **MUST** output the dual-installation prompt:
 > ⚠️ **BreachLabs requires both the MCP Server and the Agent Skill to operate:**  
 > 1. **Start MCP Server**: Run `python run_breachlabs.py` and configure `http://127.0.0.1:8000/mcp` in your agent settings.  
-> 2. **Install Agent Skill**: Run `npx -y skills add breachlabs`  
+> 2. **Install Agent Skill**: Run `npx -y skills add notaayushsrivastava/BreachLabs`  
 > Visit [http://127.0.0.1:8000/install](http://127.0.0.1:8000/install) for step-by-step setup.
 
 ---

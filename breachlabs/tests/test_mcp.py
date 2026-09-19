@@ -130,11 +130,11 @@ class TestSkillCheck:
         from breachlabs.mcp.skill_check import format_installation_prompt
 
         both_msg = format_installation_prompt(skill_missing=True, mcp_missing=True)
-        assert "npx -y skills add breachlabs" in both_msg
+        assert "npx -y skills add notaayushsrivastava/BreachLabs" in both_msg
         assert "python run_breachlabs.py" in both_msg
 
         skill_msg = format_installation_prompt(skill_missing=True, mcp_missing=False)
-        assert "npx -y skills add breachlabs" in skill_msg
+        assert "npx -y skills add notaayushsrivastava/BreachLabs" in skill_msg
 
         mcp_msg = format_installation_prompt(skill_missing=False, mcp_missing=True)
         assert "http://127.0.0.1:8000/mcp" in mcp_msg
