@@ -86,7 +86,7 @@ class SecurityAgent:
     def _phase_browser(
         self, assessment: Assessment, context: ToolContext, surface: dict[str, Any]
     ) -> list[Finding]:
-        """Drive representative browser workflows; skipped without Playwright."""
+        """Drive representative browser workflows; skipped without Playwright or target URL."""
         from breachlabs.browser import (
             BrowserUnavailable,
             browser_available,
@@ -94,6 +94,9 @@ class SecurityAgent:
         from breachlabs.browser.driver import BrowserDriver
         from breachlabs.browser.workflows import discover_workflows
         from breachlabs.core.budget import BudgetExceeded
+
+        if not context.target_base_url or not context.active_checks_enabled:
+            return []
 
         if not browser_available():
             assessment.add_event(
@@ -245,12 +248,20 @@ class SecurityAgent:
 
     def _phase_build(self, assessment: Assessment, sandbox: LocalSandbox) -> bool:
         assessment.add_event("Creating isolated environment", phase=Phase.BUILD)
+        mode_val = getattr(assessment.mode, "value", str(assessment.mode))
+        is_static = mode_val in ("static", "static_only", "fast") or not assessment.scope.active_checks_enabled
         if not sandbox.base_url:
+            if is_static:
+                assessment.add_event("Static inspection mode: continuing without active web process", phase=Phase.BUILD)
+                return True
             assessment.add_event("Application was not started; entering diagnostic state",
                                  phase=Phase.BUILD)
             return False
         health = sandbox.check_health()
         if not health.get("healthy"):
+            if is_static:
+                assessment.add_event("Health check skipped in static mode", phase=Phase.BUILD)
+                return True
             assessment.add_event(
                 f"Health check failed: {health.get('reason') or health.get('status_code')}",
                 phase=Phase.BUILD, metadata=health,
@@ -334,6 +345,12 @@ class SecurityAgent:
     def _phase_dynamic(
         self, assessment: Assessment, context: ToolContext, surface: dict[str, Any]
     ) -> list[Finding]:
+        if not context.target_base_url or not context.active_checks_enabled:
+            assessment.add_event(
+                "Dynamic analysis skipped: no active target service or active checks disabled",
+                phase=Phase.DYNAMIC_ANALYSIS,
+            )
+            return []
         paths = [r["path"] for r in surface.get("routes", [])
                  if r.get("kind") in ("page", "api")][:10]
         dast = self.registry.run("run_dast", {"paths": paths}, context)  # type: ignore[union-attr]

@@ -84,6 +84,34 @@ class TestScanners:
         result = InspectRepositoryTool().run({}, context)
         assert "requirements.txt" in result["dependency_manifests"]
 
+    def test_inspect_repository_custom_repo_path_and_communication(self, tmp_path):
+        app_file = tmp_path / "app.py"
+        app_file.write_text("from flask import Flask\napp = Flask(__name__)\n")
+        (tmp_path / "requirements.txt").write_text("flask>=2.0.0\n")
+
+        tool = InspectRepositoryTool()
+        # Agent calls tool with explicit repo_path argument
+        result = tool.run({"repo_path": str(tmp_path)}, ToolContext(assessment_id="A"))
+        assert "requirements.txt" in result["dependency_manifests"]
+        assert result["framework"] == "Flask (Python)"
+        assert "app.py" in result["entry_points"]
+        assert "communication_summary" in result
+        assert "Recommended Next Actions" in result["communication_summary"]
+        assert "app.py" in result["directory_tree"]
+
+    def test_communicate_tool(self):
+        from breachlabs.mcp.tools.scanners import CommunicateTool
+
+        tool = CommunicateTool()
+        res_sql = tool.run({"message": "How do I fix SQL injection in my routes?"}, ToolContext(assessment_id="A"))
+        assert res_sql["status"] == "success"
+        assert "parameterized" in res_sql["response"].lower() or "placeholders" in res_sql["response"].lower()
+        assert "run_static_scan" in res_sql["recommended_tools"]
+
+        res_general = tool.run({"message": "Hello, what tools can I use?"}, ToolContext(assessment_id="A"))
+        assert res_general["status"] == "success"
+        assert "BreachLabs Security Advisor" in res_general["response"]
+
 
 class TestSkillCheck:
     def test_skill_check_detects_local_skill(self, tmp_path):

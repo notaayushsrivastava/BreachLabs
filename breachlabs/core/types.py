@@ -85,6 +85,8 @@ class AssessmentStatus(str, Enum):
 class AssessmentMode(str, Enum):
     DEEP = "deep"
     QUICK = "quick"
+    STATIC = "static"
+    STATIC_ONLY = "static_only"
 
 
 class Phase(str, Enum):
@@ -283,7 +285,7 @@ class AssessmentEvent(BaseModel):
 class Assessment(BaseModel):
     id: str = Field(default_factory=lambda: _next_id("ASM"))
     repository: str
-    commit: str
+    commit: str = "HEAD"
     mode: AssessmentMode = AssessmentMode.DEEP
     status: AssessmentStatus = AssessmentStatus.QUEUED
     started_at: datetime | None = None

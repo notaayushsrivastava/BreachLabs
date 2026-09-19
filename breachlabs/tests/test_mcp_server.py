@@ -112,6 +112,45 @@ class TestMCPServer:
         assert len(content) == 1
         assert "app.py" in content[0]["text"]
 
+    def test_mcp_tools_call_inspect_repository_direct_args(self, client, tmp_path):
+        (tmp_path / "main.py").write_text("from fastapi import FastAPI\napp = FastAPI()\n")
+        (tmp_path / "pyproject.toml").write_text("[project]\nname='test'\n")
+        payload = {
+            "jsonrpc": "2.0",
+            "id": 201,
+            "method": "tools/call",
+            "params": {
+                "name": "inspect_repository",
+                "arguments": {"repo_path": str(tmp_path)},
+            },
+        }
+        res = client.post("/mcp", json=payload)
+        assert res.status_code == 200
+        data = res.json()
+        assert data["result"]["isError"] is False
+        content = data["result"]["content"]
+        assert "FastAPI (Python)" in content[0]["text"]
+        assert "pyproject.toml" in content[0]["text"]
+
+    def test_mcp_tools_call_communicate(self, client):
+        payload = {
+            "jsonrpc": "2.0",
+            "id": 202,
+            "method": "tools/call",
+            "params": {
+                "name": "communicate",
+                "arguments": {
+                    "message": "What is the recommended fix for unvalidated input in SQL queries?",
+                    "topic": "remediation",
+                },
+            },
+        }
+        res = client.post("/mcp", json=payload)
+        assert res.status_code == 200
+        data = res.json()
+        assert data["result"]["isError"] is False
+        assert "SQL Injection" in data["result"]["content"][0]["text"]
+
     def test_mcp_tools_call_unknown_tool(self, client):
         payload = {
             "jsonrpc": "2.0",
@@ -206,3 +245,66 @@ class TestMCPServer:
         parsed = json.loads(content_text)
         assert "mcp_running" in parsed
         assert "skill_installed" in parsed
+
+    def test_mcp_resources_list_and_read(self, client):
+        res = client.post("/mcp", json={"jsonrpc": "2.0", "id": 700, "method": "resources/list"})
+        assert res.status_code == 200
+        data = res.json()
+        resources = data["result"]["resources"]
+        uris = [r["uri"] for r in resources]
+        assert "report://latest" in uris
+
+        # Read resource
+        res_read = client.post(
+            "/mcp",
+            json={
+                "jsonrpc": "2.0",
+                "id": 701,
+                "method": "resources/read",
+                "params": {"uri": "report://latest"},
+            },
+        )
+        assert res_read.status_code == 200
+        data_read = res_read.json()
+        assert "contents" in data_read["result"]
+
+    def test_mcp_tools_call_run_assessment_static_mode(self, client, tmp_path):
+        (tmp_path / "app.py").write_text("API_KEY = 'secret1234567890abcdef'\nx = eval('1+1')\n")
+        payload = {
+            "jsonrpc": "2.0",
+            "id": 800,
+            "method": "tools/call",
+            "params": {
+                "name": "run_assessment",
+                "arguments": {
+                    "repo_path": str(tmp_path),
+                    "mode": "static_only",
+                    "report_format": "both",
+                },
+            },
+        }
+        res = client.post("/mcp", json=payload)
+        assert res.status_code == 200
+        data = res.json()
+        assert data["result"]["isError"] is False
+        # Verify markdown content returned
+        content_text = data["result"]["content"][0]["text"]
+        assert "BreachLabs Security Assessment" in content_text or "assessment_id" in content_text
+
+        # Test get_assessment_report
+        res_get = client.post(
+            "/mcp",
+            json={
+                "jsonrpc": "2.0",
+                "id": 801,
+                "method": "tools/call",
+                "params": {
+                    "name": "get_assessment_report",
+                    "arguments": {"assessment_id": "latest", "format": "markdown"},
+                },
+            },
+        )
+        assert res_get.status_code == 200
+        data_get = res_get.json()
+        assert data_get["result"]["isError"] is False
+

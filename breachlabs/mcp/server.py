@@ -49,16 +49,22 @@ def _build_success_response(request_id: Any, result: Any) -> dict[str, Any]:
 
 
 def _get_tool_context(params: dict[str, Any]) -> ToolContext:
-    """Extract or construct a ToolContext from JSON-RPC call params / env."""
-    context_data = params.get("context", {})
+    """Extract or construct a ToolContext from JSON-RPC call params / arguments / env."""
+    context_data = params.get("context", {}) if isinstance(params.get("context"), dict) else {}
+    arguments = params.get("arguments", {}) if isinstance(params.get("arguments"), dict) else {}
+
     repo_path = (
-        context_data.get("repo_path")
+        arguments.get("repo_path")
+        or (arguments.get("path") if isinstance(arguments.get("path"), str) and os.path.isabs(arguments.get("path")) else None)
+        or context_data.get("repo_path")
         or params.get("repo_path")
         or os.environ.get("BREACHLABS_REPO_PATH")
-        or os.getcwd()
+        or ""
     )
     target_base_url = (
-        context_data.get("target_base_url")
+        arguments.get("target_base_url")
+        or arguments.get("target_url")
+        or context_data.get("target_base_url")
         or params.get("target_base_url")
         or os.environ.get("BREACHLABS_TARGET_URL")
         or "http://127.0.0.1:5000"
@@ -107,8 +113,9 @@ async def handle_jsonrpc_message(msg: dict[str, Any]) -> dict[str, Any] | None:
         instructions = (
             "You are connected to BreachLabs Autonomous Security MCP.\n"
             + (f"{skill_status['prompt']}\n\n" if not skill_status["skill_installed"] else "")
-            + "Use breachlabs tools (inspect_repository, list_routes, run_static_scan, scan_secrets, check_health, run_dast, verify_installation) "
-            "to perform autonomous application security assessments."
+            + "Use breachlabs tools (communicate, inspect_repository, list_routes, run_static_scan, "
+            "scan_secrets, read_source_file, check_health, run_dast, run_assessment, get_assessment_report, "
+            "verify_installation) to communicate with the security engine, analyze codebases, and return verified reports."
         )
         return _build_success_response(
             req_id,
@@ -116,6 +123,10 @@ async def handle_jsonrpc_message(msg: dict[str, Any]) -> dict[str, Any] | None:
                 "protocolVersion": PROTOCOL_VERSION,
                 "capabilities": {
                     "tools": {
+                        "listChanged": False,
+                    },
+                    "resources": {
+                        "subscribe": False,
                         "listChanged": False,
                     },
                     "prompts": {
@@ -163,11 +174,20 @@ async def handle_jsonrpc_message(msg: dict[str, Any]) -> dict[str, Any] | None:
         context = _get_tool_context(params)
         try:
             tool_result = registry.run(tool_name, tool_args, context)
-            text_output = (
-                json.dumps(tool_result, indent=2)
-                if isinstance(tool_result, (dict, list))
-                else str(tool_result)
-            )
+            if isinstance(tool_result, dict):
+                if "markdown_report" in tool_result:
+                    text_output = tool_result["markdown_report"]
+                elif "communication_summary" in tool_result:
+                    text_output = tool_result["communication_summary"] + "\n\n" + json.dumps(tool_result, indent=2)
+                elif "response" in tool_result:
+                    text_output = tool_result["response"]
+                else:
+                    text_output = json.dumps(tool_result, indent=2)
+            elif isinstance(tool_result, list):
+                text_output = json.dumps(tool_result, indent=2)
+            else:
+                text_output = str(tool_result)
+
             return _build_success_response(
                 req_id,
                 {
@@ -193,7 +213,60 @@ async def handle_jsonrpc_message(msg: dict[str, Any]) -> dict[str, Any] | None:
             )
 
     if method == "resources/list":
-        return _build_success_response(req_id, {"resources": []})
+        resources = [
+            {
+                "uri": "report://latest",
+                "name": "Latest Security Assessment Report",
+                "description": "Full Markdown report of the most recently executed security assessment.",
+                "mimeType": "text/markdown",
+            }
+        ]
+        try:
+            from breachlabs.api.server import _assessments, _lock
+            with _lock:
+                for a_id in _assessments:
+                    if a_id != "latest":
+                        resources.append({
+                            "uri": f"report://{a_id}",
+                            "name": f"Security Assessment Report ({a_id})",
+                            "description": f"Markdown security assessment report for {a_id}.",
+                            "mimeType": "text/markdown",
+                        })
+        except Exception:
+            pass
+        return _build_success_response(req_id, {"resources": resources})
+
+    if method == "resources/read":
+        uri = params.get("uri", "")
+        from breachlabs.report.generator import generate_markdown
+        target_id = uri.replace("report://", "").strip() or "latest"
+        assessment = None
+        try:
+            from breachlabs.api.server import _assessments, _lock
+            with _lock:
+                assessment = _assessments.get(target_id)
+                if not assessment and target_id == "latest" and _assessments:
+                    assessment = list(_assessments.values())[-1]
+        except Exception:
+            pass
+
+        if not assessment:
+            from breachlabs.core.types import Assessment
+            assessment = Assessment(repository="demo/vulnerable_app", commit="HEAD")
+
+        md = generate_markdown(assessment)
+        return _build_success_response(
+            req_id,
+            {
+                "contents": [
+                    {
+                        "uri": uri,
+                        "mimeType": "text/markdown",
+                        "text": md,
+                    }
+                ]
+            },
+        )
 
     if method == "prompts/list":
         return _build_success_response(
@@ -203,6 +276,10 @@ async def handle_jsonrpc_message(msg: dict[str, Any]) -> dict[str, Any] | None:
                     {
                         "name": "breachlabs_security_assessment",
                         "description": "Autonomous security assessment prompt incorporating MCP tools and skill lifecycle.",
+                    },
+                    {
+                        "name": "consult_security_advisor",
+                        "description": "Communicate with BreachLabs Security Engine for triage, verification, and remediation guidance.",
                     },
                     {
                         "name": "verify_installation",
@@ -235,12 +312,32 @@ async def handle_jsonrpc_message(msg: dict[str, Any]) -> dict[str, Any] | None:
                 },
             )
 
+        if prompt_name == "consult_security_advisor":
+            advisor_prompt = (
+                "You are communicating with the BreachLabs Security Engine.\n"
+                "You can inspect code repositories (`inspect_repository`), discover routes (`list_routes`), "
+                "run static scans (`run_static_scan`, `scan_secrets`), execute dynamic probes (`run_dast`), "
+                "ask questions / get advice (`communicate`), and generate verified remediation patches."
+            )
+            return _build_success_response(
+                req_id,
+                {
+                    "description": "BreachLabs Security Advisor Communication Prompt",
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": {"type": "text", "text": advisor_prompt},
+                        }
+                    ],
+                },
+            )
+
         if prompt_name == "breachlabs_security_assessment":
             assessment_prompt = (
                 "You are an autonomous application security engineer equipped with the BreachLabs MCP server.\n"
                 "Before starting, ensure that BreachLabs MCP and the BreachLabs Skill (via npx -y skills add breachlabs) are installed.\n"
                 "Follow the 9-phase lifecycle: Intake -> Build & Health -> Recon -> Static -> Dynamic -> Browser -> Investigate -> Verify -> Report & Fix.\n"
-                "Use the allowlisted MCP tools (inspect_repository, list_routes, run_static_scan, scan_secrets, check_health, run_dast, verify_installation)."
+                "Use the allowlisted MCP tools (communicate, inspect_repository, list_routes, run_static_scan, scan_secrets, check_health, run_dast, run_assessment, get_assessment_report, verify_installation)."
             )
             return _build_success_response(
                 req_id,

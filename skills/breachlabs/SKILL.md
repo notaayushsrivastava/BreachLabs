@@ -135,6 +135,7 @@ flowchart LR
 - Formulate minimal root-cause code patches.
 - Re-run verification probes against patched code to confirm resolution (`RESOLVED`).
 - Export markdown and structured JSON reports containing executive summaries, evidence traces, and verified diffs.
+- When executing the full automated pipeline via MCP, invoke `run_assessment` which runs all 9 phases in the sandbox and returns the complete Markdown/JSON security report directly in the MCP response.
 
 ---
 
@@ -142,14 +143,17 @@ flowchart LR
 
 | Tool | Risk Level | Description |
 |---|---|---|
-| `verify_installation` | `READ_ONLY` | Verify whether BreachLabs MCP server and AI Skill are properly installed. |
-| `inspect_repository` | `READ_ONLY` | Inspect directory tree, entry points, and dependency manifests. |
-| `read_source_file` | `READ_ONLY` | Read source code lines inside the sandboxed repository copy. |
-| `list_routes` | `READ_ONLY` | Parse framework routes (Flask, FastAPI, Express) and attack surface. |
-| `run_static_scan` | `READ_ONLY` | Run AST taint analysis and pattern-based SAST rules. |
-| `scan_secrets` | `READ_ONLY` | Scan source files for committed API keys, tokens, and credentials. |
+| `communicate` | `READ_ONLY` | **Communicate directly with BreachLabs Security Engine for advisory, triage, remediation guidance, and exploit analysis.** |
+| `inspect_repository` | `READ_ONLY` | Inspect directory tree, entry points, detected framework, and dependency manifests. Accepts `repo_path` or `path`. |
+| `read_source_file` | `READ_ONLY` | Read source code lines inside the sandboxed repository copy. Accepts `path` and `repo_path`. |
+| `list_routes` | `READ_ONLY` | Parse framework routes (Flask, FastAPI, Express) and attack surface. Accepts `repo_path`. |
+| `run_static_scan` | `READ_ONLY` | Run AST taint analysis and pattern-based SAST rules. Accepts `repo_path`. |
+| `scan_secrets` | `READ_ONLY` | Scan source files for committed API keys, tokens, and credentials. Accepts `repo_path`. |
 | `check_health` | `ACTIVE_SCAN` | Verify running target status code, latency, and responsiveness. |
 | `run_dast` | `ACTIVE_SCAN` | Execute scoped HTTP baseline security probes against endpoints. |
+| `run_assessment` | `ACTIVE_SCAN` | **Execute complete end-to-end security assessment on an application sandbox and return the full security report to the AI agent.** |
+| `get_assessment_report` | `READ_ONLY` | Retrieve the generated Markdown or JSON report for an assessment ID or latest run. |
+| `verify_installation` | `READ_ONLY` | Verify whether BreachLabs MCP server and AI Skill are properly installed. |
 
 ---
 
