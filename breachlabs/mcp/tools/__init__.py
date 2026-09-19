@@ -2,6 +2,9 @@ from breachlabs.mcp.tool import ToolRegistry  # noqa: F401
 from breachlabs.mcp.tools.scanners import (  # noqa: F401
     CommunicateTool,
     DastTool,
+    DiagnoseErrorTool,
+    GenerateRemediationTool,
+    GenerateSecurityTestTool,
     GetAssessmentReportTool,
     HealthCheckTool,
     InspectRepositoryTool,
@@ -28,6 +31,9 @@ def build_default_registry() -> ToolRegistry:
         RunAssessmentTool(),
         GetAssessmentReportTool(),
         CommunicateTool(),
+        DiagnoseErrorTool(),
+        GenerateRemediationTool(),
+        GenerateSecurityTestTool(),
     ):
         registry.register(tool)
     # Browser tools join the same registry only when Playwright is installed

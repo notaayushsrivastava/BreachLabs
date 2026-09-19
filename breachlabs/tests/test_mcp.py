@@ -1,5 +1,6 @@
 """Tests for MCP tool layer: registry, validation, scope enforcement."""
 
+import os
 import pytest
 
 from breachlabs.mcp.tool import (
@@ -10,6 +11,7 @@ from breachlabs.mcp.tool import (
 from breachlabs.mcp.tools import build_default_registry
 from breachlabs.mcp.tools.scanners import (
     InspectRepositoryTool,
+    ListRoutesTool,
     ReadSourceFileTool,
     SastScanTool,
     SecretScanTool,
@@ -111,6 +113,103 @@ class TestScanners:
         res_general = tool.run({"message": "Hello, what tools can I use?"}, ToolContext(assessment_id="A"))
         assert res_general["status"] == "success"
         assert "BreachLabs Security Advisor" in res_general["response"]
+
+    def test_list_routes_multi_language(self, tmp_path):
+        # Python Flask
+        (tmp_path / "routes.py").write_text("@app.route('/api/py', methods=['POST'])\ndef handler(): pass\n")
+        # JavaScript Express
+        (tmp_path / "server.js").write_text("app.get('/api/node', (req, res) => res.json({}));\n")
+        # Go Gin
+        (tmp_path / "main.go").write_text('r.GET("/api/go", handleGo)\n')
+
+        context = ToolContext(assessment_id="A", repo_path=str(tmp_path))
+        result = ListRoutesTool().run({}, context)
+        paths = [r["path"] for r in result["routes"]]
+        assert "/api/py" in paths
+        assert "/api/node" in paths
+        assert "/api/go" in paths
+
+    def test_sast_scan_multi_language(self, tmp_path):
+        # Node prototype pollution and DOM XSS
+        (tmp_path / "vuln.js").write_text("Object.assign(target, req.body);\nel.innerHTML = userParam;\n")
+        # Go SQL injection
+        (tmp_path / "db.go").write_text('rows, err := db.Query(fmt.Sprintf("SELECT * FROM t WHERE id=%s", id))\n')
+        # Java command injection
+        (tmp_path / "App.java").write_text("Runtime.getRuntime().exec(userCmd);\n")
+        # PHP shell exec
+        (tmp_path / "index.php").write_text("<?php system($cmd); ?>\n")
+
+        context = ToolContext(assessment_id="A", repo_path=str(tmp_path))
+        result = SastScanTool().run({}, context)
+        signal_ids = [s["rule_id"] for s in result["signals"]]
+        assert "BL-SAST-008" in signal_ids  # Prototype pollution
+        assert "BL-SAST-009" in signal_ids  # DOM XSS
+        assert "BL-SAST-010" in signal_ids  # Go SQLi
+        assert "BL-SAST-011" in signal_ids  # Java command execution
+        assert "BL-SAST-012" in signal_ids  # PHP command execution
+
+    def test_diagnose_error_tool(self):
+        from breachlabs.mcp.tools.scanners import DiagnoseErrorTool
+
+        tool = DiagnoseErrorTool()
+        # Python traceback
+        py_err = "Traceback (most recent call last):\n  File 'app.py', line 12, in <module>\nModuleNotFoundError: No module named 'jwt'\n"
+        py_res = tool.run({"error_log": py_err}, ToolContext(assessment_id="A"))
+        assert py_res["error_type"] == "ModuleNotFoundError"
+        assert py_res["detected_language"] == "Python"
+        assert "pip install jwt" in py_res["suggested_fix"]
+        assert py_res["affected_line"] == 12
+
+        # Port conflict
+        port_err = "OSError: [Errno 10048] error while attempting to bind on address ('127.0.0.1', 5000): address already in use"
+        port_res = tool.run({"error_log": port_err}, ToolContext(assessment_id="A"))
+        assert port_res["error_type"] == "PortConflictError"
+        assert "occupying the port" in port_res["diagnostic_summary"]
+
+    def test_generate_remediation_tool(self):
+        from breachlabs.mcp.tools.scanners import GenerateRemediationTool
+
+        tool = GenerateRemediationTool()
+        res_py = tool.run({
+            "vulnerability_type": "sqli",
+            "language": "python",
+            "file_path": "database.py",
+            "vulnerable_snippet": "cursor.execute(f'SELECT * FROM users WHERE u={user}')",
+            "line_number": 45,
+        }, ToolContext(assessment_id="A"))
+        assert "cursor.execute(" in res_py["remediation_patch"]
+        assert "--- a/database.py" in res_py["git_diff"]
+
+        res_js = tool.run({
+            "vulnerability_type": "sqli",
+            "language": "javascript",
+            "file_path": "db.js",
+            "vulnerable_snippet": "db.query(`SELECT * FROM users WHERE u=${user}`)",
+            "line_number": 20,
+        }, ToolContext(assessment_id="A"))
+        assert "$1" in res_js["remediation_patch"]
+
+    def test_generate_security_test_tool(self):
+        from breachlabs.mcp.tools.scanners import GenerateSecurityTestTool
+
+        tool = GenerateSecurityTestTool()
+        res_py = tool.run({
+            "vulnerability_type": "sqli",
+            "target_route": "/api/users",
+            "language": "python",
+            "parameter_name": "id",
+        }, ToolContext(assessment_id="A"))
+        assert "def test_security_id_sql_injection" in res_py["test_code"]
+        assert "/api/users" in res_py["test_code"]
+
+        res_js = tool.run({
+            "vulnerability_type": "xss",
+            "target_route": "/search",
+            "language": "javascript",
+            "parameter_name": "q",
+        }, ToolContext(assessment_id="A"))
+        assert "test(" in res_js["test_code"]
+        assert "/search" in res_js["test_code"]
 
 
 class TestSkillCheck:

@@ -151,6 +151,66 @@ class TestMCPServer:
         assert data["result"]["isError"] is False
         assert "SQL Injection" in data["result"]["content"][0]["text"]
 
+    def test_mcp_tools_call_diagnose_error(self, client):
+        payload = {
+            "jsonrpc": "2.0",
+            "id": 203,
+            "method": "tools/call",
+            "params": {
+                "name": "diagnose_error",
+                "arguments": {
+                    "error_log": "Error: Cannot find module 'express'\n    at Function.Module._resolveFilename",
+                },
+            },
+        }
+        res = client.post("/mcp", json=payload)
+        assert res.status_code == 200
+        data = res.json()
+        assert data["result"]["isError"] is False
+        assert "NodeMissingModule" in data["result"]["content"][0]["text"]
+        assert "npm install express" in data["result"]["content"][0]["text"]
+
+    def test_mcp_tools_call_generate_remediation(self, client):
+        payload = {
+            "jsonrpc": "2.0",
+            "id": 204,
+            "method": "tools/call",
+            "params": {
+                "name": "generate_remediation",
+                "arguments": {
+                    "vulnerability_type": "secrets",
+                    "file_path": "config.js",
+                    "vulnerable_snippet": "const API_KEY = 'secret123';",
+                    "language": "javascript",
+                },
+            },
+        }
+        res = client.post("/mcp", json=payload)
+        assert res.status_code == 200
+        data = res.json()
+        assert data["result"]["isError"] is False
+        assert "process.env.API_KEY" in data["result"]["content"][0]["text"]
+
+    def test_mcp_tools_call_generate_security_test(self, client):
+        payload = {
+            "jsonrpc": "2.0",
+            "id": 205,
+            "method": "tools/call",
+            "params": {
+                "name": "generate_security_test",
+                "arguments": {
+                    "vulnerability_type": "sqli",
+                    "target_route": "/api/items",
+                    "language": "python",
+                },
+            },
+        }
+        res = client.post("/mcp", json=payload)
+        assert res.status_code == 200
+        data = res.json()
+        assert data["result"]["isError"] is False
+        assert "/api/items" in data["result"]["content"][0]["text"]
+
     def test_mcp_tools_call_unknown_tool(self, client):
         payload = {
             "jsonrpc": "2.0",

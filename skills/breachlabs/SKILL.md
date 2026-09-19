@@ -144,15 +144,18 @@ flowchart LR
 | Tool | Risk Level | Description |
 |---|---|---|
 | `communicate` | `READ_ONLY` | **Communicate directly with BreachLabs Security Engine for advisory, triage, remediation guidance, and exploit analysis.** |
-| `inspect_repository` | `READ_ONLY` | Inspect directory tree, entry points, detected framework, and dependency manifests. Accepts `repo_path` or `path`. |
-| `read_source_file` | `READ_ONLY` | Read source code lines inside the sandboxed repository copy. Accepts `path` and `repo_path`. |
-| `list_routes` | `READ_ONLY` | Parse framework routes (Flask, FastAPI, Express) and attack surface. Accepts `repo_path`. |
-| `run_static_scan` | `READ_ONLY` | Run AST taint analysis and pattern-based SAST rules. Accepts `repo_path`. |
-| `scan_secrets` | `READ_ONLY` | Scan source files for committed API keys, tokens, and credentials. Accepts `repo_path`. |
+| `inspect_repository` | `READ_ONLY` | Inspect directory tree, entry points, detected framework, and dependency manifests across Python, Node.js, Go, Rust, Java, and PHP. |
+| `read_source_file` | `READ_ONLY` | Read source code lines inside the target repository. Accepts `path` and `repo_path`. |
+| `list_routes` | `READ_ONLY` | Parse framework routes across Python (Flask, FastAPI, Django), Node.js (Express, Fastify), Go (Gin, net/http), Rust (Actix), Java (Spring), and PHP (Laravel). |
+| `run_static_scan` | `READ_ONLY` | Run AST taint analysis and multi-language SAST rules across Python, JavaScript, TypeScript, Go, Rust, Java, and PHP. |
+| `scan_secrets` | `READ_ONLY` | Scan source files for committed API keys, tokens, AWS keys, and credentials across all languages. |
 | `check_health` | `ACTIVE_SCAN` | Verify running target status code, latency, and responsiveness. |
 | `run_dast` | `ACTIVE_SCAN` | Execute scoped HTTP baseline security probes against endpoints. |
 | `run_assessment` | `ACTIVE_SCAN` | **Execute complete end-to-end security assessment on an application sandbox and return the full security report to the AI agent.** |
 | `get_assessment_report` | `READ_ONLY` | Retrieve the generated Markdown or JSON report for an assessment ID or latest run. |
+| `diagnose_error` | `READ_ONLY` | **Diagnose runtime exceptions, stack traces, compilation errors, port collisions, and sandbox startup crashes across multiple languages.** |
+| `generate_remediation` | `READ_ONLY` | **Generate precise, language-native security patches and git diffs with architectural rationale.** |
+| `generate_security_test` | `READ_ONLY` | **Generate automated security regression tests (pytest, Jest, Go testing, curl) to verify vulnerability resolution.** |
 | `verify_installation` | `READ_ONLY` | Verify whether BreachLabs MCP server and AI Skill are properly installed. |
 
 ---

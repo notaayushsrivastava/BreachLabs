@@ -43,7 +43,7 @@ class LocalSandbox:
         return dest
 
     def start(self, launch_command: list[str] | None = None) -> str:
-        """Install deps (if requirements.txt) and launch the app (Phase B steps 3-4)."""
+        """Install dependencies and launch the application process across supported runtimes."""
         if not self.workspace:
             raise SandboxError("Sandbox not created. Call create() first.")
         repo = self.repo_copy
@@ -51,9 +51,14 @@ class LocalSandbox:
         cmd = launch_command or self._detect_launch(repo, venv_python)
         creationflags = subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0
         env = dict(os.environ)
-        # The demo wrapper (app.py) reads the port from the environment so the
-        # sandboxed target always binds the port the health check polls.
-        env.setdefault("BREACHLABS_TARGET_PORT", str(self.port))
+        port_str = str(self.port)
+        env.setdefault("PORT", port_str)
+        env.setdefault("BREACHLABS_TARGET_PORT", port_str)
+        env.setdefault("FLASK_RUN_PORT", port_str)
+        env.setdefault("UVICORN_PORT", port_str)
+        env.setdefault("HOST", "127.0.0.1")
+        env.setdefault("NODE_ENV", "development")
+
         self.process = subprocess.Popen(
             cmd,
             cwd=repo,
@@ -101,13 +106,60 @@ class LocalSandbox:
         return python
 
     def _detect_launch(self, repo: str, python: str) -> list[str]:
-        app_py = os.path.join(repo, "app.py")
-        if os.path.isfile(app_py):
-            return [python, "app.py"]
-        main_py = os.path.join(repo, "main.py")
-        if os.path.isfile(main_py):
-            return [python, "main.py"]
-        raise SandboxError("No launchable entrypoint found (app.py or main.py).")
+        """Auto-detect application entry point across Python, Node.js, Go, Rust, Ruby, and PHP."""
+        import json
+
+        # 1. Python entry points
+        for py_entry in ("app.py", "main.py", "server.py", "run.py", "wsgi.py"):
+            if os.path.isfile(os.path.join(repo, py_entry)):
+                return [python, py_entry]
+
+        # Django
+        if os.path.isfile(os.path.join(repo, "manage.py")):
+            return [python, "manage.py", "runserver", f"127.0.0.1:{self.port}", "--noreload"]
+
+        # 2. Node.js / JavaScript / TypeScript
+        pkg_json = os.path.join(repo, "package.json")
+        if os.path.isfile(pkg_json):
+            try:
+                with open(pkg_json, encoding="utf-8", errors="replace") as fh:
+                    pkg_data = json.load(fh)
+                scripts = pkg_data.get("scripts", {})
+                if "start" in scripts:
+                    return ["npm", "start"]
+                if "dev" in scripts:
+                    return ["npm", "run", "dev"]
+                main_file = pkg_data.get("main")
+                if main_file and os.path.isfile(os.path.join(repo, main_file)):
+                    return ["node", main_file]
+            except Exception:
+                pass
+
+        for node_entry in ("index.js", "server.js", "app.js", "main.js", "src/index.js", "src/server.js", "src/app.js"):
+            if os.path.isfile(os.path.join(repo, node_entry)):
+                return ["node", node_entry]
+
+        # 3. Go
+        if os.path.isfile(os.path.join(repo, "main.go")):
+            return ["go", "run", "main.go"]
+        if os.path.isfile(os.path.join(repo, "go.mod")):
+            return ["go", "run", "."]
+
+        # 4. Rust
+        if os.path.isfile(os.path.join(repo, "Cargo.toml")):
+            return ["cargo", "run"]
+
+        # 5. PHP
+        if os.path.isfile(os.path.join(repo, "index.php")):
+            return ["php", "-S", f"127.0.0.1:{self.port}", "index.php"]
+
+        # 6. Ruby
+        if os.path.isfile(os.path.join(repo, "config.ru")):
+            return ["rackup", "-p", str(self.port), "-o", "127.0.0.1"]
+        if os.path.isfile(os.path.join(repo, "app.rb")):
+            return ["ruby", "app.rb", "-p", str(self.port)]
+
+        raise SandboxError("No launchable entrypoint found (checked Python, Node.js, Go, Rust, PHP, Ruby).")
 
     def check_health(self, timeout: float = 30.0, interval: float = 1.0) -> dict[str, Any]:
         """Poll the app until it responds (Phase B step 5)."""

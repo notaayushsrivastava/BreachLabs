@@ -115,7 +115,8 @@ async def handle_jsonrpc_message(msg: dict[str, Any]) -> dict[str, Any] | None:
             + (f"{skill_status['prompt']}\n\n" if not skill_status["skill_installed"] else "")
             + "Use breachlabs tools (communicate, inspect_repository, list_routes, run_static_scan, "
             "scan_secrets, read_source_file, check_health, run_dast, run_assessment, get_assessment_report, "
-            "verify_installation) to communicate with the security engine, analyze codebases, and return verified reports."
+            "diagnose_error, generate_remediation, generate_security_test, verify_installation) "
+            "to perform autonomous application security assessments, error diagnostics, and verified remediations."
         )
         return _build_success_response(
             req_id,
@@ -337,7 +338,7 @@ async def handle_jsonrpc_message(msg: dict[str, Any]) -> dict[str, Any] | None:
                 "You are an autonomous application security engineer equipped with the BreachLabs MCP server.\n"
                 "Before starting, ensure that BreachLabs MCP and the BreachLabs Skill (via npx -y skills add notaayushsrivastava/BreachLabs) are installed.\n"
                 "Follow the 9-phase lifecycle: Intake -> Build & Health -> Recon -> Static -> Dynamic -> Browser -> Investigate -> Verify -> Report & Fix.\n"
-                "Use the allowlisted MCP tools (communicate, inspect_repository, list_routes, run_static_scan, scan_secrets, check_health, run_dast, run_assessment, get_assessment_report, verify_installation)."
+                "Use the allowlisted MCP tools (communicate, inspect_repository, list_routes, run_static_scan, scan_secrets, check_health, run_dast, run_assessment, get_assessment_report, diagnose_error, generate_remediation, generate_security_test, verify_installation)."
             )
             return _build_success_response(
                 req_id,
