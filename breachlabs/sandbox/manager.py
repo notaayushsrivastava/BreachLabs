@@ -67,8 +67,16 @@ class LocalSandbox:
         return self.base_url
 
     def _ensure_python_env(self, repo: str) -> str:
-        """Install requirements into a per-sandbox venv when present."""
+        """Use current python interpreter if dependencies are available, or create sandbox venv."""
         import sys
+
+        # Fast path: current interpreter already has Flask / standard dependencies
+        try:
+            import flask  # noqa: F401
+
+            return sys.executable
+        except ImportError:
+            pass
 
         requirements = os.path.join(repo, "requirements.txt")
         if not os.path.isfile(requirements):

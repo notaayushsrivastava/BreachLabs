@@ -32,7 +32,7 @@
           <span class="btn-ico" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </span>
-          Run Simulation
+          <span data-replay-btn-text>Run Live Assessment</span>
         </button>
         <button class="btn btn-ghost btn-sm" type="button" data-demo-next>
           Step Next ›
@@ -238,7 +238,7 @@
               </button>
             </div>
             <div class="terminal mt-l" style="margin-top:10px">
-              <div class="terminal-bar"><b></b><b></b><b></b><span>git diff — search.py</span></div>
+              <div class="terminal-bar"><b></b><b></b><b></b><span data-drawer-diff-file>git diff — search.py</span></div>
               <div class="terminal-body" data-drawer-diff-body>
                 <div class="l"><u>1</u><span class="del">- query = "SELECT * FROM items WHERE name = '" + term + "'"</span></div>
                 <div class="l"><u>2</u><span class="del">- return db.engine.execute(query).fetchall()</span></div>
@@ -249,7 +249,7 @@
 
             <div class="notice mt-l" style="margin-top:16px;background:rgba(127,209,168,0.06);border-color:rgba(127,209,168,0.3)">
               <span aria-hidden="true"><i class="fa-solid fa-circle-check" style="color:var(--ok)"></i></span>
-              <span style="font-size:13px"><b style="color:var(--ok)">Retest Verified:</b> Replaying probe payload against patched code resulted in HTTP 200 with zero injected query syntax execution. Finding marked RESOLVED.</span>
+              <span style="font-size:13px" data-drawer-retest-notice><b style="color:var(--ok)">Retest Verified:</b> Replaying probe payload against patched code resulted in HTTP 200 with zero injected query syntax execution. Finding marked RESOLVED.</span>
             </div>
           </div>
         </div>

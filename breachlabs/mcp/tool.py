@@ -77,6 +77,23 @@ class MCPTool(ABC):
             "params_schema": schema,
         }
 
+    def mcp_schema(self) -> dict[str, Any]:
+        """Tool definition formatted according to Model Context Protocol (MCP) specification."""
+        input_schema: dict[str, Any] = {
+            "type": "object",
+            "properties": {},
+        }
+        if self.Params is not None:
+            raw_schema = self.Params.model_json_schema()
+            input_schema["properties"] = raw_schema.get("properties", {})
+            if "required" in raw_schema:
+                input_schema["required"] = raw_schema["required"]
+        return {
+            "name": self.name,
+            "description": self.description,
+            "inputSchema": input_schema,
+        }
+
 
 class ToolContext(BaseModel):
     """Execution context passed to every tool invocation."""

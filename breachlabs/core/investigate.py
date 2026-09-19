@@ -116,7 +116,7 @@ def investigate_finding(
             finding.add_evidence(evidence)
             had_route = bool(evidence.data.get("confirmed"))
 
-    if not finding.remediation:
+    if not finding.remediation or "Review the flagged" in finding.remediation or "generic" in finding.remediation:
         finding.remediation = Finding.remediation_guide(
             finding.category, finding.sources, finding.description
         )

@@ -18,7 +18,9 @@
     </div>
     <div class="chip-row mt-l" style="margin-top:18px">
       <span class="chip">Model Context Protocol</span>
-      <span class="chip">STDIO &amp; SSE Transports</span>
+      <span class="chip">Streamable HTTP &amp; SSE</span>
+      <span class="chip">Live Endpoint: <code>/mcp</code></span>
+      <span class="chip">Core API: <code>/api</code></span>
       <span class="chip">Deterministic Tooling</span>
       <span class="chip">Zero Telemetry Leakage</span>
     </div>
@@ -161,11 +163,11 @@
           <span class="chip" style="font-size:9.5px;padding:2px 8px">Any MCP Client</span>
         </div>
         <div>
-          <div class="agent-name">Universal / CLI &amp; Docker</div>
-          <div class="agent-desc mt-l" style="margin-top:6px">Standard NPX command, Python UV runner, or isolated Docker container.</div>
+          <div class="agent-name">Universal / HTTP &amp; SSE</div>
+          <div class="agent-desc mt-l" style="margin-top:6px">Direct Streamable HTTP at <code>/mcp</code>, SSE event stream at <code>/mcp/sse</code>, or Docker.</div>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--hair)">
-          <span class="eyebrow" style="font-size:10px">NPX / Docker / UV</span>
+          <span class="eyebrow" style="font-size:10px">Streamable HTTP / SSE</span>
           <span class="link-arrow" style="font-size:12px">Configure →</span>
         </div>
       </div>
@@ -181,13 +183,13 @@
               <h3 class="h-card" data-platform-title style="font-size:20px;color:var(--fg)">Google Antigravity MCP Configuration</h3>
             </div>
             <p class="body-sm" data-platform-file-desc style="margin-top:4px">
-              Add the BreachLabs MCP server to your Antigravity agent configuration (e.g. in <code>~/.gemini/antigravity/mcp/BreachLabs/</code> or project configuration).
+              Add the BreachLabs Streamable HTTP MCP server to your Antigravity agent configuration (e.g. in <code>~/.gemini/antigravity/mcp/BreachLabs/</code>).
             </p>
           </div>
           <div class="chip-row">
             <button class="chip is-active" type="button" data-format-tab="json" aria-pressed="true">JSON Config</button>
             <button class="chip" type="button" data-format-tab="cli" aria-pressed="false">CLI Command</button>
-            <button class="chip" type="button" data-format-tab="uv" aria-pressed="false">Python / UV</button>
+            <button class="chip" type="button" data-format-tab="uv" aria-pressed="false">SSE / Python</button>
             <button class="chip" type="button" data-format-tab="docker" aria-pressed="false">Docker</button>
           </div>
         </div>
@@ -197,7 +199,7 @@
           <div class="terminal-bar" style="justify-content:space-between">
             <div style="display:flex;align-items:center;gap:8px">
               <b></b><b></b><b></b>
-              <span data-config-filename>mcp_config.json</span>
+              <span data-config-filename>~/.gemini/antigravity/mcp/BreachLabs/mcp.json</span>
             </div>
             <button class="btn btn-ghost btn-sm" type="button" data-copy-config style="height:28px;padding:0 12px;font-size:11.5px">
               <i class="fa-regular fa-copy" aria-hidden="true" style="margin-right:5px"></i><span data-copy-config-text>Copy Config</span>
@@ -207,50 +209,47 @@
             <pre style="margin:0;font-family:var(--font-mono);color:var(--fg)"><code data-code-content>{
   "mcpServers": {
     "breachlabs": {
-      "command": "npx",
-      "args": ["-y", "@breachlabs/mcp-server@latest"],
-      "env": {
-        "BREACHLABS_SANDBOX": "true",
-        "BREACHLABS_AUTO_VERIFY": "true"
-      }
+      "url": "http://127.0.0.1:8000/mcp",
+      "transport": "streamable-http"
     }
   }
 }</code></pre>
           </div>
         </div>
 
-        <!-- Skill Instructions Block -->
+        <!-- Skill Instructions Block (Step 2: skills.sh with npx) -->
         <div style="margin-top:24px;border-top:1px solid var(--hair);padding-top:20px">
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
             <div>
               <div style="display:flex;align-items:center;gap:10px">
                 <span class="eyebrow" style="color:var(--ok)">STEP 2</span>
-                <h4 class="h-card" style="font-size:17px">Agent Security Skill &amp; Prompt Instructions</h4>
+                <h4 class="h-card" style="font-size:17px">Install Security Skill from skills.sh</h4>
               </div>
               <p class="body-sm" style="margin-top:4px">
-                Equip your agent with the BreachLabs Security Engineering Loop prompt (save to <code>SKILL.md</code>, <code>.cursorrules</code>, or system instructions).
+                Install the BreachLabs skill directly into your agent environment using the universal <code>skills.sh</code> package runner with <code>npx</code>, or copy the universal <code>SKILL.md</code>.
               </p>
             </div>
-            <button class="btn btn-ghost btn-sm" type="button" data-copy-skill style="height:28px;padding:0 12px;font-size:11.5px">
-              <i class="fa-regular fa-copy" aria-hidden="true" style="margin-right:5px"></i><span data-copy-skill-text>Copy Prompt</span>
-            </button>
+            <div class="chip-row">
+              <button class="chip is-active" type="button" data-skill-tab="npx" aria-pressed="true">skills.sh (npx)</button>
+              <button class="chip" type="button" data-skill-tab="skillmd" aria-pressed="false">Universal SKILL.md</button>
+              <button class="chip" type="button" data-skill-tab="prompt" aria-pressed="false">System Prompt</button>
+            </div>
           </div>
 
           <div class="terminal mt-l" style="margin-top:14px">
-            <div class="terminal-bar">
-              <b></b><b></b><b></b>
-              <span data-skill-filename>SKILL.md — Autonomous Security Engineer</span>
+            <div class="terminal-bar" style="justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:8px">
+                <b></b><b></b><b></b>
+                <span data-skill-filename>Terminal — Universal Skill CLI (skills.sh)</span>
+              </div>
+              <button class="btn btn-ghost btn-sm" type="button" data-copy-skill style="height:28px;padding:0 12px;font-size:11.5px">
+                <i class="fa-regular fa-copy" aria-hidden="true" style="margin-right:5px"></i><span data-copy-skill-text>Copy Command</span>
+              </button>
             </div>
-            <div class="terminal-body" data-skill-body style="font-size:12px;line-height:1.75;max-height:200px;overflow-y:auto">
-              <div class="l"><span class="cm"># Role: Autonomous Application Security Engineer</span></div>
-              <div class="l"><span>When testing software or validating newly generated code, follow the 7-stage BreachLabs loop:</span></div>
-              <div class="l"><span class="hl">1. INTAKE &amp; DISCOVERY: Call `breachlabs_surface_map` to discover routes, forms, and APIs.</span></div>
-              <div class="l"><span class="hl">2. DETERMINISTIC TESTS: Run SAST, dependency checks, and secret scans via `breachlabs_sast_scan`.</span></div>
-              <div class="l"><span class="hl">3. AI INVESTIGATION: Correlate code context with runtime HTTP reachability. Trace untrusted sources to sinks.</span></div>
-              <div class="l"><span class="hl">4. TARGETED VERIFICATION: Call `breachlabs_verify_exploit` to confirm reproducibility. Never assert without proof.</span></div>
-              <div class="l"><span class="hl">5. REMEDIATION: Formulate precise root-cause code patch avoiding naive input filtering.</span></div>
-              <div class="l"><span class="hl">6. RETEST PROOF: Execute `breachlabs_retest_patch` against the changed revision to confirm resolution.</span></div>
-              <div class="l"><span class="cm">Always provide evidence with exact line numbers, HTTP request/response diffs, and stated confidence.</span></div>
+            <div class="terminal-body" data-skill-body style="font-size:12px;line-height:1.75;max-height:220px;overflow-y:auto">
+              <div class="l"><u>$</u><span class="hl">npx skills add breachlabs</span></div>
+              <div class="l"><span class="cm"># Installs breachlabs autonomous security engineering skill from skills.sh</span></div>
+              <div class="l"><span class="cm"># Compatible with Antigravity, Claude, Cursor, Windsurf, Cline &amp; Universal agents</span></div>
             </div>
           </div>
         </div>

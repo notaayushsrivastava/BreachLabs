@@ -83,3 +83,33 @@ class TestScanners:
         context = ToolContext(assessment_id="A", repo_path=str(tmp_path))
         result = InspectRepositoryTool().run({}, context)
         assert "requirements.txt" in result["dependency_manifests"]
+
+
+class TestSkillCheck:
+    def test_skill_check_detects_local_skill(self, tmp_path):
+        from breachlabs.mcp.skill_check import check_skill_installation, format_installation_prompt
+
+        skill_dir = tmp_path / "skills" / "breachlabs"
+        skill_dir.mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text("---\nname: breachlabs\n---\n")
+
+        status = check_skill_installation(repo_path=str(tmp_path))
+        assert status["skill_installed"] is True
+        assert status["mcp_running"] is True
+        assert status["status"] == "ready"
+
+    def test_format_installation_prompt(self):
+        from breachlabs.mcp.skill_check import format_installation_prompt
+
+        both_msg = format_installation_prompt(skill_missing=True, mcp_missing=True)
+        assert "npx -y skills add breachlabs" in both_msg
+        assert "python run_breachlabs.py" in both_msg
+
+        skill_msg = format_installation_prompt(skill_missing=True, mcp_missing=False)
+        assert "npx -y skills add breachlabs" in skill_msg
+
+        mcp_msg = format_installation_prompt(skill_missing=False, mcp_missing=True)
+        assert "http://127.0.0.1:8000/mcp" in mcp_msg
+
+        ready_msg = format_installation_prompt(skill_missing=False, mcp_missing=False)
+        assert "Both BreachLabs MCP Server and Agent Skill are installed" in ready_msg

@@ -191,7 +191,7 @@ class Finding(BaseModel):
             self.status = FindingStatus.FALSE_POSITIVE
             self.confidence = Confidence.FALSE_POSITIVE
         else:
-            self.status = FindingStatus.INVESTIGATING
+            self.status = FindingStatus.UNVERIFIED
             self.confidence = Confidence.SUSPECTED
 
     def dismiss(self, reason: str) -> None:

@@ -39,7 +39,7 @@ def demo_sandbox():
     sandbox.start(launch_command=[
         __import__("sys").executable, "-c",
         "import sys; sys.path.insert(0, '.');"
-        "from breachlabs.demo.vulnerable_app import app, _init_db;"
+        "from vulnerable_app import app, _init_db;"
         "_init_db();"
         "app.run(host='127.0.0.1', port=5911, debug=True, use_reloader=False)",
     ])

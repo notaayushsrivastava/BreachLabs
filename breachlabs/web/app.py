@@ -1,13 +1,30 @@
+"""BreachLabs Web Application & UI Routing.
+
+Serves all public user interfaces:
+- /             - Hero & platform overview
+- /how-it-works - Security loop workflow
+- /architecture - Technical architecture & components
+- /security     - Security model & boundary definitions
+- /capabilities - Feature matrix & scanning coverage
+- /demo         - Deterministic interactive demo
+- /install      - Streamable HTTP MCP & Agent Skill Hub
+- /about        - About & roadmap
+- /robots.txt   - Search crawler policy
+"""
+
 from __future__ import annotations
+
 import os
 from typing import TypedDict
 from flask import Flask, Response, render_template, send_from_directory
+
 
 class PageMeta(TypedDict):
     title: str
     description: str
     canonical_path: str
     og_image: str
+
 
 class DemoFinding(TypedDict):
     id: str
@@ -17,6 +34,7 @@ class DemoFinding(TypedDict):
     status: str
     surface: str
 
+
 class DemoAssessment(TypedDict):
     assessment_id: str
     status: str
@@ -25,54 +43,106 @@ class DemoAssessment(TypedDict):
     routes_discovered: int
     findings: list[DemoFinding]
 
+
 PAGE_META: dict[str, PageMeta] = {
-    "home": {"title": "BreachLabs — Build. Break. Verify. Fix.",
+    "home": {
+        "title": "BreachLabs — Build. Break. Verify. Fix.",
         "description": "BreachLabs is an autonomous AI application-security engineer that inspects, tests, investigates, verifies, explains, and retests software.",
-        "canonical_path": "/", "og_image": "/static/images/logo.webp"},
-    "how-it-works": {"title": "How It Works — BreachLabs Security Loop",
+        "canonical_path": "/",
+        "og_image": "/static/images/logo.webp",
+    },
+    "how-it-works": {
+        "title": "How It Works — BreachLabs Security Loop",
         "description": "Follow the BreachLabs loop: build, discover, test, investigate, verify, fix, retest — with evidence at every step.",
-        "canonical_path": "/how-it-works", "og_image": "/static/images/logo.webp"},
-    "architecture": {"title": "Architecture — BreachLabs Orchestrator, Agent & MCP Tools",
+        "canonical_path": "/how-it-works",
+        "og_image": "/static/images/logo.webp",
+    },
+    "architecture": {
+        "title": "Architecture — BreachLabs Orchestrator, Agent & MCP Tools",
         "description": "How the BreachLabs orchestrator, AI agent, MCP tools, sandbox, and evidence pipeline fit together.",
-        "canonical_path": "/architecture", "og_image": "/static/images/logo.webp"},
-    "security": {"title": "Security Model — BreachLabs Boundaries",
+        "canonical_path": "/architecture",
+        "og_image": "/static/images/logo.webp",
+    },
+    "security": {
+        "title": "Security Model — BreachLabs Boundaries",
         "description": "Authorized scope, isolation, tool control, untrusted content handling, and limitations.",
-        "canonical_path": "/security", "og_image": "/static/images/logo.webp"},
-    "capabilities": {"title": "Capabilities — BreachLabs Assessment Coverage",
+        "canonical_path": "/security",
+        "og_image": "/static/images/logo.webp",
+    },
+    "capabilities": {
+        "title": "Capabilities — BreachLabs Assessment Coverage",
         "description": "Repository intake, SAST, dependency analysis, secret detection, DAST, browser investigation, verification, retesting.",
-        "canonical_path": "/capabilities", "og_image": "/static/images/logo.webp"},
-    "demo": {"title": "Demo — BreachLabs Deterministic Assessment",
+        "canonical_path": "/capabilities",
+        "og_image": "/static/images/logo.webp",
+    },
+    "demo": {
+        "title": "Demo — BreachLabs Deterministic Assessment",
         "description": "A safe, deterministic, clearly-labeled illustrative demo. No live scanning.",
-        "canonical_path": "/demo", "og_image": "/static/images/logo.webp"},
-    "about": {"title": "About — BreachLabs Hackathon Context & Roadmap",
+        "canonical_path": "/demo",
+        "og_image": "/static/images/logo.webp",
+    },
+    "about": {
+        "title": "About — BreachLabs Hackathon Context & Roadmap",
         "description": "What BreachLabs is, why it exists, current MVP boundaries, and roadmap.",
-        "canonical_path": "/about", "og_image": "/static/images/logo.webp"},
-    "install": {"title": "Install — BreachLabs MCP Server & Agent Skills",
-        "description": "Install BreachLabs MCP tools and autonomous security engineering skills in Antigravity, Claude, Cursor, Windsurf, Cline, and Universal agents.",
-        "canonical_path": "/install", "og_image": "/static/images/logo.webp"},
+        "canonical_path": "/about",
+        "og_image": "/static/images/logo.webp",
+    },
+    "install": {
+        "title": "Install — BreachLabs MCP Server & Agent Skills",
+        "description": "Install BreachLabs Streamable HTTP MCP tools and autonomous security engineering skills in Antigravity, Claude, Cursor, Windsurf, Cline, and Universal agents.",
+        "canonical_path": "/install",
+        "og_image": "/static/images/logo.webp",
+    },
 }
+
 
 def get_page_meta(key: str) -> PageMeta:
     return PAGE_META.get(key, PAGE_META["home"])
 
+
 def get_demo_assessment() -> DemoAssessment:
-    return {"assessment_id": "DEMO-0001", "status": "completed",
-        "target": "breachlabs-demo", "duration_ms": 4820, "routes_discovered": 12,
+    return {
+        "assessment_id": "DEMO-0001",
+        "status": "completed",
+        "target": "breachlabs-demo",
+        "duration_ms": 4820,
+        "routes_discovered": 12,
         "findings": [
-            {"id": "BL-DEMO-001", "title": "SQL injection in search parameter",
-             "severity": "high", "confidence": "verified", "status": "verified",
-             "surface": "GET /search?q="},
-            {"id": "BL-DEMO-002", "title": "Reflected XSS in comment field",
-             "severity": "high", "confidence": "verified", "status": "verified",
-             "surface": "POST /comments"},
-            {"id": "BL-DEMO-003", "title": "Missing security response headers",
-             "severity": "medium", "confidence": "investigating",
-             "status": "investigating", "surface": "GET /"}]}
+            {
+                "id": "BL-DEMO-001",
+                "title": "SQL injection in search parameter",
+                "severity": "high",
+                "confidence": "verified",
+                "status": "verified",
+                "surface": "GET /search?q=",
+            },
+            {
+                "id": "BL-DEMO-002",
+                "title": "Reflected XSS in comment field",
+                "severity": "high",
+                "confidence": "verified",
+                "status": "verified",
+                "surface": "POST /comments",
+            },
+            {
+                "id": "BL-DEMO-003",
+                "title": "Missing security response headers",
+                "severity": "medium",
+                "confidence": "verified",
+                "status": "verified",
+                "surface": "GET /",
+            },
+        ],
+    }
+
 
 def create_app() -> Flask:
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    app = Flask(__name__, template_folder=os.path.join(base_dir, "templates"),
-                static_folder=os.path.join(base_dir, "static"))
+    app = Flask(
+        __name__,
+        template_folder=os.path.join(base_dir, "templates"),
+        static_folder=os.path.join(base_dir, "static"),
+    )
     app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", "dev-only-breachlabs-key")
     app.config["TEMPLATES_AUTO_RELOAD"] = True
     app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024
@@ -92,7 +162,8 @@ def create_app() -> Flask:
             "font-src 'self' https://fonts.gstatic.com https://db.onlinewebfonts.com https://cdnjs.cloudflare.com data:; "
             "img-src 'self' data: blob:; "
             "media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; "
-            "connect-src 'self'; frame-ancestors 'none'")
+            "connect-src 'self'; frame-ancestors 'none'"
+        )
         return resp
 
     @app.route("/")
@@ -117,8 +188,9 @@ def create_app() -> Flask:
 
     @app.route("/demo")
     def demo():
-        return render_template("demo.html", meta=get_page_meta("demo"),
-                               assessment=get_demo_assessment())
+        return render_template(
+            "demo.html", meta=get_page_meta("demo"), assessment=get_demo_assessment()
+        )
 
     @app.route("/about")
     def about():
@@ -142,9 +214,9 @@ def create_app() -> Flask:
 
     return app
 
+
 app = create_app()
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", "5000"))
     app.run(host="127.0.0.1", port=port, debug=True)
-

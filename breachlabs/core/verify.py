@@ -285,8 +285,30 @@ def verify_finding(
 
         parsed = urlparse(route)
         path = parsed.path or "/"
+    if (not path or path == "/") and attack_surface is not None:
+        routes = list(getattr(attack_surface, "routes", []) or [])
+        routes += list(getattr(attack_surface, "api_endpoints", []) or [])
+        route_paths = [getattr(r, "path", "") for r in routes]
+        if category in ("injection", "xss"):
+            for rp in route_paths:
+                if "/search" in rp or "query" in rp or "find" in rp:
+                    path = rp
+                    break
+        elif category in ("authorization", "idor"):
+            for rp in route_paths:
+                if "profile" in rp or "user" in rp or "account" in rp:
+                    path = rp
+                    break
     if not path:
         path = "/"
+
+    # Normalize dynamic route placeholders for testing
+    if "<user_id>" in path:
+        path = path.replace("<user_id>", "1")
+    if "{id}" in path:
+        path = path.replace("{id}", "1")
+    if "{user_id}" in path:
+        path = path.replace("{user_id}", "1")
 
     if category == "injection" and path:
         return probe_sql_injection(base_url, path)

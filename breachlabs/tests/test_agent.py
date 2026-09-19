@@ -122,7 +122,7 @@ class TestInvestigationEnrichment:
             [
                 sys.executable, "-c",
                 "import sys; sys.path.insert(0, '.');"
-                "from breachlabs.demo.vulnerable_app import app, _init_db;"
+                "from vulnerable_app import app, _init_db;"
                 "_init_db();"
                 f"app.run(host='127.0.0.1', port={port}, debug=False, use_reloader=False)",
             ],

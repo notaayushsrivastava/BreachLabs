@@ -40,9 +40,11 @@ breachlabs = "breachlabs.api.server:main"
 [tool.setuptools.packages.find]
 include = ["breachlabs*"]
 
+[tool.setuptools.package-data]
+"breachlabs.web" = ["templates/**/*", "templates/*", "static/**/*", "static/*"]
+
 [tool.pytest.ini_options]
 testpaths = ["breachlabs/tests", "tests"]
-asyncio_mode = "auto"
 
 [tool.ruff]
 line-length = 100

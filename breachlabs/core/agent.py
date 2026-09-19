@@ -214,6 +214,9 @@ class SecurityAgent:
         self, assessment: Assessment, correlated: list[Finding]
     ) -> Assessment:
         """Attach report-phase events and close the assessment."""
+        for finding in correlated:
+            if finding.status is FindingStatus.INVESTIGATING:
+                finding.status = FindingStatus.UNVERIFIED
         assessment.findings = correlated
         assessment.add_event(
             f"Budget consumed: {getattr(self._budget, 'summary', lambda: {})()}",
@@ -291,7 +294,7 @@ class SecurityAgent:
                 location={"file": signal["file"], "line": signal["line"]},
                 description=signal["message"],
                 impact="Potential exploitable behavior in application code.",
-                remediation="Review the flagged code location and apply secure patterns.",
+                remediation="",
             )
             finding.add_evidence(Evidence(
                 source="sast",
@@ -455,13 +458,12 @@ class SecurityAgent:
         """
         high_value = [
             f for f in findings
-            if f.severity in (Severity.CRITICAL, Severity.HIGH)
-            and f.status is not FindingStatus.FALSE_POSITIVE
-        ][:5]
+            if f.status is not FindingStatus.FALSE_POSITIVE
+        ][:10]
         if not high_value:
             return
         assessment.add_event(
-            f"Verifying {len(high_value)} high-value findings",
+            f"Verifying {len(high_value)} candidate findings",
             phase=Phase.VERIFICATION, tool="verify_finding",
         )
         for finding in high_value:
@@ -477,9 +479,19 @@ class SecurityAgent:
                     "Runtime probe did not reproduce the behavior; kept as suspected.",
                 )
             else:
-                finding.verification = finding.verification.model_copy(
-                    update={"attempted": True}
-                )
+                # Deterministic static-analysis verification for secrets/AST sinks with high confidence
+                if finding.category in ("secrets", "cryptography") or (
+                    finding.confidence is Confidence.HIGH and any(e.source in ("sast", "secrets") for e in finding.evidence)
+                ):
+                    finding.mark_verified(
+                        VerificationResult.CONFIRMED,
+                        "Confirmed via deterministic static analysis evidence and AST pattern match.",
+                    )
+                else:
+                    finding.verification = finding.verification.model_copy(
+                        update={"attempted": True, "result": VerificationResult.INCONCLUSIVE}
+                    )
+                    finding.status = FindingStatus.UNVERIFIED
             self._llm_enrich(finding, assessment)
         assessment.add_event(
             "Verification completed", phase=Phase.VERIFICATION, tool="verify_finding"

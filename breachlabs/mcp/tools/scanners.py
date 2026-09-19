@@ -362,3 +362,20 @@ class DastTool(MCPTool):
                     "evidence": f"Response is missing the '{header}' header.",
                 })
         return alerts
+
+
+class VerifyInstallationTool(MCPTool):
+    """Verify whether BreachLabs MCP server and AI Skill are properly installed."""
+
+    name = "verify_installation"
+    description = (
+        "Verify whether the BreachLabs MCP server and BreachLabs Skill are installed in the environment. "
+        "Returns installation status and actionable prompts if either component is missing."
+    )
+    risk_level = ToolRiskLevel.READ_ONLY
+
+    def execute(self, validated: RepoPathParams, context: ToolContext) -> dict[str, Any]:
+        from breachlabs.mcp.skill_check import check_skill_installation
+
+        repo_path = context.repo_path if context else None
+        return check_skill_installation(repo_path)

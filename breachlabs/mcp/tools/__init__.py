@@ -7,6 +7,7 @@ from breachlabs.mcp.tools.scanners import (  # noqa: F401
     ReadSourceFileTool,
     SastScanTool,
     SecretScanTool,
+    VerifyInstallationTool,
 )
 
 
@@ -20,6 +21,7 @@ def build_default_registry() -> ToolRegistry:
         SecretScanTool(),
         HealthCheckTool(),
         DastTool(),
+        VerifyInstallationTool(),
     ):
         registry.register(tool)
     # Browser tools join the same registry only when Playwright is installed
