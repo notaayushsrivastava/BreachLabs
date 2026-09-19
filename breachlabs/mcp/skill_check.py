@@ -13,77 +13,93 @@ from typing import Any
 
 
 def get_skill_search_paths(repo_path: str | None = None) -> list[Path]:
-    """Return prioritized candidate paths where the BreachLabs skill may reside."""
+    """Return prioritized candidate paths where BreachLabs skills may reside."""
     home = Path.home()
     candidates: list[Path] = []
+
+    skill_subdirs = [
+        "breachlabs",
+        "breachlabs-security-guidelines",
+    ]
 
     # 1. Active repository / workspace
     if repo_path:
         r_path = Path(repo_path)
-        candidates.extend([
-            r_path / "skills" / "breachlabs" / "SKILL.md",
-            r_path / "skills" / "breachlabs",
-            r_path / ".skills" / "breachlabs" / "SKILL.md",
-            r_path / "SKILL.md",
-        ])
+        for s in skill_subdirs:
+            candidates.extend([
+                r_path / "skills" / s / "SKILL.md",
+                r_path / "skills" / s,
+                r_path / ".skills" / s / "SKILL.md",
+            ])
+        candidates.append(r_path / "SKILL.md")
 
     # 2. Current working directory
     cwd = Path.cwd()
-    candidates.extend([
-        cwd / "skills" / "breachlabs" / "SKILL.md",
-        cwd / "skills" / "breachlabs",
-        cwd / ".skills" / "breachlabs" / "SKILL.md",
-    ])
+    for s in skill_subdirs:
+        candidates.extend([
+            cwd / "skills" / s / "SKILL.md",
+            cwd / "skills" / s,
+            cwd / ".skills" / s / "SKILL.md",
+        ])
 
     # 3. Global agent skill directories (Antigravity, Cursor, Windsurf, Claude, Universal)
-    candidates.extend([
-        home / ".gemini" / "antigravity" / "skills" / "breachlabs" / "SKILL.md",
-        home / ".gemini" / "antigravity" / "skills" / "breachlabs",
-        home / ".gemini" / "config" / "plugins" / "breachlabs" / "SKILL.md",
-        home / ".skills" / "breachlabs" / "SKILL.md",
-        home / ".skills" / "breachlabs",
-        home / ".cursor" / "skills" / "breachlabs" / "SKILL.md",
-        home / ".codeium" / "windsurf" / "skills" / "breachlabs" / "SKILL.md",
-        home / ".claude" / "skills" / "breachlabs" / "SKILL.md",
-    ])
+    for s in skill_subdirs:
+        candidates.extend([
+            home / ".gemini" / "antigravity" / "skills" / s / "SKILL.md",
+            home / ".gemini" / "antigravity" / "skills" / s,
+            home / ".gemini" / "config" / "plugins" / s / "SKILL.md",
+            home / ".skills" / s / "SKILL.md",
+            home / ".skills" / s,
+            home / ".cursor" / "skills" / s / "SKILL.md",
+            home / ".codeium" / "windsurf" / "skills" / s / "SKILL.md",
+            home / ".claude" / "skills" / s / "SKILL.md",
+        ])
 
     return candidates
 
 
 def check_skill_installation(repo_path: str | None = None) -> dict[str, Any]:
-    """Verify if the BreachLabs Skill is installed.
+    """Verify if BreachLabs Skills are installed.
 
-    Returns structured status with installation guidance.
+    Returns structured status with installation guidance for both bundled skills:
+    1. breachlabs (Autonomous Security Engineer)
+    2. breachlabs-security-guidelines (Secure Application Guidelines)
     """
     candidates = get_skill_search_paths(repo_path)
-    found_path: str | None = None
+    found_paths: list[str] = []
 
     for p in candidates:
         if p.exists():
-            found_path = str(p.resolve())
-            break
+            resolved = str(p.resolve())
+            if resolved not in found_paths:
+                found_paths.append(resolved)
 
-    skill_installed = found_path is not None
+    skill_installed = len(found_paths) > 0
     mcp_running = True  # We are executing within the active MCP server runtime
 
     if skill_installed:
-        message = f"BreachLabs Skill is installed at '{found_path}'."
+        message = f"BreachLabs Skill bundle is installed ({len(found_paths)} skill file/path(s) found)."
         prompt = None
     else:
         message = (
-            "BreachLabs Skill is NOT detected in standard agent skill locations. "
-            "Please install the universal skill via npx to give your agent the full security workflow."
+            "BreachLabs Skills are NOT detected in standard agent skill locations. "
+            "Please install the universal skill bundle via npx to give your agent the full security workflow."
         )
         prompt = (
-            "⚠️ Notice: The BreachLabs Skill is not installed in your agent environment.\n"
-            "To install the skill, run:\n"
+            "⚠️ Notice: The BreachLabs Skill bundle is not installed in your agent environment.\n"
+            "To install both skills (breachlabs & breachlabs-security-guidelines), run:\n"
             "  $ npx -y skills add notaayushsrivastava/BreachLabs\n"
             "Or copy the universal SKILL.md from http://127.0.0.1:8000/install"
         )
 
     return {
         "skill_installed": skill_installed,
-        "installed_path": found_path,
+        "installed_paths": found_paths,
+        "installed_path": found_paths[0] if found_paths else None,
+        "bundled_skills": [
+            "breachlabs",
+            "breachlabs-security-guidelines",
+        ],
         "mcp_installed": mcp_running,
         "mcp_running": mcp_running,
         "status": "ready" if skill_installed else "skill_missing",

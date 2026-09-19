@@ -224,6 +224,19 @@ class TestSkillCheck:
         assert status["skill_installed"] is True
         assert status["mcp_running"] is True
         assert status["status"] == "ready"
+        assert "breachlabs-security-guidelines" in status["bundled_skills"]
+
+    def test_skill_check_detects_guidelines_skill(self, tmp_path):
+        from breachlabs.mcp.skill_check import check_skill_installation
+
+        guidelines_dir = tmp_path / "skills" / "breachlabs-security-guidelines"
+        guidelines_dir.mkdir(parents=True)
+        (guidelines_dir / "SKILL.md").write_text("---\nname: breachlabs-security-guidelines\n---\n")
+
+        status = check_skill_installation(repo_path=str(tmp_path))
+        assert status["skill_installed"] is True
+        assert status["mcp_running"] is True
+        assert status["status"] == "ready"
 
     def test_format_installation_prompt(self):
         from breachlabs.mcp.skill_check import format_installation_prompt

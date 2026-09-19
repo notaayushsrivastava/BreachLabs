@@ -360,9 +360,10 @@ function updateSetupPanel() {
 
       const rows = [
         { num: "01", prefix: "$", text: "npx skills add notaayushsrivastava/BreachLabs", cls: "hl" },
-        { num: "02", prefix: "#", text: "Installs breachlabs autonomous security engineering skill from skills.sh", cls: "cm" },
-        { num: "03", prefix: "#", text: "Compatible with Antigravity, Claude, Cursor, Windsurf, Cline & Universal agents", cls: "cm" },
-        { num: "04", prefix: "#", text: "Alternative: npx -y skills add notaayushsrivastava/BreachLabs", cls: "cm" }
+        { num: "02", prefix: "#", text: "Bundles & installs 2 security skillsets into your agent environment:", cls: "cm" },
+        { num: "03", prefix: "#", text: "  1. breachlabs (Autonomous Security Engineer & MCP Loop)", cls: "cm" },
+        { num: "04", prefix: "#", text: "  2. breachlabs-security-guidelines (Secure Coding & Anti-Hacking Standard)", cls: "cm" },
+        { num: "05", prefix: "#", text: "Compatible with Antigravity, Claude, Cursor, Windsurf, Cline & Universal agents", cls: "cm" }
       ];
 
       rows.forEach(r => {

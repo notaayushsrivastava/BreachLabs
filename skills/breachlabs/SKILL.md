@@ -178,3 +178,13 @@ Every finding must include verifiable, redacted evidence:
 4. **Credential Isolation**: Replace committed secrets with environment variable lookups (`os.environ.get(...)`).
 5. **Retest Verification**: Always execute retest probes against the patched code to ensure zero functional regression and confirmed vulnerability resolution.
 
+---
+
+## Bundled Skillset: BreachLabs Security Guidelines
+
+This skill is bundled directly with `breachlabs-security-guidelines` (`skills/breachlabs-security-guidelines/`):
+- **Purpose**: Authoring and architecting hardened, hack-proof software before testing.
+- **Coverage**: Comprehensive guidelines covering all attack vectors (SQLi, Command Injection, Code Deserialization, XSS, CSRF, SSRF, BOLA/IDOR, Auth, JWTs, ReDoS, LLM Prompt Injection).
+- **Usage**: When creating new routes, services, or reviewing pull requests, agents should consult `breachlabs-security-guidelines` to apply defensive patterns, and use `breachlabs` MCP tools to verify code integrity.
+
+
