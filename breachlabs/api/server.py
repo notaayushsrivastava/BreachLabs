@@ -72,10 +72,25 @@ class CreateAssessmentRequest(BaseModel):
 
 def _resolve_repo(repository: str) -> str:
     """MVP intake: resolve repository path or demo aliases."""
-    if repository.lower() in ("demo", "breachlabs/demo", "breachlabs-demo", "vulnerable_app", "ecommerce"):
-        demo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "demo"))
-        if os.path.isdir(demo_dir):
-            return demo_dir
+    repo_lower = repository.lower().strip()
+    base_demo = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "demo"))
+    root_demo = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "demo"))
+
+    if repo_lower in ("django", "django_app", "django-store", "demo/django_app", "breachlabs/demo/django_app"):
+        django_dir = os.path.join(root_demo, "django_app") if os.path.isdir(os.path.join(root_demo, "django_app")) else os.path.join(base_demo, "django_app")
+        if os.path.isdir(django_dir):
+            return os.path.abspath(django_dir)
+
+    if repo_lower in ("node", "node_app", "node-api", "node-vulnerable-api", "demo/node_app", "breachlabs/demo/node_app"):
+        node_dir = os.path.join(root_demo, "node_app") if os.path.isdir(os.path.join(root_demo, "node_app")) else os.path.join(base_demo, "node_app")
+        if os.path.isdir(node_dir):
+            return os.path.abspath(node_dir)
+
+    if repo_lower in ("demo", "flask", "flask_app", "breachlabs/demo", "breachlabs-demo", "vulnerable_app", "ecommerce", "demo/flask_app", "demo/vulnerable_app"):
+        flask_dir = os.path.join(root_demo, "flask_app") if os.path.isdir(os.path.join(root_demo, "flask_app")) else base_demo
+        if os.path.isdir(flask_dir):
+            return os.path.abspath(flask_dir)
+
     path = os.path.abspath(repository)
     if os.path.isdir(path):
         return path
@@ -105,19 +120,25 @@ def list_api_tools():
     return {"tools": registry.manifests()}
 
 
+class DemoRunRequest(BaseModel):
+    repository: str = "demo/vulnerable_app"
+    port: int = 5005
+
+
 @app.post("/api/demo/run", status_code=201)
-def run_demo_attack(background: BackgroundTasks, port: int = 5005):
+def run_demo_attack(req: DemoRunRequest = DemoRunRequest(), background: BackgroundTasks = BackgroundTasks()):
     """Launch a real live assessment and verification against the sandboxed demo target."""
-    demo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "demo"))
+    target_repo = req.repository or "demo/vulnerable_app"
+    repo_path = _resolve_repo(target_repo)
     assessment = Assessment(
-        repository="demo/vulnerable_app",
+        repository=target_repo,
         commit="live-demo",
         mode="deep",  # type: ignore[arg-type]
         scope=Scope(allowed_hosts=["127.0.0.1", "localhost"]),
     )
     with _lock:
         _assessments[assessment.id] = assessment
-    background.add_task(_run_assessment, assessment.id, demo_dir, port)
+    background.add_task(_run_assessment, assessment.id, repo_path, req.port)
     return assessment.model_dump(mode="json")
 
 

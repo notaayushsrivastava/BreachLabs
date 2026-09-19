@@ -34,14 +34,27 @@ def _resolve_target_repo(repo_arg: str = "", path_arg: str = "", context: ToolCo
     5. Current working directory.
     """
     demo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "demo"))
+    root_demo = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "demo"))
 
     raw_repo = (repo_arg or "").strip()
     sub_path = (path_arg or "").strip()
 
     # Check if path_arg is an absolute directory or alias
     if sub_path:
-        if sub_path.lower() in ("demo", "breachlabs/demo", "breachlabs-demo", "vulnerable_app"):
-            raw_repo = demo_dir
+        sub_lower = sub_path.lower()
+        if sub_lower in ("django", "django_app", "django-store", "demo/django_app"):
+            target_django = os.path.join(root_demo, "django_app") if os.path.isdir(os.path.join(root_demo, "django_app")) else os.path.join(demo_dir, "django_app")
+            if os.path.isdir(target_django):
+                raw_repo = target_django
+                sub_path = ""
+        elif sub_lower in ("node", "node_app", "node-api", "node-vulnerable-api", "demo/node_app"):
+            target_node = os.path.join(root_demo, "node_app") if os.path.isdir(os.path.join(root_demo, "node_app")) else os.path.join(demo_dir, "node_app")
+            if os.path.isdir(target_node):
+                raw_repo = target_node
+                sub_path = ""
+        elif sub_lower in ("demo", "flask", "flask_app", "breachlabs/demo", "breachlabs-demo", "vulnerable_app", "demo/flask_app"):
+            target_flask = os.path.join(root_demo, "flask_app") if os.path.isdir(os.path.join(root_demo, "flask_app")) else demo_dir
+            raw_repo = target_flask
             sub_path = ""
         elif os.path.isabs(sub_path) and os.path.isdir(sub_path):
             raw_repo = sub_path
@@ -53,8 +66,16 @@ def _resolve_target_repo(repo_arg: str = "", path_arg: str = "", context: ToolCo
     if not raw_repo:
         raw_repo = os.environ.get("BREACHLABS_REPO_PATH", "").strip()
 
-    if raw_repo.lower() in ("demo", "breachlabs/demo", "breachlabs-demo", "vulnerable_app"):
-        root = demo_dir if os.path.isdir(demo_dir) else os.getcwd()
+    repo_lower = raw_repo.lower()
+    if repo_lower in ("django", "django_app", "django-store", "demo/django_app", "breachlabs/demo/django_app"):
+        target_django = os.path.join(root_demo, "django_app") if os.path.isdir(os.path.join(root_demo, "django_app")) else os.path.join(demo_dir, "django_app")
+        root = target_django if os.path.isdir(target_django) else demo_dir
+    elif repo_lower in ("node", "node_app", "node-api", "node-vulnerable-api", "demo/node_app", "breachlabs/demo/node_app"):
+        target_node = os.path.join(root_demo, "node_app") if os.path.isdir(os.path.join(root_demo, "node_app")) else os.path.join(demo_dir, "node_app")
+        root = target_node if os.path.isdir(target_node) else demo_dir
+    elif repo_lower in ("demo", "flask", "flask_app", "breachlabs/demo", "breachlabs-demo", "vulnerable_app", "demo/flask_app"):
+        target_flask = os.path.join(root_demo, "flask_app") if os.path.isdir(os.path.join(root_demo, "flask_app")) else demo_dir
+        root = target_flask if os.path.isdir(target_flask) else (demo_dir if os.path.isdir(demo_dir) else os.getcwd())
     elif raw_repo:
         root = os.path.abspath(raw_repo)
     else:
@@ -68,11 +89,15 @@ def _resolve_target_repo(repo_arg: str = "", path_arg: str = "", context: ToolCo
         raise ToolError(f"Target repository directory not found: {root}")
 
     if sub_path:
+        sub_clean = sub_path.lstrip("\\/")
         if os.path.isabs(sub_path):
             target = os.path.abspath(sub_path)
         else:
-            target = os.path.abspath(os.path.join(root, sub_path))
-        if not target.startswith(root + os.sep) and target != root and not os.path.isdir(target):
+            target = os.path.abspath(os.path.join(root, sub_clean))
+        try:
+            if os.path.commonpath([os.path.normcase(target), os.path.normcase(root)]) != os.path.normcase(root) and not os.path.isdir(target):
+                raise ToolError(f"Path escapes the repository: {sub_path}")
+        except ValueError:
             raise ToolError(f"Path escapes the repository: {sub_path}")
     else:
         target = root
@@ -268,13 +293,20 @@ class ReadSourceFileTool(MCPTool):
 
     def execute(self, validated: ReadSourceFileTool.Params, context: ToolContext) -> dict[str, Any]:
         root, _ = _resolve_target_repo(validated.repo_path, "", context)
-        target = os.path.abspath(os.path.join(root, validated.path))
-        if not target.startswith(root + os.sep) and target != root:
+        rel_path = validated.path.lstrip("\\/")
+        target = os.path.abspath(os.path.join(root, rel_path))
+        try:
+            if os.path.commonpath([os.path.normcase(target), os.path.normcase(root)]) != os.path.normcase(root):
+                raise ToolError("Path escapes the repository.")
+        except ValueError:
             raise ToolError("Path escapes the repository.")
         if not os.path.isfile(target):
             raise ToolError(f"File not found: {validated.path}")
-        with open(target, encoding="utf-8", errors="replace") as fh:
-            content = fh.read(validated.max_bytes)
+        try:
+            with open(target, encoding="utf-8", errors="replace") as fh:
+                content = fh.read(validated.max_bytes)
+        except (OSError, FileNotFoundError) as exc:
+            raise ToolError(f"Cannot read file '{validated.path}': {exc}")
         lines = content.splitlines()
         return {"path": validated.path, "line_count": len(lines), "content": lines}
 
@@ -575,8 +607,11 @@ class DastTool(MCPTool):
             validated.paths = []
         alerts: list[dict[str, Any]] = []
         with httpx.Client(timeout=10.0, follow_redirects=validated.follow_redirects) as client:
-            baseline = client.get(context.target_base_url)
-            alerts.extend(self._check_headers(baseline, str(baseline.url)))
+            try:
+                baseline = client.get(context.target_base_url)
+                alerts.extend(self._check_headers(baseline, str(baseline.url)))
+            except httpx.HTTPError:
+                pass
             for path in validated.paths:
                 url = context.target_base_url.rstrip("/") + "/" + path.lstrip("/")
                 # reflected XSS probe

@@ -59,15 +59,32 @@ class LocalSandbox:
         env.setdefault("HOST", "127.0.0.1")
         env.setdefault("NODE_ENV", "development")
 
-        self.process = subprocess.Popen(
-            cmd,
-            cwd=repo,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            creationflags=creationflags,
-            env=env,
-        )
+        resolved_cmd = list(cmd)
+        use_shell = False
+        if resolved_cmd and os.name == "nt":
+            bin_path = shutil.which(resolved_cmd[0])
+            if bin_path:
+                resolved_cmd[0] = bin_path
+            use_shell = bool(resolved_cmd[0].lower().endswith((".cmd", ".bat")))
+
+        try:
+            self.process = subprocess.Popen(
+                resolved_cmd,
+                cwd=repo,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                creationflags=creationflags,
+                env=env,
+                shell=use_shell,
+            )
+        except FileNotFoundError as exc:
+            raise SandboxError(
+                f"Executable '{cmd[0]}' not found on system PATH. Please ensure the runtime is installed: {exc}"
+            ) from exc
+        except OSError as exc:
+            raise SandboxError(f"Failed to start sandbox process with command {cmd}: {exc}") from exc
+
         self.base_url = f"http://127.0.0.1:{self.port}"
         return self.base_url
 
@@ -99,10 +116,13 @@ class LocalSandbox:
             if os.name == "nt"
             else os.path.join(venv_dir, "bin", "python")
         )
-        subprocess.run(
-            [python, "-m", "pip", "install", "-q", "-r", requirements],
-            check=False, capture_output=True, text=True, timeout=600,
-        )
+        try:
+            subprocess.run(
+                [python, "-m", "pip", "install", "-q", "-r", requirements],
+                check=False, capture_output=True, text=True, timeout=600,
+            )
+        except (FileNotFoundError, OSError):
+            pass
         return python
 
     def _detect_launch(self, repo: str, python: str) -> list[str]:
@@ -170,7 +190,17 @@ class LocalSandbox:
         deadline = time.time() + timeout
         while time.time() < deadline:
             if self.process is not None and self.process.poll() is not None:
-                return {"healthy": False, "reason": "Application process exited early."}
+                code = self.process.returncode
+                stdout_err = ""
+                if self.process.stdout:
+                    try:
+                        stdout_err = self.process.stdout.read()
+                    except Exception:
+                        pass
+                err_msg = f"Application process exited early (exit code {code})"
+                if stdout_err.strip():
+                    err_msg += f": {stdout_err.strip()[:300]}"
+                return {"healthy": False, "reason": err_msg, "exit_code": code}
             try:
                 response = httpx.get(self.base_url, timeout=5.0)
                 if response.status_code < 500:
@@ -182,9 +212,9 @@ class LocalSandbox:
 
     def logs(self) -> str:
         """Best-effort capture of application stdout (startup errors, Phase B step 6)."""
-        if self.process and self.process.stdout:
+        if self.process and self.process.stdout and self.process.poll() is not None:
             try:
-                return "\n".join(self.process.stdout.readlines()[-200:])
+                return self.process.stdout.read()
             except Exception:
                 return ""
         return ""

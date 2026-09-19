@@ -32,16 +32,20 @@ def read_source_context(finding: Finding, repo_path: str | None) -> Evidence | N
     loc = finding.location
     if not repo_path or not loc.file:
         return None
-    target = os.path.abspath(os.path.join(repo_path, loc.file))
+    rel_file = loc.file.lstrip("\\/")
+    target = os.path.abspath(os.path.join(repo_path, rel_file))
     root = os.path.abspath(repo_path)
-    if not target.startswith(root + os.sep) and target != root:
-        return None  # path escape - never read outside the sandbox
+    try:
+        if os.path.commonpath([os.path.normcase(target), os.path.normcase(root)]) != os.path.normcase(root):
+            return None  # path escape - never read outside the sandbox
+    except ValueError:
+        return None
     if not os.path.isfile(target):
         return None
     try:
         with open(target, encoding="utf-8", errors="replace") as fh:
             lines = fh.readlines()
-    except OSError:
+    except (OSError, FileNotFoundError):
         return None
     line_no = loc.line or 1
     start = max(1, line_no - CONTEXT_RADIUS)

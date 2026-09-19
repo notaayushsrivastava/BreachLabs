@@ -107,6 +107,302 @@ const SCENARIOS = {
       }
     ]
   },
+  "django-store": {
+    id: "DEMO-0004",
+    target: "django-store",
+    duration_ms: 5120,
+    routes_discovered: 7,
+    status: "completed",
+    stages: [
+      { name: "Discovery & Recon", log: "[00:00.820] DISCOVER: Identified Django 4.2 framework with 7 endpoints in django_store.urls" },
+      { name: "Deterministic Scans", log: "[00:01.950] SAST: Discovered raw SQL query concatenation in views.py:34 & mark_safe XSS in views.py:44" },
+      { name: "AI Investigation", log: "[00:02.890] AGENT: Correlated IDOR on /api/orders/<id>/ with lack of request.user ownership check" },
+      { name: "Targeted Verification", log: "[00:03.950] VERIFY: Dispatched SQLi tautology probe -> Database schema extracted via union payload" },
+      { name: "Fix & Retest Proof", log: "[00:05.120] SUMMARY: Assessment complete · 5 findings verified · Remediation diffs generated" }
+    ],
+    findings: [
+      {
+        id: "BL-DJ-001",
+        title: "Raw SQL Injection in Product Search View",
+        severity: "critical",
+        confidence: "verified",
+        status: "verified",
+        surface: "GET /search/?q=",
+        cwe: "CWE-89: SQL Injection",
+        codeFile: "django_store/views.py:34",
+        codeSnippet: [
+          { num: 32, text: "    cursor = connection.cursor()", cls: "cm" },
+          { num: 33, text: "    query = f\"SELECT id, name, price, description FROM django_store_product WHERE name LIKE '%{q}%'\"", cls: "hl" },
+          { num: 34, text: "    cursor.execute(query)", cls: "hl" },
+          { num: 35, text: "    rows = cursor.fetchall()", cls: "cm" }
+        ],
+        evidence: [
+          { sev: "critical", source: "django_store/views.py:34 — String interpolation into cursor.execute()", kind: "SAST" },
+          { sev: "critical", source: "GET /search/?q='%20UNION%20SELECT%201,username,password,role%20FROM%20auth_user-- -> HTTP 200 with credentials", kind: "DAST PROBE" }
+        ],
+        reasoning: "The search view constructs a raw SQLite query using an f-string with untrusted GET parameter `q`. Attackers can escape the LIKE pattern and execute arbitrary SQL commands.",
+        patchDiff: [
+          { num: 1, text: "- query = f\"SELECT id, name, price, description FROM django_store_product WHERE name LIKE '%{q}%'\"", cls: "del" },
+          { num: 2, text: "- cursor.execute(query)", cls: "del" },
+          { num: 3, text: "+ query = \"SELECT id, name, price, description FROM django_store_product WHERE name LIKE %s\"", cls: "add" },
+          { num: 4, text: "+ cursor.execute(query, [f\"%{q}%\"])", cls: "add" }
+        ],
+        retestNotice: "Retest Verified: Parameterized query binding rejects injection syntax. Finding marked RESOLVED."
+      },
+      {
+        id: "BL-DJ-002",
+        title: "Reflected XSS via mark_safe in Search Response",
+        severity: "high",
+        confidence: "verified",
+        status: "verified",
+        surface: "GET /search/?q=",
+        cwe: "CWE-79: Cross-site Scripting",
+        codeFile: "django_store/views.py:44",
+        codeSnippet: [
+          { num: 42, text: "    # Returning unescaped HTML string marked as safe to the client", cls: "cm" },
+          { num: 43, text: "    html_output = mark_safe(f\"<h1>Search Results for: {q}</h1><pre>{json.dumps(products, indent=2)}</pre>\")", cls: "hl" },
+          { num: 44, text: "    return HttpResponse(html_output)", cls: "cm" }
+        ],
+        evidence: [
+          { sev: "high", source: "django_store/views.py:43 — mark_safe() called on unescaped query parameter", kind: "SAST" },
+          { sev: "high", source: "GET /search/?q=<script>alert(document.domain)</script> returned raw executable script tag in DOM", kind: "BROWSER" }
+        ],
+        reasoning: "The view marks dynamic user input as safe using Django's `mark_safe` utility without contextual HTML entity encoding, bypassing template auto-escaping.",
+        patchDiff: [
+          { num: 1, text: "- html_output = mark_safe(f\"<h1>Search Results for: {q}</h1><pre>{json.dumps(products, indent=2)}</pre>\")", cls: "del" },
+          { num: 2, text: "+ from django.utils.html import escape", cls: "add" },
+          { num: 3, text: "+ html_output = mark_safe(f\"<h1>Search Results for: {escape(q)}</h1><pre>{json.dumps(products, indent=2)}</pre>\")", cls: "add" }
+        ],
+        retestNotice: "Retest Verified: Entity encoding converts angle brackets to `&lt;` and `&gt;`. Script payload fails to execute."
+      },
+      {
+        id: "BL-DJ-003",
+        title: "Command Injection in Network Diagnostic Tool",
+        severity: "critical",
+        confidence: "verified",
+        status: "verified",
+        surface: "GET /tools/ping/?host=",
+        cwe: "CWE-78: OS Command Injection",
+        codeFile: "django_store/views.py:77",
+        codeSnippet: [
+          { num: 75, text: "    host = request.GET.get('host', '127.0.0.1')", cls: "cm" },
+          { num: 76, text: "    cmd = f\"ping -c 1 {host}\"", cls: "hl" },
+          { num: 77, text: "    output = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT, text=True)", cls: "hl" }
+        ],
+        evidence: [
+          { sev: "critical", source: "django_store/views.py:77 — subprocess execution with shell=True and user variable", kind: "SAST" },
+          { sev: "critical", source: "GET /tools/ping/?host=127.0.0.1;whoami -> returned server host execution context", kind: "DAST PROBE" }
+        ],
+        reasoning: "The diagnostic tool invokes the system shell directly using `subprocess.check_output(..., shell=True)` with user-supplied host parameters, allowing chained command execution.",
+        patchDiff: [
+          { num: 1, text: "- cmd = f\"ping -c 1 {host}\"", cls: "del" },
+          { num: 2, text: "- output = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT, text=True)", cls: "del" },
+          { num: 3, text: "+ output = subprocess.check_output([\"ping\", \"-c\", \"1\", host], shell=False, text=True)", cls: "add" }
+        ],
+        retestNotice: "Retest Verified: Command chaining characters (`;`, `|`, `&`) are treated as literal arguments without shell execution."
+      },
+      {
+        id: "BL-DJ-004",
+        title: "Broken Object-Level Authorization on Order Lookup",
+        severity: "high",
+        confidence: "verified",
+        status: "verified",
+        surface: "GET /api/orders/<int:order_id>/",
+        cwe: "CWE-285: Improper Authorization (IDOR)",
+        codeFile: "django_store/views.py:53",
+        codeSnippet: [
+          { num: 51, text: "def order_detail_view(request, order_id):", cls: "cm" },
+          { num: 52, text: "    from django_store.models import Order", cls: "cm" },
+          { num: 53, text: "    order = Order.objects.get(id=order_id)", cls: "hl" }
+        ],
+        evidence: [
+          { sev: "high", source: "django_store/views.py:53 — Direct model lookup without tenant filtering", kind: "SAST" },
+          { sev: "high", source: "User Alice session accessed Order #102 belonging to User Bob -> HTTP 200 with full shipping address", kind: "DAST PROBE" }
+        ],
+        reasoning: "The order API endpoint retrieves orders by primary key without verifying that the requesting session matches `order.user`.",
+        patchDiff: [
+          { num: 1, text: "- order = Order.objects.get(id=order_id)", cls: "del" },
+          { num: 2, text: "+ from django.core.exceptions import PermissionDenied", cls: "add" },
+          { num: 3, text: "+ order = Order.objects.get(id=order_id, user=request.user)", cls: "add" }
+        ],
+        retestNotice: "Retest Verified: Cross-tenant lookup returns HTTP 404/403. Finding marked RESOLVED."
+      },
+      {
+        id: "BL-DJ-005",
+        title: "Hardcoded Django Secret Key & Debug Mode Enabled",
+        severity: "high",
+        confidence: "verified",
+        status: "verified",
+        surface: "django_store/settings.py:12",
+        cwe: "CWE-798: Use of Hard-coded Credentials",
+        codeFile: "django_store/settings.py:12",
+        codeSnippet: [
+          { num: 11, text: "# --- Vulnerability: Hardcoded production secret key ---", cls: "cm" },
+          { num: 12, text: "SECRET_KEY = 'django-insecure-hardcoded-secret-key-9876543210-do-not-use-in-prod'", cls: "hl" },
+          { num: 15, text: "DEBUG = True", cls: "hl" }
+        ],
+        evidence: [
+          { sev: "high", source: "django_store/settings.py:12 — Hardcoded secret literal matching Django SECRET_KEY pattern", kind: "SECRETS" },
+          { sev: "medium", source: "DEBUG=True exposes full stack traces, environment variables, and SQL queries on errors", kind: "SAST" }
+        ],
+        reasoning: "Committed Django SECRET_KEY allows session forgery and cryptographic token decryption. DEBUG=True leaks sensitive state in production.",
+        patchDiff: [
+          { num: 1, text: "- SECRET_KEY = 'django-insecure-hardcoded-secret-key-9876543210-do-not-use-in-prod'", cls: "del" },
+          { num: 2, text: "- DEBUG = True", cls: "del" },
+          { num: 3, text: "+ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')", cls: "add" },
+          { num: 4, text: "+ DEBUG = os.environ.get('DJANGO_DEBUG', '0') == '1'", cls: "add" }
+        ],
+        retestNotice: "Retest Verified: Secret loaded from runtime environment variables. DEBUG disabled in production."
+      }
+    ]
+  },
+  "node-api": {
+    id: "DEMO-0005",
+    target: "node-api",
+    duration_ms: 4380,
+    routes_discovered: 8,
+    status: "completed",
+    stages: [
+      { name: "Discovery & Recon", log: "[00:00.740] DISCOVER: Identified Express.js microservice with 8 REST routes in routes/api.js & routes/auth.js" },
+      { name: "Deterministic Scans", log: "[00:01.620] SAST: Detected Object.assign prototype pollution vector on /api/preferences" },
+      { name: "AI Investigation", log: "[00:02.480] AGENT: Traced shell command interpolation in child_process.exec on /api/lookup" },
+      { name: "Targeted Verification", log: "[00:03.350] VERIFY: Dispatched prototype pollution payload `{\"__proto__\":{\"isAdmin\":true}}` -> Verified privilege escalation" },
+      { name: "Fix & Retest Proof", log: "[00:04.380] SUMMARY: Assessment complete · 5 findings verified · Remediation diffs generated" }
+    ],
+    findings: [
+      {
+        id: "BL-NODE-001",
+        title: "Prototype Pollution in User Preferences Endpoint",
+        severity: "critical",
+        confidence: "verified",
+        status: "verified",
+        surface: "POST /api/preferences",
+        cwe: "CWE-1321: Improperly Controlled Modification of Dynamically-Determined Object Attributes",
+        codeFile: "routes/api.js:43",
+        codeSnippet: [
+          { num: 40, text: "router.post('/preferences', (req, res) => {", cls: "cm" },
+          { num: 41, text: "  const userConfig = {};", cls: "cm" },
+          { num: 42, text: "  // Unvalidated body merged onto object allows __proto__ property tampering", cls: "cm" },
+          { num: 43, text: "  Object.assign(userConfig, req.body);", cls: "hl" },
+          { num: 44, text: "  res.json({ status: \"updated\", config: userConfig });", cls: "cm" }
+        ],
+        evidence: [
+          { sev: "critical", source: "routes/api.js:43 — Object.assign with untrusted req.body input", kind: "SAST" },
+          { sev: "critical", source: "POST payload `{\"__proto__\":{\"polluted\":true}}` altered global Object prototype across requests", kind: "DAST PROBE" }
+        ],
+        reasoning: "Merging unvalidated request body into target objects allows attackers to overwrite `Object.prototype`, leading to remote property injection and privilege escalation.",
+        patchDiff: [
+          { num: 1, text: "- Object.assign(userConfig, req.body);", cls: "del" },
+          { num: 2, text: "+ const allowed = ['theme', 'notifications', 'language'];", cls: "add" },
+          { num: 3, text: "+ allowed.forEach(k => { if (req.body[k] !== undefined) userConfig[k] = req.body[k]; });", cls: "add" }
+        ],
+        retestNotice: "Retest Verified: Prototype properties (`__proto__`, `constructor`) are ignored. Finding marked RESOLVED."
+      },
+      {
+        id: "BL-NODE-002",
+        title: "DOM / Reflected XSS in User Greeting Handler",
+        severity: "high",
+        confidence: "verified",
+        status: "verified",
+        surface: "GET /api/greet?name=",
+        cwe: "CWE-79: Cross-site Scripting",
+        codeFile: "routes/api.js:35",
+        codeSnippet: [
+          { num: 33, text: "router.get('/greet', (req, res) => {", cls: "cm" },
+          { num: 34, text: "  const name = req.query.name || 'Guest';", cls: "cm" },
+          { num: 35, text: "  res.send(`<h1>Hello, ${name}!</h1><p>Welcome to our platform portal.</p>`);", cls: "hl" }
+        ],
+        evidence: [
+          { sev: "high", source: "routes/api.js:35 — Direct HTML template interpolation of req.query.name", kind: "SAST" },
+          { sev: "high", source: "GET /api/greet?name=<img%20src=x%20onerror=alert(1)> rendered unescaped HTML element", kind: "BROWSER" }
+        ],
+        reasoning: "Query parameter is concatenated into an HTML response without sanitization or HTML entity escaping.",
+        patchDiff: [
+          { num: 1, text: "- res.send(`<h1>Hello, ${name}!</h1><p>Welcome to our platform portal.</p>`);", cls: "del" },
+          { num: 2, text: "+ const sanitizeHtml = require('sanitize-html');", cls: "add" },
+          { num: 3, text: "+ res.send(`<h1>Hello, ${sanitizeHtml(name)}!</h1><p>Welcome to our platform portal.</p>`);", cls: "add" }
+        ],
+        retestNotice: "Retest Verified: HTML entities are sanitized before rendering. Injected script tags fail to trigger."
+      },
+      {
+        id: "BL-NODE-003",
+        title: "Command Injection in DNS Lookup Endpoint",
+        severity: "critical",
+        confidence: "verified",
+        status: "verified",
+        surface: "GET /api/lookup?domain=",
+        cwe: "CWE-78: OS Command Injection",
+        codeFile: "routes/api.js:52",
+        codeSnippet: [
+          { num: 50, text: "router.get('/lookup', (req, res) => {", cls: "cm" },
+          { num: 51, text: "  const domain = req.query.domain || 'localhost';", cls: "cm" },
+          { num: 52, text: "  exec(`nslookup ${domain}`, (err, stdout, stderr) => {", cls: "hl" }
+        ],
+        evidence: [
+          { sev: "critical", source: "routes/api.js:52 — child_process.exec() called with unescaped string interpolation", kind: "SAST" },
+          { sev: "critical", source: "GET /api/lookup?domain=127.0.0.1%26%26id executed operating system shell command", kind: "DAST PROBE" }
+        ],
+        reasoning: "Invoking `exec` with unsanitized user query parameter passes input to `/bin/sh` or `cmd.exe`, allowing arbitrary system command execution.",
+        patchDiff: [
+          { num: 1, text: "- exec(`nslookup ${domain}`, (err, stdout, stderr) => {", cls: "del" },
+          { num: 2, text: "+ const { execFile } = require('child_process');", cls: "add" },
+          { num: 3, text: "+ execFile('nslookup', [domain], (err, stdout, stderr) => {", cls: "add" }
+        ],
+        retestNotice: "Retest Verified: `execFile` executes binary directly without shell interpretation. Command chaining blocked."
+      },
+      {
+        id: "BL-NODE-004",
+        title: "Hardcoded JWT Secret Key in Configuration",
+        severity: "high",
+        confidence: "verified",
+        status: "verified",
+        surface: "config.js:12",
+        cwe: "CWE-798: Use of Hard-coded Credentials",
+        codeFile: "config.js:12",
+        codeSnippet: [
+          { num: 11, text: "  // --- Vulnerability: Hardcoded JWT signing secret key ---", cls: "cm" },
+          { num: 12, text: "  JWT_SECRET: \"jwt-super-secret-key-123456789-do-not-use-in-production\",", cls: "hl" },
+          { num: 15, text: "  AWS_ACCESS_KEY_ID: \"AKIAIOSFODNN7EXAMPLE\",", cls: "hl" }
+        ],
+        evidence: [
+          { sev: "high", source: "config.js:12 — Hardcoded JWT signing key and AWS access key identifier", kind: "SECRETS" }
+        ],
+        reasoning: "Committing signing secrets into repository source allows attackers to forge valid JWT authorization tokens for any user or role.",
+        patchDiff: [
+          { num: 1, text: "- JWT_SECRET: \"jwt-super-secret-key-123456789-do-not-use-in-production\",", cls: "del" },
+          { num: 2, text: "+ JWT_SECRET: process.env.JWT_SECRET || (() => { throw new Error('JWT_SECRET missing'); })(),", cls: "add" }
+        ],
+        retestNotice: "Retest Verified: Secret loaded from environment variable with mandatory initialization check."
+      },
+      {
+        id: "BL-NODE-005",
+        title: "Permissive Wildcard CORS Policy",
+        severity: "medium",
+        confidence: "verified",
+        status: "verified",
+        surface: "server.js:16",
+        cwe: "CWE-942: Permissive Cross-domain Policy with Untrusted Domains",
+        codeFile: "server.js:16",
+        codeSnippet: [
+          { num: 14, text: "// --- Vulnerability: Permissive CORS policy ---", cls: "cm" },
+          { num: 15, text: "app.use(cors({", cls: "cm" },
+          { num: 16, text: "  origin: '*',", cls: "hl" },
+          { num: 17, text: "  credentials: true", cls: "hl" },
+          { num: 18, text: "}));", cls: "cm" }
+        ],
+        evidence: [
+          { sev: "medium", source: "server.js:16 — Access-Control-Allow-Origin wildcard with credentials enabled", kind: "SAST" },
+          { sev: "medium", source: "HTTP preflight OPTIONS request returned Access-Control-Allow-Origin: *", kind: "DAST" }
+        ],
+        reasoning: "Enabling wildcard origin with credentials allows untrusted third-party web applications to perform cross-origin authenticated requests.",
+        patchDiff: [
+          { num: 1, text: "- origin: '*',", cls: "del" },
+          { num: 2, text: "+ origin: ['https://app.company.com', 'https://api.company.com'],", cls: "add" }
+        ],
+        retestNotice: "Retest Verified: CORS headers restricted to explicit trusted origin domains."
+      }
+    ]
+  },
   "api-gateway": {
     id: "DEMO-0002",
     target: "api-gateway-v2",
@@ -720,15 +1016,18 @@ async function runSimulation() {
   const terminalBody = document.querySelector("[data-telemetry-body]");
   if (terminalBody) terminalBody.replaceChildren();
 
+  const scenario = getScenario();
   const startTime = Date.now();
-  appendTelemetryLog(`[00:00.000] INITIALIZE: Triggering real assessment against sandboxed target 'breachlabs-demo'...`);
+  appendTelemetryLog(`[00:00.000] INITIALIZE: Triggering real assessment against sandboxed target '${scenario.target || "breachlabs-demo"}'...`);
   updateStagePipeline(0);
 
   // Try live backend assessment via /api/demo/run or /api/assessments
   try {
+    const targetRepo = currentScenarioKey === "django-store" ? "django" : (currentScenarioKey === "node-api" ? "node" : (scenario.target || "ecommerce"));
     const res = await fetch("/api/demo/run", {
       method: "POST",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ repository: targetRepo, port: 5005 })
     });
 
     if (res.ok) {
@@ -814,13 +1113,16 @@ async function onAssessmentComplete(assessmentId, rawAssessment, startTime) {
   if (replayBtnText) replayBtnText.textContent = "Run Live Assessment";
   isSimulating = false;
 
+  const targetKey = currentScenarioKey || "ecommerce";
+  const activeScenario = SCENARIOS[targetKey] || SCENARIOS.ecommerce;
+
   // Fetch live findings
   try {
     const findingsRes = await fetch(`/api/assessments/${assessmentId}/findings`);
     if (findingsRes.ok) {
       const liveFindings = await findingsRes.json();
       if (liveFindings && liveFindings.length > 0) {
-        SCENARIOS.ecommerce.findings = liveFindings.map((f, idx) => {
+        activeScenario.findings = liveFindings.map((f, idx) => {
           const isVerified = f.status === "verified" || f.status === "resolved" || f.verification?.result === "confirmed" || f.confidence === "confirmed" || f.confidence === "verified";
           const status = isVerified ? "verified" : (f.status === "investigating" ? "unverified" : (f.status || "verified"));
           const confidence = isVerified ? "verified" : (f.confidence || "suspected");
@@ -874,7 +1176,7 @@ async function onAssessmentComplete(assessmentId, rawAssessment, startTime) {
     console.error("Error populating live findings:", err);
   }
 
-  SCENARIOS.ecommerce.duration_ms = duration;
+  activeScenario.duration_ms = duration;
   updateSummaryKPIs();
   renderFindingsGrid();
   renderFindingDrawer();

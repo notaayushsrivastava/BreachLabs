@@ -19,6 +19,28 @@
       <a href="/how-it-works">Product</a>
       <a href="/architecture">Architecture</a>
       <a href="/security">Security</a>
+      <div class="hero-dropdown" data-dropdown>
+        <button class="hero-dropdown-trigger" type="button" aria-expanded="false" aria-haspopup="true">
+          <span>Demo</span>
+          <svg class="dropdown-chevron" viewBox="0 0 10 10" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 3.5L5 6.5L8 3.5"/></svg>
+        </button>
+        <div class="hero-dropdown-menu" role="menu">
+          <a class="hero-dropdown-item" href="/demo" role="menuitem">
+            <div class="dropdown-item-title">
+              <span class="dot-live" aria-hidden="true"></span>
+              <strong>Interactive Demo</strong>
+            </div>
+            <span class="dropdown-item-desc">Live attack simulations &amp; verification</span>
+          </a>
+          <a class="hero-dropdown-item" href="/demo/code" role="menuitem">
+            <div class="dropdown-item-title">
+              <i class="fa-solid fa-code" aria-hidden="true" style="font-size:12px;color:#059669"></i>
+              <strong>View Demo Code</strong>
+            </div>
+            <span class="dropdown-item-desc">Syntax-highlighted Flask, Django &amp; Node.js apps</span>
+          </a>
+        </div>
+      </div>
       <a href="/install">Install</a>
       <a href="/about">About</a>
     </div>
@@ -27,7 +49,7 @@
 
   <div class="hero-body">
     <div class="trust-row" aria-label="Product signals">
-      <span class="trust-ring"><span><i class="fa-brands fa-github" aria-hidden="true"></i></span></span>
+      <a class="trust-ring" href="https://github.com/notaayushsrivastava/BreachLabs" target="_blank" rel="noopener noreferrer" title="View BreachLabs on GitHub" aria-label="GitHub Repository: notaayushsrivastava/BreachLabs"><span><i class="fa-brands fa-github" aria-hidden="true"></i></span></a>
       <span class="trust-ring"><span><i class="fa-brands fa-docker" aria-hidden="true"></i></span></span>
       <span class="trust-ring"><span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span></span>
       <span class="trust-pill">Open Source · MCP · SAST · DAST</span>

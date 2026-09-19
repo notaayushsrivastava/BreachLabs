@@ -81,6 +81,12 @@ PAGE_META: dict[str, PageMeta] = {
         "canonical_path": "/demo",
         "og_image": "/static/images/logo.webp",
     },
+    "demo-code": {
+        "title": "Demo Code Inspector — BreachLabs Vulnerability & Syntax Walkthrough",
+        "description": "Inspect the source code behind BreachLabs demo targets across Flask, Django, and Node.js with syntax highlighting, vulnerability analysis, and auto-remediation diffs.",
+        "canonical_path": "/demo/code",
+        "og_image": "/static/images/logo.webp",
+    },
     "about": {
         "title": "About — BreachLabs Hackathon Context & Roadmap",
         "description": "What BreachLabs is, why it exists, current MVP boundaries, and roadmap.",
@@ -191,6 +197,11 @@ def create_app() -> Flask:
         return render_template(
             "demo.html", meta=get_page_meta("demo"), assessment=get_demo_assessment()
         )
+
+    @app.route("/demo/code")
+    @app.route("/demo-code")
+    def demo_code():
+        return render_template("demo-code.html", meta=get_page_meta("demo-code"))
 
     @app.route("/about")
     def about():

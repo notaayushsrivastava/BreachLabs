@@ -259,14 +259,16 @@ class SecurityAgent:
             return False
         health = sandbox.check_health()
         if not health.get("healthy"):
+            fail_reason = health.get("reason") or health.get("status_code")
             if is_static:
-                assessment.add_event("Health check skipped in static mode", phase=Phase.BUILD)
+                assessment.add_event(f"Health check skipped in static mode ({fail_reason})", phase=Phase.BUILD)
                 return True
             assessment.add_event(
-                f"Health check failed: {health.get('reason') or health.get('status_code')}",
+                f"Health check failed: {fail_reason}. Proceeding with deep static analysis and remediation triage.",
                 phase=Phase.BUILD, metadata=health,
             )
-            return False
+            assessment.scope.active_checks_enabled = False
+            return True
         assessment.environment_id = sandbox.environment_id
         assessment.add_event(
             f"Application healthy at {sandbox.base_url}", phase=Phase.BUILD,

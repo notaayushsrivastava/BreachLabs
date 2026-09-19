@@ -4,7 +4,7 @@ import sys
 import pytest
 from breachlabs.web.app import create_app
 
-ROUTES = ["/", "/how-it-works", "/architecture", "/security", "/capabilities", "/demo", "/about", "/install"]
+ROUTES = ["/", "/how-it-works", "/architecture", "/security", "/capabilities", "/demo", "/demo/code", "/about", "/install"]
 
 
 @pytest.fixture
@@ -51,9 +51,19 @@ def test_home_hero(client):
     assert "Intelligence" in html and "Designed To Evolve" in html
     assert "An autonomous security engineer for the software you just built." in html
     assert "<h1" in html and "*" in html
+    assert "https://github.com/notaayushsrivastava/BreachLabs" in html
 
 
 def test_demo_illustrative(client):
     html = client.get("/demo").data.decode()
     assert "DEMO-0001" in html and "illustrative" in html.lower()
     assert "<input" not in html and "<form" not in html
+
+
+def test_demo_code_inspector(client):
+    html = client.get("/demo/code").data.decode()
+    assert "Demo Target Code" in html
+    assert "Flask" in html and "Django" in html and "Node.js" in html
+    assert "demo-code.js" in html
+    assert "https://github.com/notaayushsrivastava/BreachLabs" in html
+
