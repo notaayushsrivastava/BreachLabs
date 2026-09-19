@@ -1,6 +1,6 @@
 # BreachLabs
 
-![BreachLabs](website/static/logo-1280x640.png)
+![BreachLabs](breachlabs/web/static/logo-1280x640.png)
 
 
 > **Build. Break. Verify. Fix.**
